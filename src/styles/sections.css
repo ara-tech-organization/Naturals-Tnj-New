@@ -1011,154 +1011,323 @@
 }
 
 /* ==========================================================================
-   FAQ — ticket stubs
+   FAQ — editorial
 
-   Each question as a torn-ticket card: a numbered stub, a perforated edge,
-   the question, and a panel that opens on click. The stub gives the set a
-   visible, finite count rather than reading as an endless accordion.
+   A held column, not an accordion list: the question numbers stay put on
+   the left while the picked answer stages on the right beside a plate of
+   the salon, the same "anchored beside scrolling content" idea the
+   homepage's reasons section already uses. Every answer also sits inline
+   under its own question (a plain accordion, same zero-height grid trick as
+   `.acc__panel`) so touch visitors get a standard list and every answer
+   stays in the rendered DOM at every width.
    ========================================================================== */
 
-.ticket-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-m);
-}
-
-.ticket {
-  position: relative;
-  overflow: hidden;
-  background: var(--surface);
-  border: 1px solid var(--line-soft);
-  border-radius: var(--r-l);
-  box-shadow: var(--shadow-sm);
-  transition: border-color var(--dur-fast) var(--ease-out);
-}
-
-.ticket.is-open {
-  border-color: var(--plum-200);
-}
-
-.ticket h3 {
-  margin: 0;
-}
-
-.ticket__trigger {
-  position: relative;
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-  min-height: 68px;
-  text-align: left;
-}
-
-.ticket__stub {
-  position: relative;
-  flex: none;
+.faq-ed {
   display: grid;
-  place-items: center;
-  width: 60px;
-  font-family: var(--font-display);
-  font-size: var(--step-0);
-  color: var(--plum-600);
-  background: var(--plum-50);
-  border-right: 2px dashed var(--plum-200);
-  transition: color var(--dur-fast) var(--ease-out);
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
 }
 
-/* The two punched "rivets" straddling the perforation, top and bottom of
-   the card — the detail that reads as a ticket rather than a plain tab. */
-.ticket__stub::before,
-.ticket__stub::after {
-  content: "";
-  position: absolute;
-  right: -7px;
-  width: 13px;
-  height: 13px;
-  background: var(--surface);
-  border: 2px dashed var(--plum-200);
-  border-radius: 50%;
-}
-
-.ticket__stub::before {
-  top: -7px;
-}
-
-.ticket__stub::after {
-  bottom: -7px;
-}
-
-@media (min-width: 576px) {
-  .ticket__stub {
-    width: 84px;
-    font-size: var(--step-1);
+@media (min-width: 992px) {
+  .faq-ed {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    align-items: start;
+    gap: clamp(2.5rem, 1rem + 5vw, 5rem);
   }
 }
 
-.ticket__q {
-  flex: 1;
+.faq-ed__col {
   display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+
+.faq-ed__head {
+  max-width: 36ch;
+}
+
+.faq-ed__head-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+
+.faq-ed__toggle {
+  display: inline-flex;
+  flex: none;
   align-items: center;
-  padding: var(--space-s) var(--space-m);
-  font-size: var(--step--1);
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-top: 0.2em;
+  color: var(--plum-600);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.faq-ed__toggle svg {
+  fill: currentColor;
+}
+
+.faq-ed__toggle:hover {
+  background: var(--plum-50);
+  border-color: var(--plum-200);
+}
+
+.faq-ed__title {
+  margin-top: var(--space-s);
+}
+
+.faq-ed__intro {
+  margin-top: var(--space-2xs);
+  color: var(--text-muted);
+}
+
+.faq-ed__list {
+  border-top: 1px solid var(--line);
+}
+
+.faq-ed__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-ed__q {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-s);
+  width: 100%;
+  padding-block: var(--space-s);
+  text-align: left;
+  color: var(--text-muted);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-ed__num {
+  flex: none;
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--plum-200);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.faq-ed__q-text {
+  flex: 1;
+  font-size: var(--step-1);
   font-weight: 500;
   line-height: 1.4;
-  color: var(--text-strong);
+  transition: font-weight var(--dur-fast) var(--ease-out);
 }
 
-.ticket__toggle {
-  position: relative;
+.faq-ed__arrow {
   flex: none;
-  width: 20px;
-  margin-inline: var(--space-s);
   align-self: center;
+  color: var(--plum-600);
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
 
-.ticket__toggle::before,
-.ticket__toggle::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 14px;
-  height: 1.5px;
-  background: var(--plum-600);
-  transform: translate(-50%, -50%);
-  transition: transform var(--dur) var(--ease-out);
+@media (hover: hover) {
+  .faq-ed__q:hover {
+    color: var(--text-strong);
+    transform: translateX(6px);
+  }
+
+  .faq-ed__q:hover .faq-ed__arrow {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.ticket__toggle::after {
-  transform: translate(-50%, -50%) rotate(90deg);
+.faq-ed__item.is-active .faq-ed__q {
+  color: var(--plum-600);
 }
 
-.ticket.is-open .ticket__toggle::after {
-  transform: translate(-50%, -50%) rotate(0deg);
+.faq-ed__item.is-active .faq-ed__num {
+  color: var(--plum-600);
 }
 
-/* Grid-rows trick: animates to auto height without measuring in JS */
-.ticket__panel {
+.faq-ed__item.is-active .faq-ed__q-text {
+  font-weight: 600;
+}
+
+.faq-ed__item.is-active .faq-ed__arrow {
+  opacity: 1;
+  transform: none;
+}
+
+/* Mobile/tablet accordion body — same zero-height-until-open grid trick as
+   `.acc__panel`. Hidden from lg up, where the staged panel takes over. */
+.faq-ed__inline {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--dur) var(--ease-out);
+  transition: grid-template-rows 0.4s var(--ease-out);
 }
 
-.ticket.is-open .ticket__panel {
+.faq-ed__item.is-active .faq-ed__inline {
   grid-template-rows: 1fr;
 }
 
-.ticket__panel > div {
+.faq-ed__inline > div {
   overflow: hidden;
 }
 
-.ticket__a {
-  padding: 0 var(--space-m) var(--space-m) calc(60px + var(--space-m));
+.faq-ed__inline p {
+  max-width: 62ch;
+  padding-bottom: var(--space-m);
   color: var(--text-muted);
   line-height: 1.7;
 }
 
-@media (min-width: 576px) {
-  .ticket__a {
-    padding-left: calc(84px + var(--space-m));
+.faq-ed__stage {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .faq-ed__inline {
+    display: none;
   }
+
+  .faq-ed__stage {
+    display: block;
+    position: sticky;
+    top: calc(var(--header-h-scrolled) + var(--space-l));
+  }
+}
+
+/* Same dark plum as the footer, rather than a lighter tint of its own — the
+   one dark note on an otherwise pale page reads as deliberate when it's a
+   colour the site already commits to elsewhere. */
+.faq-ed__panel {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(2rem, 1.4rem + 3vw, 3rem);
+  background: var(--plum-950);
+  color: var(--text-on-dark);
+  border-radius: var(--r-l);
+  animation: faqEdIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* One large mark standing in for the interviewer, rather than a small icon
+   repeated over every question — it re-animates with the rest of the panel
+   each time a different question is picked. */
+.faq-ed__panel::before {
+  content: "\201C";
+  position: absolute;
+  z-index: 0;
+  top: 0.5rem;
+  right: 0.3em;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 2.5rem + 5vw, 6.5rem);
+  line-height: 1;
+  color: rgba(183, 151, 101, 0.4);
+  pointer-events: none;
+}
+
+.faq-ed__panel-num,
+.faq-ed__panel-q,
+.faq-ed__rule,
+.faq-ed__panel-a {
+  position: relative;
+  z-index: 1;
+}
+
+.faq-ed__panel-num {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  letter-spacing: 0.08em;
+  color: var(--gold-300);
+}
+
+.faq-ed__panel-num-rule {
+  width: 20px;
+  height: 1px;
+  background: var(--gold-500);
+  flex: none;
+}
+
+.faq-ed__panel-q {
+  margin-top: var(--space-2xs);
+  max-width: 30ch;
+  font-size: var(--step-4);
+  line-height: 1.25;
+  color: #fff;
+}
+
+.faq-ed__rule {
+  display: block;
+  width: 48px;
+  height: 1px;
+  margin-block: var(--space-m);
+  background: var(--line-dark);
+}
+
+.faq-ed__panel-a {
+  max-width: 46ch;
+  color: var(--text-on-dark);
+  line-height: 1.8;
+}
+
+@keyframes faqEdIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.faq-ed__media {
+  margin-top: var(--space-m);
+  border-radius: var(--r-l);
+  overflow: hidden;
+}
+
+.faq-ed__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  /* Reads `--p` written by useScrollProgress on `.faq-ed` itself — 0 at the
+     top of the viewport, 1 at the bottom, so the plate drifts a little
+     slower than the page around it. Scaled up so the drift never exposes
+     an edge. Absent under `prefers-reduced-motion`, where `--p` is never
+     written and the transform resolves to its resting value. */
+  transform: translateY(calc((var(--p, 0.5) - 0.5) * 28px)) scale(1.08);
+}
+
+.faq-ed__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-l);
+  border-top: 1px solid var(--line);
+}
+
+.faq-ed__cta p {
+  color: var(--text-muted);
+  font-size: var(--step--1);
 }
 
 /* ==========================================================================

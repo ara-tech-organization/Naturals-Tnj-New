@@ -1490,219 +1490,104 @@
 }
 
 /* ==========================================================================
-   07 · GALLERY — the transformation reel
+   07 · GALLERY — the transformation carousel
 
-   The one section that leaves the page's measure. Every band above it is held
-   inside the container, so running this one edge to edge is what announces
-   that the work has started — and it lets the heading sit among the pictures,
-   in the first column, rather than above them.
+   A filmstrip, not a wall: one scrolling row of large photographs, paged by
+   native scroll-snap so touch and trackpad users get a free, familiar
+   gesture, with two round buttons underneath for anyone with a mouse.
    ========================================================================== */
 
-.reel {
+.carousel {
   padding-block: clamp(3.5rem, 2.4rem + 4.6vw, 6.5rem) clamp(2.5rem, 2rem + 2vw, 3.5rem);
-  /* `clip`, not `hidden`. Both contain the columns' parallax travel, but
-     `hidden` makes this element the scrollport for everything inside it, and a
-     box that cannot itself scroll gives a sticky child nothing to stick to —
-     the caption plate simply scrolls away. `clip` establishes no scroll
-     container, so the heading holds. Where `clip` is unsupported the rule is
-     dropped and the parallax may bleed a few pixels, which is a far cheaper
-     failure than a heading that does not stay put. */
-  overflow: clip;
 }
 
-.reel__inner {
-  display: grid;
-  gap: var(--space-2xs);
-  padding-inline: var(--space-2xs);
+.carousel__head {
+  max-width: 52rem;
 }
 
-/* Below lg the three columns stack, each laying its own frames out two up. */
-@media (max-width: 991.98px) {
-  .reel__col {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  /* Three frames in a two-up grid strands the third in a row of its own with
-     a hole beside it — and once all three columns have stacked, that is three
-     holes down the page. The odd frame takes the full width instead, on a
-     wider crop so it reads as a band rather than as a stretched portrait. */
-  .reel__col li:last-child {
-    grid-column: 1 / -1;
-    aspect-ratio: 16 / 10;
-  }
-}
-
-/* From lg the intro becomes the first of four columns and the pictures run to
-   both edges of the window. */
-@media (min-width: 992px) {
-  .reel__inner {
-    grid-template-columns: minmax(0, 1.15fr) repeat(3, minmax(0, 1fr));
-    gap: clamp(0.75rem, 0.2rem + 1.4vw, 1.35rem);
-    align-items: start;
-    padding-inline: clamp(0.75rem, 0.2rem + 1.4vw, 1.35rem);
-  }
-}
-
-/* ---- The caption plate --------------------------------------------------- */
-
-.reel__intro {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: var(--space-s) var(--space-xs) var(--space-m);
-}
-
-@media (min-width: 992px) {
-  .reel__intro {
-    grid-column: auto;
-    /* Sits a little below the top edge so the first frames can start above it,
-       the way a caption sits inside a spread rather than over it. */
-    padding: clamp(2rem, 1rem + 3vw, 4rem) var(--space-m) var(--space-m) var(--space-s);
-    /* Held while the three columns of work travel past it. The columns run
-       roughly twice the height of this plate, so the heading stays with the
-       pictures it names for the whole of the section instead of scrolling out
-       at the first frame. `align-self` is what lets a grid item stick — a
-       stretched item is already the full height of its row and has nowhere
-       to move. */
-    position: sticky;
-    top: calc(var(--header-h) + var(--space-l));
-    align-self: start;
-  }
-}
-
-.reel__title {
+.carousel__title {
   margin-top: var(--space-s);
-  /* The 14ch cap below is what gives the intro its narrow, poster-style wrap
-     while it still runs full width. From lg the intro itself becomes the
-     ~250–400px sticky sidebar column (1.15fr of the four tracks), which is
-     already narrower than 14ch could ever ask for — a second, independent
-     ch cap on top of that let "Transformations," run wider than its own
-     parent and sit visually clipped behind the first photo. overflow-wrap
-     is the backstop against the same thing happening to any future copy. */
-  max-width: 14ch;
-  overflow-wrap: break-word;
+  max-width: 18ch;
   font-size: clamp(1.65rem, 1.3rem + 1.7vw, 2.65rem);
   font-weight: 400;
-  line-height: 1.1;
+  line-height: 1.12;
   letter-spacing: -0.018em;
   text-wrap: balance;
 }
 
-@media (min-width: 992px) {
-  .reel__title {
-    max-width: 100%;
-  }
-}
-
-.reel__text {
+.carousel__text {
   margin-top: var(--space-s);
-  max-width: 34ch;
-  overflow-wrap: break-word;
+  max-width: 56ch;
   color: var(--text-muted);
-  font-size: var(--step--1);
+  font-size: var(--step-0);
   line-height: 1.7;
 }
 
-@media (min-width: 992px) {
-  .reel__text {
-    max-width: 100%;
-  }
-}
-
-.reel__actions {
+.carousel__actions {
   margin-top: var(--space-m);
 }
 
-/* The four gallery groups, listed as links — the section names what is in it
-   instead of leaving nine pictures to speak for four categories. */
-.reel__index {
-  margin: var(--space-m) 0 0;
-  padding: var(--space-s) 0 0;
-  border-top: 1px solid var(--line);
-  list-style: none;
-  display: grid;
-  gap: 0.5em;
-  width: 100%;
+/* ---- The strip ---------------------------------------------------------- */
+
+.carousel__viewport {
+  margin-top: var(--space-xl);
 }
 
-.reel__index a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  font-size: var(--step--2);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  transition: color var(--dur-fast) var(--ease-out);
-}
-
-.reel__index svg {
-  color: var(--accent);
-  opacity: 0;
-  transform: translateX(-4px);
-  transition:
-    opacity var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
-}
-
-.reel__index a:hover,
-.reel__index a:focus-visible {
-  color: var(--plum-700);
-}
-
-.reel__index a:hover svg,
-.reel__index a:focus-visible svg {
-  opacity: 1;
-  transform: none;
-}
-
-/* ---- The columns --------------------------------------------------------- */
-
-.reel__col {
-  display: grid;
-  gap: var(--space-2xs);
+.carousel__track {
+  display: flex;
+  gap: clamp(1rem, 0.6rem + 1.4vw, 1.6rem);
   margin: 0;
-  padding: 0;
+  padding: 0 var(--gutter) var(--space-s);
   list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gutter);
+  -webkit-overflow-scrolling: touch;
+  /* Scrollbar hidden: scroll-snap plus the arrow buttons already signal the
+     row pages, and a visible track competes with the buttons for the same
+     job. */
+  scrollbar-width: none;
 }
 
-@media (min-width: 992px) {
-  .reel__col {
-    gap: clamp(0.75rem, 0.2rem + 1.4vw, 1.35rem);
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__item {
+  flex: 0 0 auto;
+  width: clamp(230px, 60vw, 300px);
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .carousel__item {
+    width: clamp(280px, 27vw, 360px);
   }
-
-  /* The three columns are level and static. They used to start at different
-     heights and drift at different rates on scroll, so no two frames ever
-     lined up across the row — a deliberate effect, but it left the wall
-     unresolved and every frame in motion against its neighbours. One crop, one
-     baseline, rows that line up. */
 }
 
-/* One crop for every frame, so the rows read as a set. Mixed crops made the
-   wall look unresolved. The only exception is the odd frame on a stacked
-   two-up row below lg, which widens to fill the hole beside it. */
-.reel__col li {
+.carousel__item a {
   position: relative;
+  display: block;
   overflow: hidden;
   aspect-ratio: 4 / 5;
   background: var(--sand-100);
-  border-radius: var(--r-s);
+  border-radius: var(--r-l);
 }
 
-.reel__col a {
-  display: block;
-  height: 100%;
-}
-
-.reel__col img {
+.carousel__item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 1.2s var(--ease-out);
+  transition: transform 1.1s var(--ease-out);
 }
 
-.reel__caption {
+.carousel__item a:hover img,
+.carousel__item a:focus-visible img {
+  transform: scale(1.05);
+}
+
+.carousel__caption {
   position: absolute;
   left: 0;
   right: 0;
@@ -1711,42 +1596,81 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2xs);
-  padding: 1.4em 1em 0.9em;
-  font-size: var(--step--2);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  padding: 2.4em 1.1em 1em;
+  font-size: var(--step--1);
+  font-weight: 500;
   color: #fff;
-  background: linear-gradient(to top, rgba(20, 12, 25, 0.78), rgba(20, 12, 25, 0));
-  opacity: 0;
-  transform: translateY(8px);
-  transition:
-    opacity var(--dur) var(--ease-out),
-    transform var(--dur) var(--ease-out);
+  background: linear-gradient(to top, rgba(20, 12, 25, 0.82), rgba(20, 12, 25, 0));
 }
 
-.reel__caption-text {
+.carousel__caption-text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.reel__caption svg {
+.carousel__caption svg {
   flex: none;
+  opacity: 0.85;
 }
 
-.reel__col a:hover img,
-.reel__col a:focus-visible img {
-  transform: scale(1.06);
+/* ---- Nav + closing line --------------------------------------------------- */
+
+.carousel__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
 }
 
-.reel__col a:hover .reel__caption,
-.reel__col a:focus-visible .reel__caption {
-  opacity: 1;
-  transform: none;
+@media (min-width: 768px) {
+  .carousel__foot {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
-.reel__foot {
-  margin: var(--space-l) 0 0;
+.carousel__nav {
+  display: none;
+  gap: var(--space-s);
+}
+
+/* Buttons for a mouse; a touch or trackpad visitor already has the row's own
+   scroll gesture, so the buttons would only be a second, redundant control. */
+@media (hover: hover) and (pointer: fine) {
+  .carousel__nav {
+    display: flex;
+  }
+}
+
+.carousel__arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  color: var(--plum-700);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.carousel__arrow:hover,
+.carousel__arrow:focus-visible {
+  background: var(--plum-50);
+  border-color: var(--plum-200);
+}
+
+.carousel__arrow:active {
+  transform: scale(0.94);
+}
+
+.carousel__note {
+  margin: 0;
   font-size: var(--step--1);
   color: var(--text-muted);
 }

@@ -1,8 +1,78 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { PRICING_DISCLAIMER, PRICING_NOTE } from "../data/services";
+import { priceFor, PRICING_DISCLAIMER, PRICING_NOTE } from "../data/services";
 import { CONTACT, WHATSAPP } from "../data/site";
 import Icon from "./Icon";
 import { Btn } from "./Ui";
+
+/**
+ * One card's "what's included" — collapsed by default, since the same
+ * information repeated with a price attached to it would otherwise run the
+ * tile long before you ever reach the Book button. Expanding it swaps the
+ * plain checklist for the same dotted-leader price rows the rate-card page
+ * uses, so a category never shows the same list twice in two formats.
+ */
+function ServiceTile({ s, index, ctaLabel, isTarget }) {
+  const [open, setOpen] = useState(false);
+  const panelId = `${s.slug}-pricing`;
+
+  return (
+    <li
+      id={s.slug}
+      className={`svc-tile${isTarget ? " is-target" : ""}`}
+      data-reveal
+    >
+      <div className="svc-tile__media">
+        <img src={s.image} alt={s.alt} loading="lazy" decoding="async" />
+        <span className="svc-tile__index">{String(index + 1).padStart(2, "0")}</span>
+      </div>
+
+      <div className="svc-tile__body">
+        <h3 id={`${s.slug}-title`} className="svc-tile__title">
+          {s.name}
+        </h3>
+        <p className="svc-tile__text">{s.text}</p>
+
+        <button
+          type="button"
+          className="svc-tile__toggle"
+          aria-expanded={open}
+          aria-controls={panelId}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span>
+            {s.items.length} {s.items.length === 1 ? "treatment" : "treatments"} &middot; View
+            pricing
+          </span>
+          <span className="svc-tile__toggle-icon" aria-hidden="true" />
+        </button>
+
+        <div className={`svc-tile__panel${open ? " is-open" : ""}`} id={panelId} role="region">
+          <div>
+            <ul className="svc-tile__rows">
+              {s.items.map((item) => {
+                const price = priceFor(s.slug, item);
+                return (
+                  <li key={item}>
+                    <span className="svc-tile__row-name">{item}</span>
+                    <span className="svc-tile__row-leader" aria-hidden="true" />
+                    <span className="svc-tile__row-price">{price ?? "On request"}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+
+        <div className="svc-tile__foot">
+          <Btn to="/book" size="sm" icon="calendar" block>
+            {ctaLabel}
+          </Btn>
+        </div>
+      </div>
+    </li>
+  );
+}
 
 /**
  * The service menu — one card per category, three across from lg.
@@ -24,47 +94,13 @@ export default function ServiceMenu({ items, ctaLabel = "Book This Service" }) {
     <>
       <ul className="svc-menu">
         {items.map((s, i) => (
-          <li
+          <ServiceTile
             key={s.slug}
-            id={s.slug}
-            className={`svc-tile${section === s.slug ? " is-target" : ""}`}
-            data-reveal
-          >
-            <div className="svc-tile__media">
-              <img src={s.image} alt={s.alt} loading="lazy" decoding="async" />
-              <span className="svc-tile__index">{String(i + 1).padStart(2, "0")}</span>
-            </div>
-
-            <div className="svc-tile__body">
-              <h3 id={`${s.slug}-title`} className="svc-tile__title">
-                {s.name}
-              </h3>
-              <p className="svc-tile__text">{s.text}</p>
-
-              <div className="svc-tile__items">
-                <span className="svc-tile__items-label">
-                  What&rsquo;s included
-                  <em>
-                    {s.items.length} {s.items.length === 1 ? "treatment" : "treatments"}
-                  </em>
-                </span>
-                <ul>
-                  {s.items.map((item) => (
-                    <li key={item}>
-                      <Icon name="check" size={13} />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="svc-tile__foot">
-                <Btn to="/book" size="sm" icon="calendar" block>
-                  {ctaLabel}
-                </Btn>
-              </div>
-            </div>
-          </li>
+            s={s}
+            index={i}
+            ctaLabel={ctaLabel}
+            isTarget={section === s.slug}
+          />
         ))}
       </ul>
 

@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   CONTACT,
   FAQS,
@@ -7,9 +7,11 @@ import {
   TESTIMONIALS,
   WHATSAPP,
 } from "../data/site";
+import { IMG } from "../assets";
 import Icon from "./Icon";
 import { Btn, Eyebrow, SectionHeading } from "./Ui";
 import { useCountUp } from "../hooks/useCountUp";
+import { useScrollProgress } from "../hooks/useMotion";
 
 /* ------------------------------------------------------------------ Stats */
 
@@ -176,45 +178,121 @@ export function Accordion({ items, defaultOpen = -1, renderBody }) {
 }
 
 /**
- * Each question as its own ticket — a numbered stub torn away from the
- * question by a perforated edge, closed until picked up. The stub number
- * gives the set a sense of a fixed count to get through, which a plain
- * accordion row doesn't carry.
+ * An editorial FAQ, not an accordion: a numbered question list stays put on
+ * the left while the picked question stages on the right beside a plate of
+ * the salon itself — the same "held column beside scrolling content" idea
+ * the homepage's "Why choose Naturals" section already uses elsewhere.
+ *
+ * The desktop stage is a progressive enhancement. Every answer also sits
+ * inline under its own question via the same zero-height-until-open grid
+ * trick the plain Accordion uses, so a touch visitor gets a standard
+ * accordion and every answer stays in the rendered DOM at every width —
+ * nothing here is JS-generated-only content.
  */
-function FaqTickets({ items }) {
-  const [open, setOpen] = useState(0);
+function FaqEditorial({ title, items }) {
+  const [active, setActive] = useState(0);
+  // Reduced-motion visitors land on a stopped rotation with the toggle in
+  // reach, never on an answer that changes under them unasked.
+  const [playing, setPlaying] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const [hidden, setHidden] = useState(false);
+  const rootRef = useRef(null);
+  useScrollProgress(rootRef);
   const uid = useId();
+  const current = items[active];
+
+  // A timeout re-armed per pick, same as the homepage hero: picking a
+  // question by hand restarts the dwell rather than ending the rotation.
+  useEffect(() => {
+    if (!playing || hidden) return undefined;
+
+    const tick = setTimeout(() => setActive((i) => (i + 1) % items.length), 4500);
+    return () => clearTimeout(tick);
+  }, [playing, hidden, active, items.length]);
+
+  // A rotator running in a background tab is wasted work.
+  useEffect(() => {
+    const onVisibility = () => setHidden(document.hidden);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
 
   return (
-    <ul className="ticket-list" role="list">
-      {items.map((item, i) => {
-        const isOpen = open === i;
-        const panelId = `${uid}-p${i}`;
-
-        return (
-          <li className={`ticket${isOpen ? " is-open" : ""}`} key={item.q}>
-            <h3>
-              <button
-                type="button"
-                className="ticket__trigger"
-                aria-expanded={isOpen}
-                aria-controls={panelId}
-                onClick={() => setOpen(isOpen ? -1 : i)}
-              >
-                <span className="ticket__stub">{String(i + 1).padStart(2, "0")}</span>
-                <span className="ticket__q">{item.q}</span>
-                <span className="ticket__toggle" aria-hidden="true" />
-              </button>
-            </h3>
-            <div className="ticket__panel" id={panelId} role="region">
-              <div>
-                <p className="ticket__a">{item.a}</p>
-              </div>
+    <div className="faq-ed" ref={rootRef}>
+      <div className="faq-ed__col">
+        <div className="faq-ed__head" data-reveal>
+          <div className="faq-ed__head-row">
+            <div>
+              <Eyebrow>Good To Know</Eyebrow>
+              <h2 id="faq-title" className="faq-ed__title">
+                {title}
+              </h2>
             </div>
-          </li>
-        );
-      })}
-    </ul>
+            {/* The mechanism WCAG 2.2.2 asks for, and the only thing that
+                stops the rotation for good. */}
+            <button
+              type="button"
+              className="faq-ed__toggle"
+              aria-label={playing ? "Pause the FAQ rotation" : "Play the FAQ rotation"}
+              onClick={() => setPlaying((p) => !p)}
+            >
+              <Icon name={playing ? "pause" : "play"} size={13} />
+            </button>
+          </div>
+          <p className="faq-ed__intro lead">
+            Everything you need to know before your appointment.
+          </p>
+        </div>
+
+        <ol className="faq-ed__list" data-reveal>
+          {items.map((item, i) => {
+            const isActive = i === active;
+            const panelId = `${uid}-p${i}`;
+
+            return (
+              <li className={`faq-ed__item${isActive ? " is-active" : ""}`} key={item.q}>
+                <button
+                  type="button"
+                  className="faq-ed__q"
+                  aria-expanded={isActive}
+                  aria-controls={panelId}
+                  onClick={() => setActive(i)}
+                >
+                  <span className="faq-ed__num">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="faq-ed__q-text">{item.q}</span>
+                  <Icon name="arrowUpRight" size={15} className="faq-ed__arrow" />
+                </button>
+                <div className="faq-ed__inline" id={panelId}>
+                  <div>
+                    <p>{item.a}</p>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+
+      <div className="faq-ed__stage">
+        {/* `key` restarts the reveal on every pick, so choosing the answer
+            that's already showing still reads as a response. */}
+        <div className="faq-ed__panel" key={active}>
+          <span className="faq-ed__panel-num">
+            <span className="faq-ed__panel-num-rule" aria-hidden="true" />
+            {String(active + 1).padStart(2, "0")}
+          </span>
+          <h3 className="faq-ed__panel-q">{current.q}</h3>
+          <span className="faq-ed__rule" aria-hidden="true" />
+          <p className="faq-ed__panel-a">{current.a}</p>
+        </div>
+        <div className="faq-ed__media figure-frame">
+          <img src={IMG.salonInterior} alt="" loading="lazy" decoding="async" />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -222,28 +300,19 @@ export function FaqSection({ items = FAQS, title = "Frequently Asked Questions" 
   return (
     <section className="section" aria-labelledby="faq-title">
       <div className="container">
-        <SectionHeading
-          eyebrow="Good To Know"
-          title={title}
-          titleId="faq-title"
-          center
-          text={
-            <>
-              Still have a question? Call us on{" "}
-              <a href={CONTACT.phoneHref} className="inline-link">
-                {CONTACT.phoneDisplay}
-              </a>{" "}
-              — we&rsquo;re happy to help.
-            </>
-          }
-          aside={
-            <Btn href={WHATSAPP} variant="outline" size="sm" icon="whatsapp">
-              Ask on WhatsApp
-            </Btn>
-          }
-        />
-        <div data-reveal>
-          <FaqTickets items={items} />
+        <FaqEditorial title={title} items={items} />
+
+        <div className="faq-ed__cta" data-reveal="fade">
+          <p>
+            Still have a question? Call us on{" "}
+            <a href={CONTACT.phoneHref} className="inline-link">
+              {CONTACT.phoneDisplay}
+            </a>{" "}
+            — we&rsquo;re happy to help.
+          </p>
+          <Btn href={WHATSAPP} variant="outline" size="sm" icon="whatsapp">
+            Ask on WhatsApp
+          </Btn>
         </div>
       </div>
     </section>

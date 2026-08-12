@@ -167,53 +167,106 @@
   color: var(--text-muted);
 }
 
-.svc-tile__items {
+/* Compact by default — a plain text button rather than a bordered control,
+   since it sits inside a card that already has a border. Opens into the
+   same dotted-leader price rows the rate-card page uses (see PRICE MENU). */
+.svc-tile__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
   margin-top: var(--space-2xs);
   padding-top: var(--space-xs);
   border-top: 1px solid var(--line-soft);
-}
-
-.svc-tile__items-label {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-xs);
-  margin-bottom: var(--space-2xs);
   font-size: var(--step--2);
   font-weight: 500;
   letter-spacing: var(--track-caps);
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--plum-700);
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
-/* The count sits opposite the label as a plain figure, not a badge — it is
-   there to set expectations, not to be clicked. */
-.svc-tile__items-label em {
-  flex: none;
-  font-style: normal;
-  letter-spacing: 0;
-  text-transform: none;
+.svc-tile__toggle:hover {
   color: var(--plum-600);
 }
 
-.svc-tile__items ul {
-  display: grid;
-  gap: 0.4em;
+.svc-tile__toggle-icon {
+  position: relative;
+  flex: none;
+  width: 14px;
+  height: 14px;
 }
 
-.svc-tile__items li {
+.svc-tile__toggle-icon::before,
+.svc-tile__toggle-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 1.5px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.svc-tile__toggle-icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.svc-tile__toggle[aria-expanded="true"] .svc-tile__toggle-icon::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+/* Grid-rows trick: animates open/closed to auto height without JS measuring */
+.svc-tile__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur) var(--ease-out);
+}
+
+.svc-tile__panel.is-open {
+  grid-template-rows: 1fr;
+}
+
+.svc-tile__panel > div {
+  overflow: hidden;
+}
+
+.svc-tile__rows {
+  padding-top: var(--space-xs);
+}
+
+.svc-tile__rows li {
   display: flex;
-  align-items: flex-start;
+  align-items: baseline;
   gap: 0.5em;
+  padding-block: 0.4em;
   font-size: var(--step--1);
-  line-height: 1.45;
+}
+
+.svc-tile__rows li:not(:last-child) {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.svc-tile__row-name {
+  flex: none;
   color: var(--text);
 }
 
-.svc-tile__items svg {
+/* Same printed-menu leader as the rate-card page's price cards. */
+.svc-tile__row-leader {
+  flex: 1;
+  min-width: 1.5em;
+  border-bottom: 1px dotted var(--line);
+  transform: translateY(-0.35em);
+}
+
+.svc-tile__row-price {
   flex: none;
-  margin-top: 0.3em;
-  color: var(--plum-500);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 /* margin-top: auto pins the button to the bottom of every card, so the CTAs
@@ -414,23 +467,17 @@
    ========================================================================== */
 
 .standards__head {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: var(--space-s);
-  padding-bottom: var(--space-m);
-  border-bottom: 1px solid var(--line);
-}
-
-@media (min-width: 768px) {
-  .standards__head {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: end;
-    gap: clamp(2rem, 0.5rem + 3.5vw, 4rem);
-  }
+  padding-bottom: var(--space-l);
+  text-align: center;
 }
 
 .standards__title {
   margin-top: var(--space-s);
-  max-width: 16ch;
+  max-width: 22ch;
 }
 
 .standards__lead {
@@ -438,56 +485,68 @@
   color: var(--text-muted);
 }
 
-.standards__list {
+.standards__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-m);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* The entry. Numeral in its own narrow track, the standard beside it, and its
-   explanation in the third — so the six titles form a readable column of their
-   own rather than a heading buried above each paragraph. */
-.standard {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.25em var(--space-s);
-  padding-block: var(--space-m);
-  border-bottom: 1px solid var(--line);
-  transition: background var(--dur-fast) var(--ease-out);
-}
-
-@media (min-width: 768px) {
-  .standard {
-    grid-template-columns: auto minmax(0, 0.85fr) minmax(0, 1.3fr);
-    gap: var(--space-m);
-    align-items: baseline;
-    /* Pulled out to the gutter so the hover tint reads as a row of the sheet
-       rather than a box that appeared under the pointer. */
-    padding-inline: var(--space-s);
-    margin-inline: calc(-1 * var(--space-s));
+@media (min-width: 640px) {
+  .standards__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.standard:hover {
-  background: rgba(126, 71, 152, 0.04);
+@media (min-width: 992px) {
+  .standards__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
-.standard__num {
-  font-family: var(--font-display);
-  font-size: var(--step-1);
-  font-weight: 500;
-  line-height: 1;
-  color: var(--accent);
-  font-variant-numeric: lining-nums tabular-nums;
-  transition: color var(--dur-fast) var(--ease-out);
+.standard-card {
+  position: relative;
+  padding: var(--space-m);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-l);
+  transition:
+    transform var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out);
 }
 
-.standard:hover .standard__num {
+.standard-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--plum-200);
+  box-shadow: var(--shadow-md);
+}
+
+.standard-card__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
   color: var(--plum-600);
+  background: var(--plum-50);
+  border-radius: 50%;
 }
 
-.standard__title {
-  margin: 0;
+.standard-card__num {
+  position: absolute;
+  top: var(--space-m);
+  right: var(--space-m);
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  font-weight: 500;
+  color: var(--line);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.standard-card__title {
+  margin: var(--space-s) 0 0;
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 0.95rem + 0.45vw, 1.3rem);
   font-weight: 500;
@@ -495,25 +554,15 @@
   letter-spacing: -0.015em;
 }
 
-.standard__text {
-  margin: 0;
-  /* Below md the explanation drops under the title and lines up with it,
-     clear of the numeral's track. */
-  grid-column: 2;
+.standard-card__text {
+  margin: var(--space-2xs) 0 0;
   color: var(--text-muted);
   font-size: var(--step--1);
   line-height: 1.75;
 }
 
-@media (min-width: 768px) {
-  .standard__text {
-    grid-column: auto;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .standard,
-  .standard__num {
+  .standard-card {
     transition: none;
   }
 }
@@ -560,78 +609,227 @@
   }
 }
 
-/* ---- Detail accordion block ---------------------------------------------- */
+/* ---- Service pricing (menu cards) -----------------------------------------
+   One bordered card per category rather than a stack of hairline accordion
+   rows — the previous treatment ran thirteen categories down the page as
+   near-identical lines, distinguishable only by name. */
 
-.detail-block {
+.price-menu {
   margin-top: var(--space-xl);
-  padding: var(--space-l) var(--space-m);
-  background: var(--surface);
-  border: 1px solid var(--line-soft);
-  border-radius: var(--r-l);
 }
 
-@media (min-width: 768px) {
-  .detail-block {
-    padding: var(--space-l);
-  }
-}
-
-.detail-block__head {
-  margin-bottom: var(--space-m);
-}
-
-.detail-block__head h3 {
+.price-menu__head h3 {
   font-family: var(--font-sans);
   font-size: var(--step-1);
   font-weight: 500;
   margin-bottom: 0.35em;
 }
 
-.detail-list {
+/* Compact toggle tiles — icon and name only, four across from lg. Clicking
+   one doesn't grow that tile in place; instead a popup anchored to the tile
+   itself (see PRICE POPUP below, `position: relative` here is its anchor)
+   opens over the grid. One column below 480px — two-up on the narrowest
+   phones squeezed names like "Facial Add-ons" onto three wrapped lines. */
+.price-grid {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.55em var(--space-m);
+  gap: var(--space-s);
+  margin-top: var(--space-m);
 }
 
-@media (min-width: 576px) {
-  .detail-list {
+@media (min-width: 480px) {
+  .price-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 992px) {
-  .detail-list {
+@media (min-width: 640px) {
+  .price-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-.detail-list li {
+@media (min-width: 992px) {
+  .price-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.price-tile {
   display: flex;
-  align-items: flex-start;
-  gap: 0.5em;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-s);
+  min-height: 60px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-l);
+  text-align: left;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.price-tile:hover {
+  border-color: var(--plum-200);
+}
+
+.price-tile.is-active {
+  border-color: var(--plum-400);
+  box-shadow: 0 0 0 3px var(--plum-100);
+}
+
+.price-tile__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  color: var(--plum-600);
+  background: var(--plum-50);
+  border-radius: 50%;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.price-tile.is-active .price-tile__icon {
+  color: #fff;
+  background: var(--plum-600);
+}
+
+.price-tile__name {
+  flex: 1;
   font-size: var(--step--1);
+  font-weight: 500;
   color: var(--text-strong);
 }
 
-.detail-list svg {
+/* Same plus/minus glyph as the shared Accordion — a different mark for the
+   same action would read as a different kind of control. */
+.price-tile__toggle {
+  position: relative;
   flex: none;
-  margin-top: 0.4em;
-  color: var(--plum-500);
+  width: 16px;
+  height: 16px;
 }
 
-/* Name takes the slack so the price stays pinned to the right of its row. */
-.detail-list__name {
+.price-tile__toggle::before,
+.price-tile__toggle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11px;
+  height: 1.5px;
+  background: var(--text-muted);
+  transform: translate(-50%, -50%);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.price-tile__toggle::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.price-tile.is-active .price-tile__toggle::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+/* A true popup — positioned by script (see ServicePricing.jsx) to sit right
+   under whichever tile was clicked, overlapping the tiles below it rather
+   than pushing them down. `.price-grid`'s `position: relative` above is
+   this popup's anchor. */
+.price-popup {
+  position: absolute;
+  z-index: 20;
+  width: min(360px, 100%);
+  padding: var(--space-m);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-l);
+  box-shadow: var(--shadow-lg);
+  animation: pricePopIn 0.18s var(--ease-out);
+}
+
+@keyframes pricePopIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .price-popup {
+    animation: none;
+  }
+}
+
+.price-popup__close {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--text-muted);
+  border-radius: 50%;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.price-popup__close:hover {
+  background: var(--sand-100);
+}
+
+.price-popup__title {
+  padding-right: var(--space-l);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 500;
+  margin-bottom: var(--space-2xs);
+}
+
+.price-popup__rows li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  padding-block: 0.6em;
+  font-size: var(--step--1);
+}
+
+.price-popup__rows li:not(:last-child) {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.price-popup__row-name {
+  flex: none;
+  color: var(--text-strong);
+}
+
+/* Classic printed-menu leader — a dotted rule filling the gap between the
+   name and its price, so a long list of prices still reads as one column
+   however much the names beside them vary in length. */
+.price-popup__row-leader {
   flex: 1;
+  min-width: 1.5em;
+  border-bottom: 1px dotted var(--line);
+  transform: translateY(-0.35em);
 }
 
-.detail-list__price {
+.price-popup__row-price {
   flex: none;
   font-variant-numeric: tabular-nums;
   color: var(--text-muted);
   white-space: nowrap;
 }
 
-.detail-price {
+.price-popup__note {
   margin-top: var(--space-s);
   font-size: var(--step--2);
   font-style: italic;

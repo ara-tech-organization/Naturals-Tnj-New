@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { CONTACT, HERO_SLIDES, WHY_US } from "../data/site";
 import { GALLERY_GROUPS, OCCASION_SERVICES } from "../data/services";
@@ -235,11 +235,11 @@ export function WhyNarrative() {
 }
 
 /* ==========================================================================
-   GALLERY — the transformation reel
+   GALLERY — the transformation carousel
    ========================================================================== */
 
 /**
- * Every photograph the homepage has already spent by the time the reel
+ * Every photograph the homepage has already spent by the time the carousel
  * arrives. Most are derived from the sections that use them, so moving a
  * picture cannot silently put it back in the gallery; the last four are named
  * because they live in Home.jsx rather than here.
@@ -256,17 +256,15 @@ const ALREADY_SHOWN = new Set([
 ]);
 
 /**
- * Nine frames, dealt one group at a time so each column mixes categories
- * rather than running as one column of brides and one of beards.
+ * A dozen frames, dealt one group at a time so the row mixes categories
+ * rather than running as a block of brides, then a block of beards.
  *
- * Anything the page has already shown is skipped. The gallery was drawing the
- * first image of each group, which is exactly what the hero plates and the
- * bridal proof strip use — so the section that exists to show the range of the
- * work was showing the pictures the visitor had already scrolled past. There
- * are twenty-five photographs in the four groups and eleven are spent by the
- * time the reel appears, which still leaves fourteen to choose nine from.
+ * Anything the page has already shown is skipped — the same logic the
+ * masonry gallery used, kept because the reasoning still holds: showing the
+ * pictures the visitor has already scrolled past defeats a section that
+ * exists to prove the range of the work.
  */
-const REEL = (() => {
+const CAROUSEL = (() => {
   const flat = [];
   // The longest group holds nine, so nine passes reaches every image.
   for (let i = 0; i < 9; i += 1) {
@@ -277,81 +275,138 @@ const REEL = (() => {
       }
     }
   }
-  return [0, 1, 2].map((c) => flat.slice(c * 3, c * 3 + 3));
+  return flat.slice(0, 12);
 })();
 
 /**
- * The gallery, edge to edge.
+ * A single scrolling row of large photographs — a filmstrip rather than a
+ * wall. Each frame keeps its category as a caption, so the range of the work
+ * still reads even without the grid's four-up structure.
  *
- * Everything above it is held inside the page's measure, so this one runs the
- * full width of the window and drops the container entirely — the change of
- * frame is what tells you the work has started. The heading is not above the
- * pictures but among them, occupying the first column like a caption plate in
- * a spread, which is also why the pictures can start at the very top edge of
- * the section.
+ * Native scroll-snap does the paging; the two round buttons are a desktop
+ * convenience for anyone without a trackpad or touchscreen, hidden wherever
+ * the device doesn't have a fine, hover-capable pointer to click them with.
  *
- * The three columns are level and static. They used to start at offset heights
- * and travel at different rates as the section passed, so no two frames lined
- * up across the row — depth, but at the cost of a wall that never resolved and
- * every frame moving against its neighbours. One crop, one baseline, rows that
- * line up.
+ * The row also advances itself, one card every few seconds, looping back to
+ * the start at the end — so the range of the work is on display even for a
+ * visitor who never touches it. It pauses the moment a pointer or keyboard
+ * focus enters the strip and only resumes once it leaves, and never starts at
+ * all under `prefers-reduced-motion`.
  */
 export function TransformationReel() {
+  const trackRef = useRef(null);
+
+  const scrollByCard = useCallback((dir) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.querySelector(".carousel__item");
+    const step = card ? card.getBoundingClientRect().width + 20 : 320;
+    track.scrollBy({ left: dir * step, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const track = trackRef.current;
+    if (!track) return undefined;
+
+    let paused = false;
+    const tick = () => {
+      if (paused) return;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+      if (atEnd) {
+        track.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        scrollByCard(1);
+      }
+    };
+    const pause = () => {
+      paused = true;
+    };
+    const resume = () => {
+      paused = false;
+    };
+
+    const id = window.setInterval(tick, 3200);
+    track.addEventListener("pointerenter", pause);
+    track.addEventListener("pointerleave", resume);
+    track.addEventListener("pointerdown", pause);
+    track.addEventListener("focusin", pause);
+    track.addEventListener("focusout", resume);
+
+    return () => {
+      window.clearInterval(id);
+      track.removeEventListener("pointerenter", pause);
+      track.removeEventListener("pointerleave", resume);
+      track.removeEventListener("pointerdown", pause);
+      track.removeEventListener("focusin", pause);
+      track.removeEventListener("focusout", resume);
+    };
+  }, [scrollByCard]);
+
   return (
-    <section className="reel" aria-labelledby="gallery-title">
-      <div className="reel__inner">
-        <div className="reel__intro" data-reveal>
+    <section className="carousel" aria-labelledby="gallery-title">
+      <div className="container">
+        <div className="carousel__head" data-reveal>
           <Chapter>Our Work</Chapter>
-          <h2 id="gallery-title" className="reel__title">
+          <h2 id="gallery-title" className="carousel__title">
             Real Transformations, Real Clients
           </h2>
-          <p className="reel__text">
+          <p className="carousel__text">
             Bridal makeovers, precision haircuts, spa sessions and grooming transformations —
             straight from our chairs.
           </p>
-          <div className="reel__actions">
+          <div className="carousel__actions">
             <Btn to="/gallery" variant="outline" size="sm">
               View Full Gallery
             </Btn>
           </div>
-
-          <ul className="reel__index">
-            {GALLERY_GROUPS.map((g) => (
-              <li key={g.id}>
-                <Link to={`/gallery/${g.id}`}>
-                  {g.title}
-                  <Icon name="arrowUpRight" size={13} />
-                </Link>
-              </li>
-            ))}
-          </ul>
         </div>
+      </div>
 
-        {REEL.map((column, c) => (
-          <ul key={c} className={`reel__col reel__col--${c + 1}`}>
-            {column.map((img) => (
-              <li key={img.src} data-reveal="fade">
-                <Link to={`/gallery/${img.group}`}>
-                  <img src={img.src} alt={img.alt} loading="lazy" decoding="async" />
-                  <span className="reel__caption">
-                    <span className="reel__caption-text">{img.title}</span>
-                    <Icon name="arrowUpRight" size={14} />
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ))}
+      <div className="carousel__viewport">
+        <ul className="carousel__track" ref={trackRef}>
+          {CAROUSEL.map((img) => (
+            <li key={img.src} className="carousel__item" data-reveal="fade">
+              <Link to={`/gallery/${img.group}`}>
+                <img src={img.src} alt={img.alt} loading="lazy" decoding="async" />
+                <span className="carousel__caption">
+                  <span className="carousel__caption-text">{img.title}</span>
+                  <Icon name="arrowUpRight" size={14} />
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="container">
-        <p className="reel__foot" data-reveal="fade">
-          Ready to be our next transformation story?{" "}
-          <Link className="inline-link" to="/book">
-            Book your appointment
-          </Link>{" "}
-          at Naturals Thanjavur today.
-        </p>
+        <div className="carousel__foot">
+          <p className="carousel__note" data-reveal="fade">
+            Ready to be our next transformation story?{" "}
+            <Link className="inline-link" to="/book">
+              Book your appointment
+            </Link>{" "}
+            at Naturals Thanjavur today.
+          </p>
+          <div className="carousel__nav">
+            <button
+              type="button"
+              className="carousel__arrow"
+              onClick={() => scrollByCard(-1)}
+              aria-label="Scroll to previous photos"
+            >
+              <Icon name="arrowLeft" size={18} />
+            </button>
+            <button
+              type="button"
+              className="carousel__arrow"
+              onClick={() => scrollByCard(1)}
+              aria-label="Scroll to more photos"
+            >
+              <Icon name="arrowRight" size={18} />
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
