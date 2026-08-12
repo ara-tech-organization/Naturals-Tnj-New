@@ -1,0 +1,348 @@
+/* ==========================================================================
+   EDITORIAL LAYER
+
+   Scoped to `.editorial`, which currently wraps the home page only. Everything
+   here is a refinement of a section that already exists in sections.css — this
+   file never introduces a second way to build a component, it just gives the
+   home page an editorial register: more air, hairlines instead of boxes, and
+   Cormorant carrying the section titles.
+
+   SIZE: deliberately a middle register. The hero owns the page's largest type
+   and is untouched by this file; every section below it is set to sit a clear
+   step under the hero rather than compete with it. If a rule here starts
+   approaching hero scale, it is wrong.
+
+   Because it is scoped, no other page moves until its wrapper is added too.
+   ========================================================================== */
+
+.editorial {
+  --rule: rgba(25, 18, 32, 0.13);
+  --rule-dark: rgba(255, 255, 255, 0.18);
+}
+
+/* ---- Rhythm --------------------------------------------------------------
+   A middle register: more air than the rest of the site carries, but well
+   short of a full magazine spread. The hero is deliberately excluded — it
+   sets the page's largest note, and everything below should sit under it
+   rather than compete. Nothing in this file touches `.hero`. */
+
+.editorial .section {
+  padding-block: clamp(3.25rem, 2.4rem + 4.2vw, 6rem);
+}
+
+.editorial .section--tight {
+  padding-block: clamp(2.5rem, 2rem + 2.4vw, 4rem);
+}
+
+/* ---- Display type --------------------------------------------------------
+   Cormorant runs a step above the base sheet's headings and a clear step
+   below the hero's H1, so section titles read as section titles. */
+
+.editorial .sec-head__title,
+.editorial .welcome__title,
+.editorial .numbers__title,
+.editorial .pops__title,
+.editorial .split__copy h2,
+.editorial .split__copy h3 {
+  font-size: clamp(1.65rem, 1.3rem + 1.7vw, 2.65rem);
+  line-height: 1.12;
+  letter-spacing: -0.018em;
+  font-weight: 400;
+}
+
+.editorial .sec-head__text,
+.editorial .lead {
+  max-width: 46ch;
+}
+
+/* ---- Chapter marker ------------------------------------------------------
+   Replaces the eyebrow on the home page: a gold hairline, then the label.
+   It opened with a section numeral until the page-wide sequence was dropped —
+   the rule is what carries the marker now. */
+
+.chapter {
+  display: flex;
+  align-items: center;
+  gap: 0.85em;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--track-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.chapter__rule {
+  flex: none;
+  width: clamp(28px, 5vw, 64px);
+  height: 1px;
+  background: var(--accent);
+  transform-origin: left center;
+}
+
+/* On the dark bands the muted ink the marker normally uses is unreadable, and
+   the gold rule needs the lighter tint to hold against plum. */
+.section--dark .chapter,
+.bridal__card .chapter {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.section--dark .chapter__rule,
+.bridal__card .chapter__rule {
+  background: var(--gold-300);
+}
+
+/* ---- Trust strip ---------------------------------------------------------
+   Was a solid plum band directly beneath the hero, which cut the page in two.
+   As a ruled ivory band it reads as a caption line under the opening spread. */
+
+.editorial .trust-strip {
+  background: transparent;
+  color: var(--text-muted);
+  padding-block: var(--space-s);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.editorial .trust-strip__list li {
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+}
+
+.editorial .trust-strip__list svg {
+  color: var(--accent);
+}
+
+@media (min-width: 992px) {
+  .editorial .trust-strip__list li:not(:first-child) {
+    border-left-color: var(--rule);
+  }
+
+}
+
+/* ---- Welcome -------------------------------------------------------------
+   The spread's own rules live with the section in sections.css; the editorial
+   layer only sets the register — the title runs a size above a body heading,
+   and the standfirst is allowed a wider measure than a `.lead` because it is
+   holding a column of its own rather than sitting under a heading. */
+
+.editorial .welcome__title {
+  max-width: 21ch;
+}
+
+.editorial .welcome__standfirst {
+  max-width: 40ch;
+}
+
+/* Pull quote — the editorial device that most says "magazine". Hangs off the
+   left rule so the eye reads it as a break in the column, not another
+   paragraph. */
+.pull-quote {
+  margin-block: var(--space-s);
+  padding-left: var(--space-m);
+  border-left: 2px solid var(--accent);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1rem + 0.55vw, 1.4rem);
+  font-style: italic;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--text-strong);
+}
+
+.pull-quote cite {
+  display: block;
+  margin-top: var(--space-2xs);
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  font-style: normal;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ---- Numbers -------------------------------------------------------------
+   Stats lose their boxes and sit on hairlines, which lets the numerals carry
+   the section instead of competing with a border. */
+
+.editorial .numbers {
+  gap: clamp(2rem, 0.5rem + 3.5vw, 3.75rem);
+}
+
+.editorial .numbers .stat {
+  border: 0;
+  background: none;
+  padding: var(--space-s) 0 0;
+  border-top: 1px solid var(--rule-dark);
+  border-radius: 0;
+}
+
+/* Now the row runs full width each figure has roughly twice the column it had,
+   so the numerals no longer need to be oversized to hold their own. Brought
+   down to sit just above the section heading rather than dwarfing it. */
+.editorial .numbers .stat__value {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.25rem + 1.25vw, 2.375rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.editorial .numbers .stat__label {
+  margin-top: var(--space-2xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: var(--step--2);
+}
+
+/* ---- Splits --------------------------------------------------------------
+   Photography gets more of the row, and the frame loses its shadow in favour
+   of a hairline — quieter, and it stops the image looking like a card. */
+
+@media (min-width: 992px) {
+  .editorial .split {
+    gap: clamp(2.25rem, 0.75rem + 3.6vw, 4.25rem);
+    align-items: center;
+  }
+
+}
+
+.editorial .figure-frame {
+  box-shadow: none;
+}
+
+.editorial .figure {
+  border-radius: var(--r-s);
+}
+
+/* ---- Why grid ------------------------------------------------------------ */
+
+.editorial .why-card {
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+  padding: var(--space-m) 0 0;
+  box-shadow: none;
+}
+
+.editorial .why-card__num {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  color: var(--accent);
+  background: none;
+  padding: 0;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.editorial .why-card__title {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+}
+
+/* ---- Gallery rail -------------------------------------------------------- */
+
+.editorial .rail__item {
+  width: clamp(210px, 19vw, 300px);
+}
+
+.editorial .rail__item img {
+  border-radius: var(--r-s);
+}
+
+/* ---- Why us --------------------------------------------------------------
+   Heading held in its own column beside the reasons rather than centred over
+   them, and sticky on desktop so the claim stays on screen while its evidence
+   scrolls past. The cards keep their hairline treatment from above. */
+
+.editorial .why-split {
+  display: grid;
+  gap: var(--space-l);
+}
+
+@media (min-width: 992px) {
+  .editorial .why-split {
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.6fr);
+    gap: clamp(2.5rem, 1rem + 3vw, 4.5rem);
+    align-items: start;
+  }
+
+  .editorial .why-split__head {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-l));
+  }
+
+  /* Two columns inside the right-hand track — three would set the reason text
+     in columns too narrow to read comfortably. */
+  .editorial .why-split .why-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+.editorial .why-split__title {
+  margin-top: var(--space-s);
+  max-width: 16ch;
+}
+
+.editorial .why-split__text {
+  margin-top: var(--space-2xs);
+  color: var(--text-muted);
+  max-width: 34ch;
+}
+
+.editorial .why-split__actions {
+  margin-top: var(--space-s);
+}
+
+/* ---- Gallery mosaic ------------------------------------------------------
+   Replaces the horizontal rail. Seven frames, the first running double width
+   and height so the block has a lead image instead of seven equal thumbnails. */
+
+.mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2xs);
+}
+
+@media (min-width: 768px) {
+  .mosaic {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-xs);
+  }
+
+}
+
+.mosaic__item {
+  overflow: hidden;
+  border-radius: var(--r-m);
+  background: var(--sand-100);
+  aspect-ratio: 1;
+}
+
+@media (min-width: 768px) {
+  .mosaic__item--lead {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+}
+
+.mosaic__item a {
+  display: block;
+  height: 100%;
+}
+
+.mosaic__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s var(--ease-out);
+}
+
+.mosaic__item a:hover img,
+.mosaic__item a:focus-visible img {
+  transform: scale(1.05);
+}
+

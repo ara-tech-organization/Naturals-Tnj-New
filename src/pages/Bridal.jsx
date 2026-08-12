@@ -1,0 +1,260 @@
+import PageHero from "../components/PageHero";
+import Icon from "../components/Icon";
+import { CtaBanner, FaqSection, Testimonials } from "../components/Blocks";
+import { ArrowLink, Btn, Eyebrow, SectionHeading } from "../components/Ui";
+import { OCCASION_SERVICES } from "../data/services";
+import { CONTACT, PAGE_FAQS } from "../data/site";
+import { faqSchema, localBusinessSchema, useSeo } from "../hooks/useSeo";
+import { PAGE_KEYWORDS } from "../data/keywords";
+import { IMG } from "../assets";
+
+const SCHEMA = {
+  "@context": "https://schema.org",
+  "@graph": [localBusinessSchema(CONTACT), faqSchema(PAGE_FAQS.bridal)],
+};
+
+const JOURNEY = [
+  {
+    t: "Consultation",
+    d: "We talk through your outfit, jewellery, venue lighting and the look you have in mind.",
+  },
+  {
+    t: "Trial Session",
+    d: "A personalised trial so there are no surprises on the morning itself. Adjust anything you want changed.",
+  },
+  {
+    t: "The Day",
+    d: "Makeup, hairdo and draping done to schedule, built to hold through a long day and photograph well.",
+  },
+  {
+    t: "Touch-ups",
+    d: "Finishing checks before you step out, so every frame looks the way you pictured it.",
+  },
+];
+
+/** The same run of services the statement paragraph names, set as a rule so it
+    can be scanned instead of read. */
+const COVERS = ["Bride", "Groom", "Saree Draping", "Hairdo", "Mehandi"];
+
+/** Each line of the old tick list, given a heading and its own tile — every
+    one is a separate booking someone might arrive for. */
+const SUITABLE_FOR = [
+  {
+    icon: "sparkle",
+    title: "Bridal",
+    text: "Engagement, muhurtham and reception looks, each built for its own venue and lighting.",
+  },
+  {
+    icon: "users",
+    title: "Groom Makeup",
+    text: "Grooming and makeup for the groom, so both of you photograph consistently.",
+  },
+  {
+    icon: "star",
+    title: "Party & Sangeet",
+    text: "Makeup for family and guests across the celebrations either side of the wedding.",
+  },
+  {
+    icon: "scissors",
+    title: "Draping & Hairdo",
+    text: "Saree draping and hairdo bookable on their own, without a full package.",
+  },
+  {
+    icon: "heart",
+    title: "Mehandi",
+    text: "Mehandi for the bride and for the wedding party, booked alongside or separately.",
+  },
+];
+
+export default function Bridal() {
+  useSeo({
+    title: "Bridal Makeup Artist in Thanjavur | Naturals Bridal Makeover",
+    description:
+      "Bridal makeup, groom makeup, saree draping, hairdo and mehandi at Naturals Thanjavur. Camera-ready bridal makeovers with personalised trial sessions. Book your bridal package.",
+    path: "/bridal-makeover",
+    keywords: PAGE_KEYWORDS.bridal,
+    image: IMG.makeup,
+    schema: SCHEMA,
+  });
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Glam Up Your Special Day"
+        title="Bridal Makeup Artist in Thanjavur — Your Perfect Wedding Look"
+        text="As one of Thanjavur's most trusted bridal makeup artists, we craft flawless, camera-ready looks tailored to your outfit, skin tone, and style."
+        image={IMG.bridalMakeover}
+        alt="Bridal makeover by Naturals Thanjavur makeup artists"
+        trail={[{ label: "Bridal" }]}
+      />
+
+      {/* ---- Statement --------------------------------------------------- */}
+      <section className="section vow">
+        <div className="container vow__grid">
+          <div className="vow__media" data-reveal>
+            <img
+              src={IMG.bridalPortrait}
+              alt="Bride in full bridal makeup and jewellery at Naturals Thanjavur"
+              loading="lazy"
+              decoding="async"
+            />
+            {/* The single fact a bride is scanning for, put on the picture
+                rather than buried in the paragraph below it. */}
+            <span className="vow__badge">
+              <Icon name="sparkle" size={16} />
+              Trial session included
+            </span>
+          </div>
+
+          <div className="vow__copy" data-reveal>
+            <Eyebrow>Your Day</Eyebrow>
+            <h2 className="vow__title">
+              Your day. Your moment. <em>Your transformation.</em>
+            </h2>
+            <p className="vow__lead lead">
+              From engagement to wedding day, our bridal packages include personalized trial
+              sessions. Walk down the aisle with total confidence.
+            </p>
+            <p className="vow__text">
+              As a bridal makeover salon in Thanjavur, we handle the whole day — a wedding makeup
+              artist for the bride, groom makeup, saree draping, hairdo and mehandi — so you
+              aren&rsquo;t coordinating four suppliers on the busiest morning of your life.
+            </p>
+
+            {/* The same list as the sentence above, set as a rule so it can be
+                scanned rather than read. */}
+            <ul className="vow__covers">
+              {COVERS.map((c) => (
+                <li key={c}>{c}</li>
+              ))}
+            </ul>
+
+            <div className="vow__actions">
+              <Btn to="/book" size="lg" icon="calendar">
+                Book Your Bridal Trial
+              </Btn>
+              <Btn href={CONTACT.phoneHref} variant="outline" size="lg" icon="phone">
+                Call {CONTACT.phoneDisplay}
+              </Btn>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Occasion services ------------------------------------------- */}
+      <section className="section section--alt" aria-labelledby="occasion-services">
+        <div className="container">
+          <SectionHeading
+            eyebrow="What We Offer"
+            title="Bridal & Special Occasion Services"
+            titleId="occasion-services"
+            text="Make every celebration unforgettable with our special occasion services, crafted by experienced bridal makeup artists in Thanjavur."
+            split
+            aside={
+              <Btn to="/book" size="sm" icon="calendar">
+                Book Your Package
+              </Btn>
+            }
+          />
+
+          <div className="bridal-grid stagger">
+            {OCCASION_SERVICES.map((s, i) => (
+              <article key={s.name} className="bridal-card" data-reveal>
+                <span className="bridal-card__num">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="bridal-card__title">{s.name}</h3>
+                <p className="bridal-card__text">{s.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Journey ----------------------------------------------------- */}
+      <section className="section section--dark journey" aria-labelledby="journey-title">
+        <span className="journey__glow" aria-hidden="true" />
+
+        <div className="container">
+          <div className="journey__head" data-reveal>
+            <Eyebrow>The Bridal Journey</Eyebrow>
+            <h2 id="journey-title" className="journey__title">
+              From first consultation to final touch-up
+            </h2>
+          </div>
+
+          {/* Read as a timeline rather than a stacked list: four steps on one
+              rule, so the whole run is visible at a glance. */}
+          <ol className="journey__track stagger">
+            {JOURNEY.map((s, i) => (
+              <li className="journey__step" key={s.t} data-reveal>
+                <span className="journey__node" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="journey__step-title">{s.t}</h3>
+                <p className="journey__step-text">{s.d}</p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="journey__actions" data-reveal>
+            <Btn to="/book" variant="light" icon="calendar">
+              Book Your Trial
+            </Btn>
+            <ArrowLink to="/gallery">See Bridal Gallery</ArrowLink>
+            {/* Brides routinely browse the general hair and skin menu on the
+                way to the date — the reciprocal link back from Women's
+                Services already exists. */}
+            <ArrowLink to="/womens-services">Women&rsquo;s Services</ArrowLink>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Suitable for ------------------------------------------------ */}
+      <section className="section section--alt occ" aria-labelledby="occ-title">
+        <div className="container">
+          <div className="occ__head" data-reveal>
+            <Eyebrow>Suitable For</Eyebrow>
+            <h2 id="occ-title" className="occ__title">
+              Every celebration, not only the wedding morning.
+            </h2>
+          </div>
+
+          {/* Tiles rather than ticks: each line is a distinct booking someone
+              might come in for, so each gets its own card. */}
+          <ul className="occ__grid stagger">
+            {SUITABLE_FOR.map((o) => (
+              <li className="occ__tile" key={o.title} data-reveal>
+                <span className="occ__icon" aria-hidden="true">
+                  <Icon name={o.icon} size={19} />
+                </span>
+                <h3 className="occ__tile-title">{o.title}</h3>
+                <p className="occ__tile-text">{o.text}</p>
+              </li>
+            ))}
+          </ul>
+
+          {/* The seasonal warning is the reason to call today, so it sits on
+              its own bar with the number as a button rather than as a note. */}
+          <div className="occ__note" data-reveal="fade">
+            <p>
+              <strong>Bridal dates book out well ahead of the season.</strong> Call to check
+              availability for your date.
+            </p>
+            <Btn href={CONTACT.phoneHref} variant="outline" size="sm" icon="phone">
+              {CONTACT.phoneDisplay}
+            </Btn>
+          </div>
+        </div>
+      </section>
+
+      <FaqSection items={PAGE_FAQS.bridal} title="Bridal Questions, Answered" />
+
+      <Testimonials />
+
+      <CtaBanner
+        eyebrow="Your Wedding Day"
+        title="Let's Plan Your Bridal Look"
+        text="Book a trial session with our bridal team and walk into your wedding day with total confidence."
+      />
+    </>
+  );
+}

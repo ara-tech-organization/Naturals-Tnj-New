@@ -1,0 +1,174 @@
+/* ==========================================================================
+   NATURALS THANJAVUR — DESIGN TOKENS
+   Palette derived from the live brand (primary hsl(281 34% 36%) = #7E4798)
+   Type: Poppins — the one family the live site declares, used throughout
+   ========================================================================== */
+
+:root {
+  /* ---- Brand plum (extracted from naturalsthanjavur.com) ---- */
+  --plum-950: #1F1425;
+  --plum-900: #2A1B31;
+  --plum-800: #3D2647;
+  --plum-700: #5C3370;
+  --plum-600: #7E4798; /* PRIMARY brand colour */
+  --plum-500: #9C5CB5; /* brand secondary */
+  --plum-400: #B583C9;
+  --plum-300: #CDAADB;
+  --plum-200: #E3CDEC;
+  --plum-100: #F0E4F5;
+  --plum-50: #FAF5FF;
+
+  /* ---- Warm neutrals (the "premium paper" ground) ---- */
+  --ivory: #FBF8F6;
+  --sand-50: #F6F0EC;
+  --sand-100: #EFE6E0;
+  --sand-200: #E2D5CC;
+  --sand-300: #CDBBAF;
+
+  /* ---- Accents ---- */
+  --rose-500: #C4738C; /* soft blush, refined from brand pink */
+  --rose-100: #FBEEF2;
+  --gold-500: #B79765; /* subtle luxury accent — rules, eyebrows */
+  --gold-300: #D9C39C;
+
+  /* ---- Ink ---- */
+  --ink-900: #191220;
+  --ink-700: #372C41;
+  --ink-500: #6A5E75;
+  --ink-400: #8B7F95;
+  --ink-300: #B3A9BB;
+
+  /* ---- Semantic ---- */
+  --bg: var(--ivory);
+  --bg-alt: var(--sand-50);
+  --bg-dark: var(--plum-950);
+  --surface: #FFFFFF;
+  --text: var(--ink-700);
+  --text-strong: var(--ink-900);
+  --text-muted: var(--ink-500);
+  --text-on-dark: rgba(255, 255, 255, 0.78);
+  --primary: var(--plum-600);
+  --primary-deep: var(--plum-800);
+  --accent: var(--gold-500);
+  --line: rgba(25, 18, 32, 0.1);
+  --line-soft: rgba(25, 18, 32, 0.06);
+  --line-dark: rgba(255, 255, 255, 0.14);
+
+  /* ---- Typography ---- */
+  /* Poppins throughout — the single family naturalsthanjavur.com declares
+     (`font-family: Poppins, sans-serif`), so the redesign matches the corporate
+     site exactly. The display role is a separate token rather than the same
+     value spelled twice: headings need their own tracking and weight, and
+     keeping the hook means a display face can be introduced later by editing
+     one line instead of hunting through 35 rules. */
+  --font-display: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Fluid scale: locked 320px -> 1440px. Smooth, no jumps between breakpoints.
+     Steps -2 to 1 are body and UI text and are unchanged.
+
+     Steps 2 to 7 are the heading scale. They were built for a poster-sized
+     display treatment (h1 reached 84px, the hero 112px) which read as shouty
+     rather than premium and pushed the opening copy of every page below the
+     fold. The whole heading range is now roughly a third smaller at desktop
+     while the ratios between steps are preserved, so the hierarchy is intact —
+     it is the same scale, quieter:
+
+        px @320 -> @1440      before          after
+        step-2   20 -> 26     18 -> 22
+        step-3   24 -> 34     20 -> 27
+        step-4   30 -> 46     24 -> 34
+        step-5   36 -> 62     27 -> 42     (h2)
+        step-6   42 -> 84     30 -> 54     (h1)
+        step-7   48 -> 112    34 -> 68     (hero headline) */
+  --step--2: clamp(0.688rem, 0.66rem + 0.14vw, 0.75rem);
+  --step--1: clamp(0.8rem, 0.77rem + 0.16vw, 0.875rem);
+  --step-0: clamp(0.938rem, 0.9rem + 0.18vw, 1.0625rem);
+  --step-1: clamp(1.063rem, 0.99rem + 0.36vw, 1.25rem);
+  --step-2: clamp(1.125rem, 1.054rem + 0.36vw, 1.375rem);
+  --step-3: clamp(1.25rem, 1.125rem + 0.63vw, 1.688rem);
+  --step-4: clamp(1.5rem, 1.321rem + 0.89vw, 2.125rem);
+  --step-5: clamp(1.688rem, 1.42rem + 1.34vw, 2.625rem);
+  --step-6: clamp(1.875rem, 1.446rem + 2.14vw, 3.375rem);
+  --step-7: clamp(2.125rem, 1.518rem + 3.04vw, 4.25rem);
+
+  /* Smaller display type needs marginally more leading than poster sizes did,
+     or the lines sit too close to read comfortably. */
+  --lh-tight: 1.08;
+  --lh-display: 1.14;
+  --lh-heading: 1.24;
+  --lh-body: 1.72;
+
+  --track-eyebrow: 0.22em;
+  /* Poppins is a wide geometric sans. At display sizes its default fit reads
+     loose and generic, so headings are pulled in noticeably harder than the
+     serif needed (-0.015em). */
+  --track-display: -0.032em;
+  --track-caps: 0.14em;
+
+  /* ---- Spacing (fluid section rhythm) ---- */
+  --space-3xs: clamp(0.25rem, 0.24rem + 0.05vw, 0.3rem);
+  --space-2xs: clamp(0.5rem, 0.47rem + 0.14vw, 0.625rem);
+  --space-xs: clamp(0.75rem, 0.7rem + 0.23vw, 0.875rem);
+  --space-s: clamp(1rem, 0.93rem + 0.36vw, 1.25rem);
+  --space-m: clamp(1.5rem, 1.36rem + 0.71vw, 2rem);
+  --space-l: clamp(2rem, 1.73rem + 1.34vw, 2.938rem);
+  --space-xl: clamp(3rem, 2.5rem + 2.5vw, 4.75rem);
+  --space-2xl: clamp(4rem, 3.11rem + 4.46vw, 7rem);
+  --space-3xl: clamp(5rem, 3.5rem + 7.5vw, 10rem);
+
+  /* Vertical rhythm for full sections */
+  --section-y: clamp(3.5rem, 2.3rem + 6vw, 7.5rem);
+  --section-y-tight: clamp(2.75rem, 2rem + 3.75vw, 5rem);
+
+  /* ---- Layout ---- */
+  --container-max: 1320px;
+  --container-narrow: 940px;
+  --gutter: clamp(1.125rem, 0.86rem + 1.34vw, 2.5rem);
+  /* The header keeps a constant height at every scroll position. Shrinking it
+     would change how much layout space the sticky bar occupies and shift the
+     page under the reader — so the "condensed" look is done with a transform
+     on the logo instead, which costs no layout.
+
+     The bar is the logo plus a fixed 6px of clearance top and bottom, and
+     nothing else: it carries the same 3vw slope and the same clamp shape as
+     `.logo__mark` (clamp(54px, 44px + 3vw, 80px) + 12px), so the mark keeps
+     its size at every width while the air around it stays constant instead of
+     opening up on wide screens. Change the logo clamp and this one has to
+     move with it. */
+  --header-h: clamp(66px, 56px + 3vw, 92px);
+  --header-h-scrolled: var(--header-h);
+
+  /* ---- Radii / shadow / motion ---- */
+  --r-xs: 4px;
+  --r-s: 8px;
+  --r-m: 14px;
+  --r-l: 22px;
+  --r-xl: 32px;
+  --r-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(25, 18, 32, 0.05), 0 2px 8px rgba(25, 18, 32, 0.04);
+  --shadow-md: 0 4px 12px rgba(25, 18, 32, 0.06), 0 12px 32px rgba(25, 18, 32, 0.07);
+  --shadow-lg: 0 12px 28px rgba(25, 18, 32, 0.08), 0 32px 64px rgba(42, 27, 49, 0.12);
+  --shadow-plum: 0 10px 30px rgba(126, 71, 152, 0.22);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.24s;
+  --dur: 0.42s;
+  --dur-slow: 0.85s;
+
+  --z-header: 700;
+  --z-menu: 800;
+  --z-float: 600;
+  --z-modal: 900;
+}
+
+/* Reduced-motion: strip transforms, keep opacity legibility */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0.01ms;
+    --dur: 0.01ms;
+    --dur-slow: 0.01ms;
+  }
+}

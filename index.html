@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#7E4798" />
+
+    <title>Best Unisex Salon for Hair, Bridal &amp; Spa | Naturals Salon Thanjavur</title>
+    <meta
+      name="description"
+      content="Experience premium hair styling, bridal makeovers, spa therapies &amp; men's grooming at Naturals Thanjavur. 15+ years of trusted expertise. Book your appointment today!"
+    />
+    <meta name="author" content="Naturals Beauty Salon" />
+    <link rel="canonical" href="https://naturalsthanjavur.com/" />
+
+    <!-- The logo is white on transparency, so it vanishes against a light tab.
+         The favicon is the "naturals" wordmark cropped out of /assets/logo.png
+         (tagline dropped) on brand plum — see scripts/make-favicon.ps1. The 64
+         is what a 2x display pulls for a 32px tab slot. -->
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-64.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Poppins is the single typeface naturalsthanjavur.com uses, and the only
+         one here. Self-hosted from /public/fonts (see src/styles/fonts.css), so
+         no fonts.googleapis.com stylesheet blocks first render and there is no
+         gstatic.com round trip.
+
+         Only the two faces needed above the fold are preloaded: 400 for body
+         copy and 500 for headings, navigation and buttons. -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/poppins-400-normal-latin.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/poppins-500-normal-latin.woff2"
+      crossorigin
+    />
+
+    <!-- Images are bundled from src/assets, so their built filenames are
+         content-hashed and cannot be named here. Vite rewrites these two to the
+         hashed URLs at build time because the paths resolve into the source
+         tree. The LCP image is the hero's first slide, which also carries
+         fetchpriority="high" in the markup. -->
+    <link rel="preload" as="image" href="/src/assets/hairstyle.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="/src/assets/logo.png" />
+
+    <!-- Google Tag Manager (carried over from the existing site) -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-5M5QNW6B');
+    </script>
+  </head>
+
+  <body>
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5M5QNW6B"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,2761 @@
+/* ==========================================================================
+   SECTIONS — page compositions
+   Breakpoints: xs <576 · sm 576 · md 768 · lg 992 · xl 1200 · xxl 1400
+   ========================================================================== */
+
+.inline-link {
+  color: var(--plum-700);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.inline-link:hover {
+  color: var(--plum-500);
+}
+
+.section--dark .inline-link {
+  color: var(--gold-300);
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  /* Pulled up under the sticky header, which is transparent at the top of the
+     page, then padded back down so the headline clears it. */
+  margin-top: calc(-1 * var(--header-h));
+  padding-top: calc(var(--header-h) + var(--space-xl));
+  padding-bottom: var(--space-2xl);
+  background: linear-gradient(170deg, var(--plum-50) 0%, var(--ivory) 46%, var(--sand-50) 100%);
+  overflow: hidden;
+}
+
+/* Soft plum bloom behind the image stack */
+.hero__wash {
+  position: absolute;
+  top: -12%;
+  right: -18%;
+  width: min(760px, 78vw);
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle at center,
+    rgba(126, 71, 152, 0.16) 0%,
+    rgba(126, 71, 152, 0.05) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+/* Two-column editorial split from lg — 52/48, not a plain half-and-half */
+@media (min-width: 992px) {
+  .hero__inner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, -1rem + 5vw, 4.5rem);
+  }
+
+}
+
+@media (min-width: 1200px) {
+  .hero__inner {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+}
+
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-s);
+}
+
+/* Load-in stagger. Runs from CSS so there is no layout work in JS. */
+.hero__anim {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  animation: heroIn 0.9s var(--ease-out) forwards;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes heroIn {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__anim {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+}
+
+.hero__title {
+  font-size: var(--step-7);
+  max-width: 15ch;
+}
+
+/* The keyword phrase inside a headline is marked with colour and weight, not
+   italics. A serif italic carried this elegantly; an italic geometric sans at
+   headline size just looks slanted, so the emphasis moves to the palette. */
+.hero__title em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--plum-700);
+}
+
+.hero__text {
+  max-width: 54ch;
+  font-size: var(--step-0);
+  color: var(--text-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-2xs);
+}
+
+/* Below 360px two full-width buttons read better than a cramped wrap */
+@media (max-width: 359.98px) {
+  .hero__actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+}
+
+.hero__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-m);
+  margin-top: var(--space-s);
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--line-soft);
+  width: 100%;
+}
+
+.hero__trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.hero__trust svg {
+  color: var(--plum-600);
+  flex: none;
+}
+
+/* ---- Hero image stack ---------------------------------------------------- */
+
+.hero__stage {
+  --px: 0;
+  --py: 0;
+  position: relative;
+  /* Reserve room for the offset sub-image and badge */
+  padding-bottom: clamp(2.5rem, 1rem + 7vw, 4.5rem);
+  padding-left: clamp(0rem, -2rem + 6vw, 3rem);
+}
+
+.hero__shot {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  background: var(--sand-100);
+  box-shadow: var(--shadow-lg);
+  /* Parallax: a few pixels only — enough to feel alive, not to distract */
+  transform: translate3d(calc(var(--px) * -14px), calc(var(--py) * -12px), 0);
+  transition: transform 0.5s var(--ease-out);
+}
+
+/* Every slide's image stays mounted; only opacity changes, so the cross-fade
+   never shows an empty box while a new file decodes. */
+.hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-out);
+}
+
+.hero__img.is-active {
+  opacity: 1;
+}
+
+.hero__shot--main {
+  aspect-ratio: 4 / 5;
+  animation: heroReveal 1.3s var(--ease-out) 0.1s both;
+}
+
+.hero__shot--sub {
+  position: absolute;
+  right: clamp(-0.5rem, -2rem + 4vw, 1rem);
+  bottom: 0;
+  width: clamp(112px, 34%, 220px);
+  aspect-ratio: 4 / 5;
+  border: 5px solid var(--ivory);
+  border-radius: var(--r-l);
+  transform: translate3d(calc(var(--px) * 26px), calc(var(--py) * 20px), 0);
+  animation: heroReveal 1.3s var(--ease-out) 0.45s both;
+}
+
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__shot,
+  .hero__shot--main,
+  .hero__shot--sub {
+    animation: none;
+    transform: none;
+    clip-path: none;
+    opacity: 1;
+  }
+
+}
+
+/* Floating "15+ years" mark */
+.hero__badge {
+  position: absolute;
+  left: clamp(-0.5rem, -1.5rem + 3vw, 0.5rem);
+  bottom: clamp(3rem, 2rem + 5vw, 6rem);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.75em 1.15em;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(8px);
+  animation: heroIn 0.9s var(--ease-out) 0.8s both;
+}
+
+.hero__badge-value {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--plum-700);
+}
+
+.hero__badge-label {
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Tap-to-call chip on the artwork */
+.hero__call {
+  position: absolute;
+  top: clamp(0.75rem, 0.2rem + 2vw, 1.75rem);
+  left: clamp(-0.5rem, -1.75rem + 3.5vw, 0.75rem);
+  z-index: 2;
+  display: none;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.6em 1.15em;
+  background: var(--plum-800);
+  color: #fff;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-md);
+  animation: heroIn 0.9s var(--ease-out) 0.9s both;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+@media (min-width: 576px) {
+  .hero__call {
+    display: inline-flex;
+  }
+
+}
+
+.hero__call:hover {
+  background: var(--plum-600);
+}
+
+/* ---- Slider controls ----------------------------------------------------- */
+
+.hero__controls {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  margin-top: var(--space-l);
+}
+
+/* From xl the scroll cue owns the bottom-left corner, so the controls move
+   clear of it rather than sitting on top. */
+@media (min-width: 1200px) {
+  .hero__controls {
+    justify-content: flex-end;
+  }
+
+}
+
+.hero__dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.hero__dot {
+  position: relative;
+  width: 42px;
+  height: 3px;
+  border-radius: var(--r-pill);
+  background: var(--line);
+  overflow: hidden;
+  transition: width var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+
+/* Enlarge the tap target without enlarging the mark itself */
+.hero__dot::before {
+  content: "";
+  position: absolute;
+  inset: -12px -4px;
+}
+
+.hero__dot:hover {
+  background: var(--plum-200);
+}
+
+.hero__dot.is-active {
+  width: 76px;
+}
+
+.hero__dot-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: var(--plum-700);
+}
+
+/* The active dot doubles as the autoplay progress bar; when autoplay is paused
+   or the visitor has taken control, it simply fills and stays. */
+.hero__dot.is-active .hero__dot-fill {
+  transform: scaleX(1);
+}
+
+.hero__dot-fill[data-run] {
+  animation: heroDot var(--dur, 3000ms) linear forwards;
+}
+
+@keyframes heroDot {
+  from { transform: scaleX(0); }
+
+  to { transform: scaleX(1); }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__dot-fill[data-run] {
+    animation: none;
+  }
+
+}
+
+.hero__arrows {
+  display: flex;
+  gap: var(--space-3xs);
+}
+
+.hero__arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--plum-800);
+  background: transparent;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.hero__arrow svg {
+  /* The shared chevron points down; rotate it into a left/right caret. */
+  transform: rotate(90deg);
+}
+
+.hero__arrow--next svg {
+  transform: rotate(-90deg);
+}
+
+.hero__arrow:hover {
+  background: var(--plum-800);
+  border-color: var(--plum-800);
+  color: #fff;
+}
+
+/* ---- Slider controls ------------------------------------------------------ */
+
+.hero__controls {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  margin-top: var(--space-l);
+}
+
+/* From xl the scroll cue occupies the bottom-left, so the controls move right
+   to sit beside it rather than on top of it. */
+@media (min-width: 1200px) {
+  .hero__controls {
+    justify-content: flex-end;
+  }
+
+}
+
+/* Pause/play keeps company with the dots, not the arrows: those two together
+   report the state of the rotation, while the arrows are navigation. */
+.hero__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.hero__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  color: var(--plum-700);
+  border: 1px solid rgba(126, 71, 152, 0.28);
+  border-radius: var(--r-pill);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+/* The play glyph is a closed triangle and wants a solid fill at this size; the
+   pause glyph is two open strokes, which a fill cannot touch. */
+.hero__toggle svg {
+  fill: currentColor;
+}
+
+.hero__toggle:hover {
+  background: var(--plum-600);
+  border-color: var(--plum-600);
+  color: #fff;
+}
+
+.hero__dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+/* Each dot is a progress track; the active one fills over the slide duration,
+   so the rotation is legible instead of arriving unannounced. */
+.hero__dot {
+  position: relative;
+  width: clamp(32px, 9vw, 54px);
+  height: 3px;
+  padding: 0;
+  background: rgba(126, 71, 152, 0.2);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  transition: background var(--dur) var(--ease-out);
+}
+
+/* The visible bar is thin, but the hit area is a comfortable 44px */
+.hero__dot::before {
+  content: "";
+  position: absolute;
+  inset: -20px -4px;
+}
+
+.hero__dot:hover {
+  background: rgba(126, 71, 152, 0.34);
+}
+
+.hero__dot.is-active {
+  background: rgba(126, 71, 152, 0.24);
+}
+
+.hero__dot-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--plum-600);
+  border-radius: inherit;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* Only the running slide animates; `data-run` is removed on pause, which
+   freezes the fill where it is rather than snapping it back. */
+.hero__dot-fill[data-run] {
+  animation: dotFill var(--dur, 3000ms) linear forwards;
+}
+
+.hero__dot.is-active .hero__dot-fill:not([data-run]) {
+  transform: scaleX(1);
+}
+
+@keyframes dotFill {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__dot-fill[data-run] {
+    animation: none;
+  }
+
+  .hero__dot.is-active .hero__dot-fill {
+    transform: scaleX(1);
+  }
+
+}
+
+.hero__arrows {
+  display: flex;
+  gap: var(--space-2xs);
+}
+
+.hero__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  color: var(--plum-700);
+  border: 1px solid rgba(126, 71, 152, 0.28);
+  border-radius: var(--r-pill);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.hero__arrow:hover {
+  background: var(--plum-600);
+  border-color: var(--plum-600);
+  color: #fff;
+}
+
+/* One chevron glyph serves both directions */
+.hero__arrow svg {
+  transform: rotate(90deg);
+}
+
+.hero__arrow--next svg {
+  transform: rotate(-90deg);
+}
+
+/* Scroll cue — desktop only, where there is room for it */
+.hero__scroll {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .hero__scroll {
+    position: absolute;
+    left: var(--gutter);
+    bottom: var(--space-l);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    font-size: var(--step--2);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    animation: heroIn 0.9s var(--ease-out) 1.1s both;
+  }
+
+}
+
+.hero__scroll-line {
+  position: relative;
+  width: 58px;
+  height: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.hero__scroll-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--plum-600);
+  animation: scrollCue 2.4s var(--ease-in-out) infinite;
+}
+
+@keyframes scrollCue {
+  0% { transform: translateX(-100%); }
+
+  55%, 100% { transform: translateX(100%); }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__scroll-line::after {
+    animation: none;
+  }
+
+}
+
+/* ==========================================================================
+   TRUST STRIP
+   ========================================================================== */
+
+.trust-strip {
+  background: var(--plum-950);
+  color: rgba(255, 255, 255, 0.82);
+  padding-block: var(--space-m);
+}
+
+.trust-strip__list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs) var(--space-m);
+}
+
+@media (min-width: 992px) {
+  .trust-strip__list {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-m);
+  }
+
+}
+
+.trust-strip__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.trust-strip__list svg {
+  flex: none;
+  color: var(--gold-300);
+}
+
+@media (min-width: 992px) {
+  .trust-strip__list li:not(:first-child) {
+    padding-left: var(--space-m);
+    border-left: 1px solid var(--line-dark);
+  }
+
+}
+
+/* ==========================================================================
+   STORY (asymmetric editorial intro)
+   ========================================================================== */
+
+.story {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+/* 42/58 asymmetric split from lg */
+@media (min-width: 992px) {
+  .story {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(2.5rem, 0rem + 6vw, 5.5rem);
+  }
+
+}
+
+.story__media {
+  position: relative;
+  /* Room for the overlapping inset image */
+  padding-bottom: clamp(2.5rem, 1rem + 8vw, 5rem);
+  padding-right: clamp(1.5rem, 0.5rem + 6vw, 4rem);
+}
+
+.story__media-inset {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: clamp(110px, 42%, 210px);
+  border: 6px solid var(--ivory);
+  box-shadow: var(--shadow-md);
+}
+
+.story__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.story__title {
+  margin-top: var(--space-s);
+  max-width: 18ch;
+}
+
+.story__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+  margin-top: var(--space-s);
+}
+
+/* ==========================================================================
+   WELCOME (home page opening spread)
+
+   The home page's introduction. `.story` above is the general two-column
+   intro and is still what the About page uses; this is the spread version,
+   used once, where the heading runs the full measure across the top and the
+   section breaks into plate and column only underneath it.
+   ========================================================================== */
+
+.welcome__head {
+  display: grid;
+  gap: var(--space-s);
+  padding-bottom: var(--space-m);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Title and standfirst share the top rule from lg. The title track is the
+   wider of the two so the standfirst reads as a note beside it rather than a
+   second column of equal weight. */
+@media (min-width: 992px) {
+  .welcome__head {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: end;
+    gap: clamp(2rem, 0.5rem + 3.5vw, 4rem);
+    padding-bottom: var(--space-l);
+  }
+
+}
+
+.welcome__title {
+  margin-top: var(--space-s);
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+/* Same treatment as the hero headline: the keyword phrase is marked with
+   colour and weight, never italics — Poppins italic at display size reads as
+   slanted rather than emphatic. */
+.welcome__title em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--plum-700);
+}
+
+.welcome__standfirst {
+  font-size: var(--step-1);
+  line-height: 1.6;
+  color: var(--text);
+  max-width: 42ch;
+}
+
+.welcome__sign {
+  margin-top: var(--space-s);
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  font-size: var(--step--2);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.welcome__sign::before {
+  content: "";
+  width: clamp(24px, 4vw, 48px);
+  height: 1px;
+  background: var(--accent);
+  flex: none;
+}
+
+.welcome__body {
+  display: grid;
+  gap: var(--space-l);
+  margin-top: var(--space-l);
+}
+
+/* Equal tracks. The copy keeps its own 52ch measure inside its half, so the
+   spread stays readable while the two columns balance. */
+@media (min-width: 992px) {
+  .welcome__body {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 0.5rem + 5vw, 5rem);
+    align-items: start;
+    margin-top: var(--space-xl);
+  }
+
+}
+
+/* ---- Plate --------------------------------------------------------------- */
+
+/* Holds the padding the inset hangs into, on both the bottom and the right. */
+.welcome__plate {
+  position: relative;
+  margin: 0;
+  padding-bottom: clamp(2rem, 0.75rem + 4.5vw, 3.25rem);
+  padding-right: clamp(1.25rem, 0.5rem + 4vw, 3rem);
+}
+
+/* Half the row is wide enough that a 4/5 crop would run a third taller than
+   the copy beside it and leave the spread ending on dead space. The ceiling
+   crops the photograph rather than letting it set the section's height. */
+.welcome__plate-lead {
+  max-height: 520px;
+}
+
+.welcome__plate-inset {
+  position: absolute;
+  right: 0;
+  /* Hangs into the padding the plate already reserves for it, so nothing below
+     has to make room. */
+  bottom: 0;
+  width: clamp(96px, 34%, 175px);
+  border: 6px solid var(--ivory);
+  box-shadow: var(--shadow-md);
+}
+
+/* ---- Copy ---------------------------------------------------------------- */
+
+.welcome__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+/* The copy column is set narrower than its track. A measure this long is
+   unreadable at full width, and the slack becomes the margin the spread needs
+   to feel composed rather than filled. */
+.welcome__para {
+  max-width: 52ch;
+}
+
+.welcome__para--sm {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  max-width: 46ch;
+}
+
+/* Drop cap — the one device that says "this is where the page starts
+   reading". Sized off the paragraph so it always spans about three lines. */
+.welcome__para:first-child::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 3.3em;
+  line-height: 0.8;
+  font-weight: 500;
+  margin: 0.06em 0.1em 0 0;
+  color: var(--primary);
+}
+
+.welcome__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+  margin-top: var(--space-2xs);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--line);
+}
+
+/* ==========================================================================
+   NUMBERS (dark stats band)
+   ========================================================================== */
+
+/* Head stacked above the figures, so the four numbers get the full container
+   width. Side by side, the widest value ("10,000+") set the column rhythm for
+   all four and the row read as ragged with dead space under the heading. */
+.numbers {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+
+/* Title and its supporting line sit on one row from lg, baseline-aligned so
+   the sentence hangs off the bottom of the heading like a standfirst. */
+@media (min-width: 992px) {
+  .numbers__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 0rem + 5vw, 5rem);
+    align-items: end;
+  }
+
+}
+
+.numbers__title {
+  margin-top: var(--space-s);
+  max-width: 14ch;
+}
+
+.numbers__text {
+  max-width: 48ch;
+  color: var(--text-on-dark);
+}
+
+@media (min-width: 992px) {
+  .numbers__text {
+    padding-bottom: 0.4em;
+  }
+
+}
+
+/* ==========================================================================
+   POPULAR SERVICES STRIP
+   ========================================================================== */
+
+.pops__head {
+  max-width: 46rem;
+  margin-bottom: clamp(1.75rem, 1rem + 2vw, 2.75rem);
+}
+
+.pops__title {
+  margin-top: var(--space-s);
+  font-size: var(--step-3);
+}
+
+.pops__text {
+  margin-top: var(--space-2xs);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  max-width: 52ch;
+}
+
+/* Ten photo tiles. Two per row on phones, five at desktop — so the strip is
+   two even rows rather than three ragged columns of different lengths. */
+.pops__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-s);
+}
+
+@media (min-width: 640px) {
+  .pops__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-m);
+  }
+
+}
+
+@media (min-width: 1200px) {
+  .pops__grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+}
+
+.pops__tile {
+  position: relative;
+  display: block;
+  height: 100%;
+}
+
+.pops__media {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-m);
+  background: var(--sand-100);
+}
+
+.pops__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s var(--ease-out);
+}
+
+.pops__tile:hover .pops__media img,
+.pops__tile:focus-visible .pops__media img {
+  transform: scale(1.05);
+}
+
+/* A plum veil that deepens on hover — enough to lift the arrow off the
+   photograph without dulling the image at rest. */
+.pops__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(31, 20, 37, 0.34), rgba(31, 20, 37, 0.06) 55%);
+  opacity: 0.55;
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.pops__tile:hover .pops__media::after,
+.pops__tile:focus-visible .pops__media::after {
+  opacity: 0.9;
+}
+
+/* Caption sits below the frame, not over it: at this tile size an overlaid
+   name competes with the photograph and loses. */
+.pops__body {
+  display: block;
+  padding-top: var(--space-xs);
+}
+
+.pops__tag {
+  display: block;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--plum-600);
+}
+
+.pops__name {
+  display: block;
+  margin-top: 0.25em;
+  /* Two lines' worth reserved, so a name that wraps does not push its row of
+     tiles out of line with the row beside it. */
+  min-height: 2.4em;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
+  line-height: 1.2;
+  color: var(--text-strong);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.pops__tile:hover .pops__name,
+.pops__tile:focus-visible .pops__name {
+  color: var(--plum-700);
+}
+
+.pops__icon {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  color: #fff;
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition:
+    opacity var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+}
+
+.pops__tile:hover .pops__icon,
+.pops__tile:focus-visible .pops__icon {
+  opacity: 1;
+  transform: none;
+}
+
+.pops__foot {
+  margin-top: var(--space-l);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--line-soft);
+}
+
+/* ==========================================================================
+   SERVICE EXPLORER
+   ========================================================================== */
+
+/* Tab-specific CTA in the section head — the button changes route with the
+   selected audience, the link below it always reaches the full catalogue. */
+.explorer__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2xs);
+}
+
+@media (min-width: 992px) {
+  .explorer__cta {
+    align-items: flex-end;
+  }
+
+}
+
+/* 55/45 image-left, list-right from lg */
+/* ---- Named service lanes (H3 blocks under the section's H2) -------------- */
+
+.lanes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-m);
+  margin-top: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+  .lanes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+.lane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: var(--space-l) var(--space-m);
+  background: var(--sand-50);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-l);
+}
+
+.lane__title {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--text-strong);
+}
+
+.lane__text {
+  font-size: var(--step--1);
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.lane__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s);
+  margin-top: auto;
+  padding-top: var(--space-s);
+}
+
+/* ==========================================================================
+   SPLIT (reusable asymmetric text/media section)
+   ========================================================================== */
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+@media (min-width: 992px) {
+  .split {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(2.5rem, 0rem + 6vw, 5.5rem);
+  }
+
+  /* Media first in the DOM, copy first visually — or the reverse */
+  .split--reverse .split__copy {
+    order: -1;
+  }
+
+  /* Even split, for a media column that should carry as much weight as the
+     copy beside it rather than trail behind it at 0.9fr. */
+  .split--equal {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+}
+
+.split__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.split__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+  margin-top: var(--space-s);
+}
+
+.split__media {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.split__media-second {
+  width: 76%;
+  align-self: flex-end;
+}
+
+/* Held-back media column. On desktop the photograph is measured off the copy
+   beside it: the column stretches to the row height and the figure takes its
+   width from that height through the aspect ratio, so the image tops and tails
+   with the text instead of floating short in the middle of it. */
+.split__media--sm {
+  max-width: 380px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .split__media--sm {
+    max-width: none;
+    align-self: stretch;
+  }
+
+  .split__media--sm > * {
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* The frame shrinks to the photo rather than to the column, or the plum
+     corner rule it draws would sit adrift of the image it belongs to. */
+  .split__media--sm .figure-frame {
+    display: flex;
+    align-self: center;
+    max-width: 100%;
+  }
+
+  .split__media--sm .figure {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+  }
+
+}
+
+.tick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  margin-top: var(--space-2xs);
+}
+
+.tick-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7em;
+  font-size: var(--step-0);
+  line-height: 1.6;
+}
+
+.tick-list svg {
+  flex: none;
+  margin-top: 0.4em;
+  color: var(--plum-600);
+}
+
+.section--dark .tick-list svg {
+  color: var(--gold-300);
+}
+
+/* ==========================================================================
+   WHY GRID
+   ========================================================================== */
+
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  /* Ruled rows, not boxed cells. Six bordered tiles beside a held heading read
+     as a feature comparison; hairlines read as a list of reasons, which is what
+     this is. The rule is drawn per item so the columns stay independent. */
+  gap: 0 clamp(2rem, 0rem + 4vw, 3.5rem);
+}
+
+@media (min-width: 640px) {
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (min-width: 992px) {
+  .why-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+}
+
+.why-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.15em var(--space-s);
+  align-items: baseline;
+  padding-block: var(--space-m);
+  border-top: 1px solid var(--line);
+  background: none;
+  transition: none;
+}
+
+/* The numeral is the only thing that moves — the row itself stays put, since
+   there is nothing to click. */
+.why-card:hover .why-card__num {
+  grid-row: span 2;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--plum-400);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--dur) var(--ease-out);
+}
+
+.why-card__num {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--plum-300);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.why-card:hover .why-card__num {
+  color: var(--plum-600);
+}
+
+.why-card__title {
+  font-family: var(--font-sans);
+  font-size: var(--step-1);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.why-card__text {
+  font-size: var(--step--1);
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   GALLERY RAIL (horizontal scroll)
+   ========================================================================== */
+
+.rail {
+  margin-top: var(--space-m);
+  /* Bleeds to the viewport edge — the gutter becomes leading padding */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--plum-300) transparent;
+}
+
+.rail::-webkit-scrollbar {
+  height: 4px;
+}
+
+.rail::-webkit-scrollbar-thumb {
+  background: var(--plum-300);
+  border-radius: var(--r-pill);
+}
+
+.rail__track {
+  display: flex;
+  gap: var(--space-s);
+  padding-inline: var(--gutter);
+  padding-bottom: var(--space-s);
+  width: max-content;
+}
+
+.rail__item {
+  flex: none;
+  width: clamp(220px, 62vw, 380px);
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-l);
+  overflow: hidden;
+  background: var(--sand-100);
+  scroll-snap-align: center;
+}
+
+@media (min-width: 768px) {
+  .rail__item {
+    width: clamp(260px, 32vw, 340px);
+  }
+
+  .rail__item:nth-child(even) {
+    aspect-ratio: 4 / 5;
+    align-self: flex-end;
+  }
+
+}
+
+.rail__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s var(--ease-out);
+}
+
+.rail__item:hover img {
+  transform: scale(1.05);
+}
+
+.rail__foot {
+  margin-top: var(--space-m);
+}
+
+/* ==========================================================================
+   TESTIMONIALS
+   ========================================================================== */
+
+/* Every review on the page at once as a three-up row. The band's whole finish
+   lives in CSS so the markup stays a heading and a list of figures. */
+
+.reviews {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  /* The reviews foot already ends on a hairline and a lone button, which reads
+     as a close on its own — the full section rhythm underneath it was doubling
+     up with whatever follows. */
+  padding-bottom: clamp(2rem, 1.5rem + 2.2vw, 3.5rem);
+}
+
+.reviews .container {
+  position: relative;
+  z-index: 1;
+}
+
+.reviews__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-m);
+}
+
+@media (min-width: 640px) {
+  .reviews__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+@media (min-width: 992px) {
+  .reviews__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 0.5rem + 1.6vw, 2rem);
+  }
+
+}
+
+/* Cards stretch to the tallest quote so the attribution rows line up across
+   the set, however long the individual reviews run. */
+.reviews__grid > li {
+  display: flex;
+}
+
+/* ---- The card ------------------------------------------------------------ */
+
+.rev-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  width: 100%;
+  padding: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-l);
+  box-shadow: 0 18px 44px rgba(63, 34, 78, 0.07);
+  overflow: hidden;
+  transition:
+    transform var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+
+/* A plum-to-gold rule across the top edge, drawn in on hover */
+.rev-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--plum-600), var(--gold-500), var(--plum-600));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.rev-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--plum-200);
+  box-shadow: 0 26px 60px rgba(63, 34, 78, 0.12);
+}
+
+.rev-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Oversized watermark, cropped by the card — texture, not an icon */
+.rev-card__mark {
+  position: absolute;
+  top: -20px;
+  right: -12px;
+  color: rgba(126, 71, 152, 0.06);
+  pointer-events: none;
+}
+
+.rev-card__stars {
+  display: inline-flex;
+  gap: 3px;
+  color: var(--gold-500);
+}
+
+/* Pushes the attribution to the foot of the card whatever the quote's length */
+.rev-card__quote {
+  flex: 1;
+}
+
+.rev-card__quote p {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-strong);
+}
+
+/* Typographic quote marks, set in the accent so they frame without shouting */
+.rev-card__quote p::before {
+  content: "\201C";
+}
+
+.rev-card__quote p::after {
+  content: "\201D";
+}
+
+.rev-card__quote p::before,
+.rev-card__quote p::after {
+  color: var(--plum-300);
+}
+
+.rev-card__by {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--line-soft);
+}
+
+/* Lettered medallion — no client photos were supplied, and initials read
+   better than a generic avatar placeholder. */
+.rev-card__mono {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 46px;
+  height: 46px;
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: linear-gradient(145deg, var(--plum-500), var(--plum-700));
+  border-radius: var(--r-pill);
+  box-shadow: 0 6px 16px rgba(126, 71, 152, 0.26);
+}
+
+.rev-card__who {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  min-width: 0;
+}
+
+.rev-card__name {
+  font-size: var(--step-0);
+  font-weight: 500;
+  color: var(--text-strong);
+}
+
+.rev-card__service {
+  font-size: var(--step--2);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.reviews__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-s) var(--space-m);
+  margin-top: var(--space-l);
+}
+
+/* Google Business Profile score, shown in the stage's footer row */
+.reviews-cta__score {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+
+.reviews-cta__stars {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--gold-500);
+}
+
+.reviews-cta__score strong {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+/* ==========================================================================
+   FAQ
+   ========================================================================== */
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-l);
+}
+
+@media (min-width: 992px) {
+  .faq-grid {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(2.5rem, 0rem + 6vw, 5rem);
+    align-items: start;
+  }
+
+  .faq-grid__aside {
+    position: sticky;
+    top: calc(var(--header-h-scrolled) + var(--space-l));
+  }
+
+}
+
+/* ==========================================================================
+   VISIT / LOCATION
+   ========================================================================== */
+
+/* The map is the section now. The address used to sit in a panel beside it,
+   which made two boxes competing for one job; here the map runs as a wide band
+   and the details float over its left third — the listing-on-a-map reading
+   everyone already knows from Maps itself. The heading is centred over the
+   band rather than split across the full measure. */
+.visit-lead {
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.visit {
+  position: relative;
+  max-width: 1120px;
+  margin-inline: auto;
+}
+
+.visit__card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  /* Below lg the card sits under the map but overlaps its bottom edge, so the
+     two never read as two stacked strangers. */
+  margin: calc(-1 * var(--space-l)) var(--space-s) 0;
+  padding: var(--space-m);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-l);
+  box-shadow: 0 24px 60px rgba(63, 34, 78, 0.16);
+}
+
+@media (min-width: 992px) {
+  /* A card floated with position:absolute doesn't count toward its parent's
+     height, so once the card's content ran taller than the map, it hung off
+     the top and bottom edges — the overflow in the last screenshot. Stacking
+     map and card in the same grid cell instead makes the row size to whichever
+     is tallest, so the card is always fully enclosed. Right side, not left:
+     this embed is a Google "place" pin, which draws its own native info card
+     over the left edge of the map, so a left-anchored card would still
+     collide with it. */
+  .visit {
+    display: grid;
+  }
+
+  .visit__map,
+  .visit__card {
+    grid-area: 1 / 1;
+  }
+
+  .visit__card {
+    align-self: center;
+    justify-self: end;
+    margin: var(--space-l) clamp(1.5rem, -1rem + 4vw, 3rem);
+    padding: var(--space-l);
+    border-radius: var(--r-xl);
+    width: min(390px, 40%);
+  }
+}
+
+/* A small plum tag over the branch name settles which Naturals this is before
+   the address has to. */
+.visit__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35em;
+  padding-bottom: var(--space-s);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.visit__tag {
+  display: inline-block;
+  margin-bottom: 0.2em;
+  padding: 0.3em 0.85em;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--plum-700);
+  background: var(--plum-50);
+  border-radius: var(--r-pill);
+}
+
+.visit__branch {
+  font-size: var(--step-2);
+  line-height: 1.2;
+}
+
+.visit__pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+
+.visit__pin svg {
+  flex: none;
+  color: var(--plum-600);
+}
+
+.visit__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.visit__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-s);
+}
+
+.visit__list svg {
+  flex: none;
+  margin-top: 0.25em;
+  color: var(--plum-600);
+}
+
+.visit__list > li > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+  min-width: 0;
+}
+
+.visit__label {
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.25em;
+}
+
+.visit__value {
+  font-size: var(--step-0);
+  line-height: 1.55;
+  color: var(--text-strong);
+  /* Long addresses and emails must not push the grid wide */
+  overflow-wrap: anywhere;
+}
+
+.visit__hint {
+  margin-top: 0.35em;
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+
+/* Three details down a narrow card, a step under body size — reference you
+   scan once, not copy you read. Each icon sits in a plum disc, which is what
+   keeps a run of small text blocks from reading as a form. */
+.visit__list--stack {
+  gap: var(--space-s);
+}
+
+.visit__list--stack > li {
+  gap: var(--space-xs);
+}
+
+.visit__list--stack > li > svg {
+  box-sizing: content-box;
+  margin-top: 0;
+  padding: 0.45rem;
+  background: var(--plum-50);
+  border-radius: 50%;
+}
+
+.visit__list--stack .visit__value {
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+
+/* Landmark wayfinding, three-up beneath the band: at this size it reads as
+   marginalia to the map rather than a paragraph competing inside the card. */
+.visit__ways {
+  display: grid;
+  gap: var(--space-xs) var(--space-l);
+  max-width: 1120px;
+  margin: var(--space-m) auto 0;
+}
+
+@media (min-width: 768px) {
+  .visit__ways {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+.visit__ways li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6em;
+  font-size: var(--step--2);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.visit__ways svg {
+  flex: none;
+  margin-top: 0.4em;
+  color: var(--plum-600);
+}
+
+.visit__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin-top: auto;
+  padding-top: var(--space-s);
+}
+
+/* The band itself — tall enough to read as a map rather than a strip, and it
+   carries the frame now that the details float free of it. */
+.visit__map {
+  position: relative;
+  min-height: 300px;
+  background: var(--sand-100);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-l);
+  overflow: hidden;
+}
+
+@media (min-width: 992px) {
+  .visit__map {
+    min-height: 520px;
+    border-radius: var(--r-xl);
+  }
+
+}
+
+.visit__map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  /* Warm the map slightly so it sits inside the palette */
+  filter: saturate(0.85) contrast(1.02);
+}
+
+/* ==========================================================================
+   CTA BAND
+   ========================================================================== */
+
+/* A white plate, with every element carried in dark plum. The decoration below
+   is deliberately faint: on lavender it could afford weight, but on white the
+   same values read as smudges, so each is roughly halved. */
+.cta-band {
+  position: relative;
+  /* Tighter than --space-2xl. The CTA almost always follows another white
+     section, so its top padding was stacking on that section's bottom padding
+     and opening a void with no change of colour to justify it. */
+  padding-block: clamp(2.5rem, 1.9rem + 2.7vw, 4.25rem);
+  background: var(--surface);
+  color: var(--plum-800);
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Hairline rings — pushed half off-canvas so only an arc shows */
+.cta-band__ring {
+  position: absolute;
+  z-index: 1;
+  aspect-ratio: 1;
+  border: 1px solid rgba(126, 71, 152, 0.13);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cta-band__ring--l {
+  width: clamp(180px, 26vw, 320px);
+  top: -18%;
+  left: -6%;
+}
+
+.cta-band__ring--r {
+  width: clamp(240px, 34vw, 440px);
+  right: -10%;
+  bottom: -34%;
+  border-color: rgba(183, 151, 101, 0.18);
+}
+
+.cta-band__spark {
+  position: absolute;
+  z-index: 1;
+  color: var(--plum-500);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.cta-band__spark--a {
+  top: 16%;
+  left: 9%;
+}
+
+.cta-band__spark--b {
+  right: 12%;
+  top: 26%;
+  color: var(--gold-500);
+  opacity: 0.65;
+}
+
+/* Below md the band is narrow enough that edge decoration crowds the copy */
+@media (max-width: 767.98px) {
+  .cta-band__spark--a,
+  .cta-band__spark--b {
+    display: none;
+  }
+
+  .cta-band__ring--l {
+    display: none;
+  }
+
+}
+
+.cta-band__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-s);
+}
+
+.cta-band__title {
+  max-width: 20ch;
+  color: var(--plum-900);
+}
+
+/* The band is pale lavender, so the eyebrow and the two button variants that
+   were built for dark sections get flipped to dark ink here. */
+.cta-band .eyebrow {
+  color: var(--plum-700);
+}
+
+.cta-band .btn--light {
+  --btn-bg: var(--plum-600);
+  --btn-fg: #fff;
+  border-color: var(--plum-600);
+}
+
+.cta-band .btn--light::after {
+  background: var(--plum-800);
+}
+
+.cta-band .btn--light:hover,
+.cta-band .btn--light:focus-visible {
+  --btn-fg: #fff;
+}
+
+.cta-band .btn--ghost {
+  --btn-fg: var(--plum-700);
+  border-color: var(--plum-500);
+}
+
+.cta-band .btn--ghost::after {
+  background: var(--plum-700);
+}
+
+.cta-band .btn--ghost:hover,
+.cta-band .btn--ghost:focus-visible {
+  --btn-fg: #fff;
+  border-color: var(--plum-700);
+}
+
+.cta-band__text {
+  max-width: 58ch;
+  font-size: var(--step-0);
+}
+
+.cta-band__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-s);
+}
+
+/* Stack the two CTAs below 400px rather than letting them wrap awkwardly */
+@media (max-width: 399.98px) {
+  .cta-band__actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+}
+
+/* ==========================================================================
+   BOOKING
+   ========================================================================== */
+
+.booking {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  /* Stretch (the grid default) rather than start: the aside's content is the
+     taller of the two, and stretching lets the panel's card grow to match
+     instead of leaving the shorter column looking clipped off early. */
+  align-items: stretch;
+}
+
+@media (min-width: 992px) {
+  .booking {
+    /* Right column trimmed from 0.75fr to 0.6fr — the aside carries less
+       visual weight than the form it sits beside. */
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+    gap: clamp(2.5rem, 0rem + 5vw, 4.5rem);
+  }
+
+}
+
+.booking__panel {
+  display: flex;
+  flex-direction: column;
+  /* The form itself may be shorter than the stretched card (the two-step
+     wizard's first screen is only three fields) — centering keeps it from
+     reading as pinned to the top of an oversized box. */
+  justify-content: center;
+  padding: var(--space-l) var(--space-m);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-l);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 768px) {
+  .booking__panel {
+    padding: var(--space-xl) var(--space-l);
+  }
+
+}
+
+.booking-form__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-s);
+  margin-top: var(--space-l);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--line-soft);
+}
+
+@media (min-width: 576px) {
+  .booking-form__foot {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-m);
+  }
+
+}
+
+.booking-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
+/* The step swapped in on Continue/Back has already been validated onto
+   screen — a quick settle rather than the scroll-triggered `data-reveal`
+   system, which only fires once per element as it enters the viewport. */
+.step-panel {
+  animation: stepIn var(--dur-slow) var(--ease-out);
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-panel {
+    animation: none;
+  }
+}
+
+.booking__aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-s);
+  padding: var(--space-m);
+  background: var(--plum-950);
+  color: rgba(255, 255, 255, 0.75);
+  border-radius: var(--r-l);
+  font-size: var(--step--1);
+}
+
+.booking__aside h3 {
+  color: #fff;
+  font-size: var(--step-1);
+}
+
+.booking__aside .visit__label {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.booking__aside .visit__value {
+  color: #fff;
+  font-size: var(--step--1);
+}
+
+.booking__aside .visit__list svg {
+  color: var(--plum-400);
+}
+
+/* The tick's default plum sits far too close to the plum-950 panel to read,
+   so inside the aside it takes the gold used on every other dark surface. */
+.booking__aside .tick-list svg {
+  color: var(--gold-300);
+}
+
+.booking__aside .tick-list li {
+  font-size: var(--step--1);
+}
+
+/* The list above the ticks already carries the section's breathing room; the
+   rule keeps the two halves of the panel legibly separate. */
+.booking__aside .visit__list {
+  padding-top: var(--space-s);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ==========================================================================
+   SPA & WELLNESS (08)
+   Section 06 is already a copy-beside-media split, so this one is composed the
+   other way round: a two-part head on one row, then the photography running
+   the full width beneath it as an even three-frame band.
+   ========================================================================== */
+
+.spa__head {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-m);
+  margin-bottom: var(--space-xl);
+}
+
+/* Title left, supporting line and actions right — baseline-aligned so the
+   sentence hangs off the bottom of the heading like a standfirst. */
+@media (min-width: 992px) {
+  .spa__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 0rem + 5vw, 5rem);
+    align-items: end;
+  }
+
+}
+
+.spa__title {
+  margin-top: var(--space-s);
+  max-width: 16ch;
+}
+
+.spa__text {
+  max-width: 48ch;
+  color: var(--text-on-dark);
+}
+
+.spa__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+  margin-top: var(--space-s);
+}
+
+/* Three equal frames. Tall portrait crops on a phone would push the section to
+   a full screen each, so they stay landscape until there is width for three. */
+.spa__band {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-s);
+}
+
+@media (min-width: 768px) {
+  .spa__band {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+.spa__band li {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--r-l);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+@media (min-width: 768px) {
+  .spa__band li {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* The middle frame drops slightly, so the row reads as a composition rather
+     than three boxes in a line. */
+  .spa__band li:nth-child(2) {
+    transform: translateY(clamp(1rem, 3vw, 2.5rem));
+  }
+
+}
+
+.spa__band img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s var(--ease-out);
+}
+
+.spa__band li:hover img {
+  transform: scale(1.05);
+}
+
+.spa__label {
+  position: absolute;
+  left: var(--space-s);
+  bottom: var(--space-s);
+  padding: 0.4em 1em;
+  background: rgba(31, 20, 37, 0.62);
+  color: #fff;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  border-radius: var(--r-pill);
+  backdrop-filter: blur(6px);
+}
+
+/* The offset middle frame would otherwise crop against the section padding. */
+@media (min-width: 768px) {
+  .spa {
+    padding-bottom: calc(var(--section-y) + clamp(1rem, 3vw, 2.5rem));
+  }
+
+}
+
+/* Two ruled columns from md. Each column starts its own rule, so the first row
+   of both columns aligns instead of one column leading with a stray line. */
+@media (min-width: 768px) {
+  .why-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+/* ==========================================================================
+   SERVICE MENU (04)
+   An openable list. Each category is a full-width row that discloses its own
+   treatments and photograph in place, so the menu answers "what is in this?"
+   without a page change. Disclosure is used nowhere else on the home page.
+   ========================================================================== */
+
+.menu__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-l);
+}
+
+.menu__tab {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6em;
+  min-height: 46px;
+  padding: 0.6em 1.4em;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  transition:
+    background var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out);
+}
+
+.menu__tab:hover {
+  border-color: var(--plum-400);
+  color: var(--plum-700);
+}
+
+.menu__tab.is-active {
+  background: var(--plum-600);
+  border-color: var(--plum-600);
+  color: #fff;
+}
+
+.menu__tab-count {
+  font-family: var(--font-display);
+  font-size: var(--step--2);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+
+/* ---- Rows ---------------------------------------------------------------- */
+
+.menu {
+  border-top: 1px solid var(--line);
+}
+
+.menu__item {
+  border-bottom: 1px solid var(--line);
+  transition: background var(--dur) var(--ease-out);
+}
+
+.menu__item.is-open {
+  background: var(--plum-50);
+}
+
+.menu__heading {
+  font: inherit;
+  margin: 0;
+}
+
+.menu__trigger {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.3em var(--space-s);
+  width: 100%;
+  padding: var(--space-s) var(--space-s) var(--space-s) 0;
+  text-align: left;
+  transition: padding-left var(--dur) var(--ease-out);
+}
+
+@media (min-width: 768px) {
+  .menu__trigger {
+    gap: var(--space-m);
+    padding-block: var(--space-m);
+  }
+
+  .menu__item:hover .menu__trigger,
+  .menu__item.is-open .menu__trigger {
+    padding-left: var(--space-s);
+  }
+
+}
+
+.menu__num {
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+  color: var(--plum-400);
+  font-variant-numeric: tabular-nums;
+}
+
+.menu__name {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: var(--track-display);
+  color: var(--text-strong);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.menu__item:hover .menu__name,
+.menu__item.is-open .menu__name {
+  color: var(--plum-700);
+}
+
+/* Count drops under the name on a phone, where there is no third column. */
+.menu__count {
+  grid-column: 2;
+  font-size: var(--step--2);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+@media (min-width: 768px) {
+  .menu__count {
+    grid-column: auto;
+    text-align: right;
+  }
+
+}
+
+/* A plus that becomes a minus — the state of the row, not a chevron pointing
+   somewhere. Built from two rules so it needs no icon swap. */
+.menu__mark {
+  position: relative;
+  grid-row: 1;
+  grid-column: 3;
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+
+@media (min-width: 768px) {
+  .menu__mark {
+    grid-column: 4;
+  }
+
+}
+
+.menu__mark::before,
+.menu__mark::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 1.5px;
+  background: var(--plum-600);
+  transform: translate(-50%, -50%);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.menu__mark::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.menu__item.is-open .menu__mark::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+/* ---- Disclosed panel ----------------------------------------------------- */
+
+.menu__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur) var(--ease-out);
+}
+
+.menu__item.is-open .menu__panel {
+  grid-template-rows: 1fr;
+}
+
+.menu__panel > div {
+  overflow: hidden;
+}
+
+.menu__body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-m);
+  padding: 0 0 var(--space-l);
+}
+
+/* Photograph beside the detail from md — it is supporting evidence for the
+   treatments, so it takes the smaller half. */
+@media (min-width: 768px) {
+  .menu__body {
+    grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr);
+    gap: clamp(1.5rem, 0rem + 3.5vw, 3rem);
+    padding-left: var(--space-s);
+    align-items: start;
+  }
+
+}
+
+.menu__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--r-m);
+  background: var(--sand-100);
+}
+
+@media (min-width: 768px) {
+  .menu__media {
+    aspect-ratio: 3 / 4;
+    max-height: 300px;
+  }
+
+}
+
+.menu__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.menu__detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.menu__text {
+  max-width: 62ch;
+  font-size: var(--step--1);
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.menu__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.45em var(--space-m);
+}
+
+@media (min-width: 480px) {
+  .menu__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+@media (min-width: 992px) {
+  .menu__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+.menu__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--text-strong);
+}
+
+.menu__list svg {
+  flex: none;
+  margin-top: 0.35em;
+  color: var(--plum-500);
+}
+
+.menu__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+  margin-top: var(--space-2xs);
+}
+
+
+/* ==========================================================================
+   BRIDAL (05)
+   A poster: full-bleed photograph with a solid card overlapping it, then the
+   occasion services as their own band. The only composition on the page where
+   two planes sit on top of each other rather than beside each other — section
+   06 already owns side-by-side, and a scrim would repeat the hero.
+   ========================================================================== */
+
+.bridal {
+  position: relative;
+  padding-bottom: var(--section-y);
+  background: var(--bg-alt);
+}
+
+.bridal__frame {
+  height: clamp(280px, 46vw, 560px);
+  overflow: hidden;
+  background: var(--sand-100);
+}
+
+.bridal__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Bridal portraits put the face high in the frame; centring the crop cuts it. */
+  object-position: center 28%;
+}
+
+/* The card climbs into the photograph. The overlap is deliberate and large —
+   a few pixels reads as a mistake, a third of the card reads as a composition. */
+.bridal__card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-s);
+  margin-top: clamp(-3.5rem, -7vw, -2rem);
+  padding: var(--space-l) var(--space-m);
+  background: var(--plum-950);
+  color: var(--text-on-dark);
+  border-radius: var(--r-l);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 768px) {
+  .bridal__card {
+    max-width: 34rem;
+    margin-top: clamp(-11rem, -16vw, -6rem);
+    padding: var(--space-xl) var(--space-l);
+  }
+}
+
+/* From lg it pulls left of the container edge, so the card breaks the grid the
+   rest of the page sits on — which is what makes it read as a plate laid over
+   the photograph rather than a box inside a column. */
+@media (min-width: 1200px) {
+  .bridal__card {
+    margin-left: calc(-1 * var(--gutter));
+  }
+}
+
+.bridal__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.375rem);
+  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: var(--track-display);
+  color: #fff;
+}
+
+/* The promise drops to its own line in gold rather than running on as part of
+   the service name. */
+.bridal__title em {
+  display: block;
+  margin-top: 0.15em;
+  font-style: normal;
+  color: var(--gold-300);
+}
+
+.bridal__text {
+  max-width: 42ch;
+  font-size: var(--step--1);
+  line-height: 1.7;
+}
+
+.bridal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-2xs);
+}
+
+/* ---- Occasion band ------------------------------------------------------- */
+
+.bridal__services {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--space-m);
+  margin-top: var(--space-l);
+  border-top: 1px solid var(--line);
+}
+
+@media (min-width: 768px) {
+  .bridal__services {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .bridal__services {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0 var(--space-s);
+  }
+}
+
+.bridal__services a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  padding-block: var(--space-s);
+  border-bottom: 1px solid var(--line);
+  transition: border-color var(--dur) var(--ease-out);
+}
+
+.bridal__services a:hover {
+  border-bottom-color: var(--plum-600);
+}
+
+.bridal__services-num {
+  font-family: var(--font-display);
+  font-size: var(--step--2);
+  color: var(--plum-400);
+  font-variant-numeric: tabular-nums;
+}
+
+.bridal__services-name {
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--text-strong);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.bridal__services a:hover .bridal__services-name {
+  color: var(--plum-700);
+}
