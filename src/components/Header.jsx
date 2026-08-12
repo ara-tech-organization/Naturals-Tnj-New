@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { BRAND, CONTACT, NAV, SECONDARY_NAV, SERVICE_TABS, WHATSAPP } from "../data/site";
+import { BRAND, CONTACT, NAV, SERVICE_TABS, WHATSAPP } from "../data/site";
 import { MENS_SERVICES, WOMENS_SERVICES } from "../data/services";
 import Icon from "./Icon";
 import MegaMenu from "./MegaMenu";
@@ -182,6 +182,10 @@ export default function Header({ overlay = false, dark = false }) {
           </nav>
 
           <div className="header__actions">
+            <a href={CONTACT.phoneHref} className="header__call">
+              <Icon name="phone" size={14} />
+              {CONTACT.phoneDisplay}
+            </a>
             <Btn to="/book" size="sm" className="header__cta" icon="calendar">
               Book Appointment
             </Btn>
@@ -304,19 +308,11 @@ export default function Header({ overlay = false, dark = false }) {
             })}
           </nav>
 
+          {/* Actions only. The secondary link row and the phone/email/address
+              block that used to sit either side of it are gone: the number was
+              already the Call button, and the drawer closed on a wall of small
+              print rather than on the three things a visitor opened it for. */}
           <div className="drawer__foot">
-            {/* Not in the numbered list above — these are the secondary pages
-                the desktop footer carries, kept reachable on mobile. */}
-            <ul className="drawer__secondary">
-              {SECONDARY_NAV.map((item) => (
-                <li key={item.to}>
-                  <Link to={item.to} onClick={close}>
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
             <div className="drawer__actions">
               <Btn to="/book" size="sm" icon="calendar" onClick={close}>
                 Book
@@ -327,11 +323,6 @@ export default function Header({ overlay = false, dark = false }) {
               <Btn href={WHATSAPP} variant="ghost" size="sm" icon="whatsapp">
                 WhatsApp
               </Btn>
-            </div>
-            <div className="drawer__meta">
-              <a href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</a>
-              <a href={CONTACT.emailHref}>{CONTACT.email}</a>
-              <span>{CONTACT.addressShort}</span>
             </div>
           </div>
         </div>

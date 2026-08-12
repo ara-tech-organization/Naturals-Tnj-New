@@ -175,34 +175,75 @@ export function Accordion({ items, defaultOpen = -1, renderBody }) {
   );
 }
 
+/**
+ * Each question as its own ticket — a numbered stub torn away from the
+ * question by a perforated edge, closed until picked up. The stub number
+ * gives the set a sense of a fixed count to get through, which a plain
+ * accordion row doesn't carry.
+ */
+function FaqTickets({ items }) {
+  const [open, setOpen] = useState(0);
+  const uid = useId();
+
+  return (
+    <ul className="ticket-list" role="list">
+      {items.map((item, i) => {
+        const isOpen = open === i;
+        const panelId = `${uid}-p${i}`;
+
+        return (
+          <li className={`ticket${isOpen ? " is-open" : ""}`} key={item.q}>
+            <h3>
+              <button
+                type="button"
+                className="ticket__trigger"
+                aria-expanded={isOpen}
+                aria-controls={panelId}
+                onClick={() => setOpen(isOpen ? -1 : i)}
+              >
+                <span className="ticket__stub">{String(i + 1).padStart(2, "0")}</span>
+                <span className="ticket__q">{item.q}</span>
+                <span className="ticket__toggle" aria-hidden="true" />
+              </button>
+            </h3>
+            <div className="ticket__panel" id={panelId} role="region">
+              <div>
+                <p className="ticket__a">{item.a}</p>
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 export function FaqSection({ items = FAQS, title = "Frequently Asked Questions" }) {
   return (
     <section className="section" aria-labelledby="faq-title">
       <div className="container">
-        <div className="faq-grid">
-          <div className="faq-grid__aside">
-            <div data-reveal>
-              <Eyebrow>Good To Know</Eyebrow>
-              <h2 id="faq-title" style={{ marginTop: "var(--space-s)" }}>
-                {title}
-              </h2>
-            </div>
-            <p className="lead" data-reveal style={{ marginTop: "var(--space-s)" }}>
+        <SectionHeading
+          eyebrow="Good To Know"
+          title={title}
+          titleId="faq-title"
+          center
+          text={
+            <>
               Still have a question? Call us on{" "}
               <a href={CONTACT.phoneHref} className="inline-link">
                 {CONTACT.phoneDisplay}
               </a>{" "}
               — we&rsquo;re happy to help.
-            </p>
-            <div data-reveal style={{ marginTop: "var(--space-m)" }}>
-              <Btn href={WHATSAPP} variant="outline" size="sm" icon="whatsapp">
-                Ask on WhatsApp
-              </Btn>
-            </div>
-          </div>
-          <div className="faq-grid__main" data-reveal>
-            <Accordion items={items} defaultOpen={0} />
-          </div>
+            </>
+          }
+          aside={
+            <Btn href={WHATSAPP} variant="outline" size="sm" icon="whatsapp">
+              Ask on WhatsApp
+            </Btn>
+          }
+        />
+        <div data-reveal>
+          <FaqTickets items={items} />
         </div>
       </div>
     </section>

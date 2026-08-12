@@ -204,9 +204,17 @@ export const HERO_MEDIA = {
   video: null,
 };
 
+/**
+ * `mark` is the short label on the floating chip over the hero photograph.
+ * It used to print `main.alt` instead — but alt text is a description written
+ * for screen readers and search engines, and set in caps across four lines on
+ * the picture it reads as a metadata dump. The chip is decorative, so it gets
+ * copy written to be looked at.
+ */
 export const HERO_SLIDES = [
   {
     id: "unisex",
+    mark: "Hair · Beauty · Grooming",
     eyebrow: `${BRAND.name} ${BRAND.place} · Since ${BRAND.since}`,
     title: [{ t: "Thanjavur's Trusted Salon for " }, { t: "Hair, Bridal & Grooming", em: true }],
     text: "Looking for the best salon in Thanjavur? Naturals Beauty Parlour brings together expert hair styling, bridal makeup artistry, rejuvenating spa therapies, and complete grooming solutions under one roof. With 15+ years of trusted service, we've become one of the most recommended unisex salons in Thanjavur for both everyday beauty needs and once-in-a-lifetime moments.",
@@ -223,6 +231,7 @@ export const HERO_SLIDES = [
   },
   {
     id: "bridal",
+    mark: "Bridal Studio",
     eyebrow: "Glam Up Your Special Day",
     title: [{ t: "Bridal Makeover in Thanjavur" , em: true }, { t: ", Crafted for Your Big Day" }],
     text: "As one of Thanjavur's most trusted bridal makeup artists, we craft flawless, camera-ready looks tailored to your outfit, skin tone, and style — with a personalised trial session before the day itself.",
@@ -239,6 +248,7 @@ export const HERO_SLIDES = [
   },
   {
     id: "mens",
+    mark: "Grooming Lounge",
     eyebrow: "For Him",
     title: [{ t: "Men's Grooming Salon in Thanjavur", em: true }, { t: " for the Modern Man" }],
     text: "Sharp haircuts, expert beard styling and trimming, facials built for men's skin, and complete grooming packages — all in a unisex salon the men of Thanjavur have trusted for over 15 years.",
@@ -286,29 +296,37 @@ export const TRUST_POINTS = [
   "Hygienic & Safe Environment",
 ];
 
-/** "Why Thanjavur Trusts Naturals" — verbatim from the content document. */
+/** "Why Thanjavur Trusts Naturals" — verbatim from the content document.
+    `icon` is the mark on the home page's plate for each reason; the Services
+    page renders the same list numbered only, and ignores it. */
 export const WHY_US = [
   {
+    icon: "award",
     title: "15+ Years of Proven Expertise",
     text: "Serving Thanjavur since 2009, with a track record built on consistent, dependable results.",
   },
   {
+    icon: "users",
     title: "Certified & Experienced Stylists",
     text: "A trained team that stays current with global styling techniques and trends.",
   },
   {
+    icon: "sparkle",
     title: "Premium, Skin-Friendly Products",
     text: "Salon-grade products chosen to suit Indian skin and hair, never harsh on either.",
   },
   {
+    icon: "shield",
     title: "Hygienic, Comfortable Environment",
     text: "Clean, well-maintained spaces where every tool and station is prepared for you.",
   },
   {
+    icon: "heart",
     title: "Thousands of Happy Customers",
     text: "Trusted by more than 10,000 clients across Thanjavur and the surrounding districts.",
   },
   {
+    icon: "star",
     title: "Personalized Beauty Solutions",
     text: "Every service is shaped around your hair type, skin type and the look you want.",
   },

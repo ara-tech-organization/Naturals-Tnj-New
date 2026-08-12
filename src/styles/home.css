@@ -1,0 +1,1753 @@
+/* ==========================================================================
+   HOME — THE BEAUTY TRANSFORMATION JOURNEY
+
+   The homepage's own design layer, loaded last. Everything here belongs to a
+   section that exists only on `/`, so no other page can be disturbed by it.
+
+   The page is composed as one continuous journey rather than a stack of bands:
+
+     Arrival      cinematic hero, full viewport
+     Discovery    welcome spread, the salon in its own words
+     Expertise    service discovery, category by category
+     Transform    the signature bridal plate, men's, spa
+     Experience   parallax story, the reasons, the numbers
+     Trust        testimonials, gallery, questions
+     Booking      location and the closing plate
+
+   Two custom properties carry the motion, both written outside React by
+   hooks/useMotion and both absent under `prefers-reduced-motion`:
+
+     --p        0…1 progress of a section through the viewport (scroll)
+     --px/--py  -0.5…0.5 pointer position in the viewport (depth)
+
+   Every rule that reads them has a resting value that looks right when they
+   are never written, so the page is complete before a single frame of motion.
+   ========================================================================== */
+
+/* ==========================================================================
+   01 · CINEMATIC HERO
+   ========================================================================== */
+
+.chero {
+  --p: 0.5;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  /* Pulled up under the transparent sticky header, then padded back down so
+     the headline clears it. */
+  margin-top: calc(-1 * var(--header-h));
+  padding-top: calc(var(--header-h) + var(--space-l));
+  padding-bottom: clamp(6rem, 4rem + 8vw, 9rem);
+  overflow: hidden;
+  background: var(--plum-950);
+  color: #fff;
+}
+
+/* ---- Layers 01–03 · the stage -------------------------------------------- */
+
+.chero__stage {
+  --px: 0;
+  --py: 0;
+  position: absolute;
+  /* Over-sized so the parallax offset never exposes an edge. */
+  inset: -3%;
+  z-index: -1;
+  /* Pointer drift, plus a slow settle downward as the page scrolls away, so
+     the section below rises out from behind the hero. */
+  transform: translate3d(
+    calc(var(--px) * -14px),
+    calc(var(--py) * -10px + (var(--p) - 0.5) * 56px),
+    0
+  );
+  transition: transform 0.6s var(--ease-out);
+  will-change: transform;
+}
+
+.chero__video,
+.chero__plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chero__plate {
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 1.1s var(--ease-out);
+}
+
+/* The active plate drifts as it sits — the difference between a photograph on
+   screen and a film of one. */
+.chero__plate.is-active {
+  opacity: 1;
+  animation: cheroDrift 12s linear both;
+}
+
+@keyframes cheroDrift {
+  from {
+    transform: scale(1.05);
+  }
+
+  to {
+    transform: scale(1.14);
+  }
+}
+
+/* Weighted to the left, and deliberately not a flat wash: the photography is
+   the campaign, so the right two-thirds of the frame stay open. */
+.chero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(20, 12, 25, 0.9) 0%,
+      rgba(20, 12, 25, 0.72) 32%,
+      rgba(20, 12, 25, 0.22) 62%,
+      rgba(20, 12, 25, 0.44) 100%
+    ),
+    linear-gradient(to top, rgba(20, 12, 25, 0.78) 0%, rgba(20, 12, 25, 0) 42%);
+}
+
+/* The brand's own light, moving further than the photograph beneath it. */
+.chero__glow {
+  position: absolute;
+  top: -18%;
+  right: -12%;
+  width: min(780px, 82vw);
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle at center,
+    rgba(156, 92, 181, 0.42) 0%,
+    rgba(126, 71, 152, 0.16) 42%,
+    transparent 68%
+  );
+  transform: translate3d(calc(var(--px) * 38px), calc(var(--py) * 30px), 0);
+  transition: transform 0.7s var(--ease-out);
+  pointer-events: none;
+}
+
+/* ---- Layer 04 · the copy ------------------------------------------------- */
+
+.chero__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  /* Lifts and fades as the hero leaves, so the copy does not simply travel
+     with the page. */
+  transform: translate3d(0, calc((var(--p) - 0.5) * -70px), 0);
+  opacity: calc(1.9 - var(--p) * 1.5);
+}
+
+.chero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-s);
+  max-width: 44rem;
+}
+
+/* Load-in stagger. Runs from CSS so there is no layout work in JS. */
+.chero__anim {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  animation: cheroIn 1s var(--ease-out) forwards;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes cheroIn {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.chero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  margin: 0;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--track-eyebrow);
+  text-transform: uppercase;
+  color: var(--gold-300);
+}
+
+.chero__eyebrow-rule {
+  width: clamp(28px, 5vw, 56px);
+  height: 1px;
+  background: var(--gold-500);
+  flex: none;
+}
+
+.chero__title {
+  margin: 0;
+  /* The page's largest note. Everything below it is set a clear step down. */
+  font-size: clamp(2.2rem, 1.35rem + 4.1vw, 4.5rem);
+  line-height: 1.04;
+  letter-spacing: var(--track-display);
+  font-weight: 500;
+  color: #fff;
+  text-wrap: balance;
+  text-shadow: 0 2px 24px rgba(20, 12, 25, 0.35);
+}
+
+/* The keyword phrase carries the brand's gold rather than a second weight of
+   white — an italic geometric sans at this size only reads as slanted. */
+.chero__title em {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--gold-300);
+}
+
+.chero__text {
+  margin: 0;
+  max-width: 54ch;
+  font-size: var(--step-0);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.chero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-2xs);
+}
+
+.chero__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em var(--space-m);
+  margin: var(--space-2xs) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chero__trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+}
+
+.chero__trust svg {
+  color: var(--gold-300);
+  flex: none;
+}
+
+/* ---- Layers 05–06 · floating marks --------------------------------------- */
+
+.chero__marks {
+  display: none;
+}
+
+/* Only from lg: on a narrow screen these would sit on top of the headline,
+   and the headline is what the section is for. */
+@media (min-width: 992px) {
+  .chero__marks {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-s);
+    text-align: right;
+    /* Furthest forward of the layers, so it moves most. */
+    transform: translate3d(calc(var(--px) * 26px), calc(var(--py) * 20px), 0);
+    transition: transform 0.7s var(--ease-out);
+  }
+
+  /* One line, always. The chip is a mark on the photograph, and a mark that
+     wraps to four lines is a paragraph sitting on the picture. */
+  .chero__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+    padding: 0.7em 1.15em;
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(20, 12, 25, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--r-pill);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: cheroIn 1s var(--ease-out) 0.8s both;
+  }
+
+  .chero__label-dot {
+    width: 7px;
+    height: 7px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--gold-300);
+    box-shadow: 0 0 0 4px rgba(217, 195, 156, 0.22);
+  }
+
+  .chero__years {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+    font-size: var(--step--2);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
+    animation: cheroIn 1s var(--ease-out) 0.95s both;
+  }
+
+  .chero__years strong {
+    font-size: var(--step-4);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: #fff;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+}
+
+/* ---- Controls ------------------------------------------------------------ */
+
+.chero__controls {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: clamp(1.5rem, 0.5rem + 3vw, 2.75rem);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  width: 100%;
+}
+
+/* From xl the scroll cue owns the bottom-left corner, so the controls clear
+   it rather than sitting on top. */
+@media (min-width: 1200px) {
+  .chero__controls {
+    justify-content: flex-end;
+  }
+}
+
+.chero__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.chero__toggle,
+.chero__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: var(--r-pill);
+  background: rgba(20, 12, 25, 0.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.chero__toggle {
+  width: 34px;
+  height: 34px;
+}
+
+.chero__arrow {
+  width: 46px;
+  height: 46px;
+}
+
+/* The play glyph is a closed triangle and wants a solid fill at this size; the
+   pause glyph is two open strokes, which a fill cannot touch. */
+.chero__toggle svg {
+  fill: currentColor;
+}
+
+.chero__toggle:hover,
+.chero__arrow:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--plum-800);
+}
+
+/* One chevron glyph serves both directions */
+.chero__arrow svg {
+  transform: rotate(90deg);
+}
+
+.chero__arrow--next svg {
+  transform: rotate(-90deg);
+}
+
+.chero__arrows {
+  display: flex;
+  gap: var(--space-3xs);
+}
+
+.chero__dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+/* Each dot is a progress track; the active one fills over the slide duration,
+   so the rotation is legible instead of arriving unannounced. */
+.chero__dot {
+  position: relative;
+  width: clamp(30px, 8vw, 52px);
+  height: 3px;
+  padding: 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: var(--r-pill);
+  transition: background var(--dur) var(--ease-out);
+}
+
+/* The visible bar is thin, but the hit area is a comfortable 44px */
+.chero__dot::before {
+  content: "";
+  position: absolute;
+  inset: -20px -4px;
+}
+
+.chero__dot:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.chero__dot-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--gold-300);
+  border-radius: inherit;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* Only the running slide animates; `data-run` is removed on pause, which
+   freezes the fill where it is rather than snapping it back. */
+.chero__dot-fill[data-run] {
+  animation: cheroDot var(--dur, 3000ms) linear forwards;
+}
+
+.chero__dot.is-active .chero__dot-fill:not([data-run]) {
+  transform: scaleX(1);
+}
+
+@keyframes cheroDot {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.chero__count {
+  display: none;
+  font-size: var(--step--2);
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.72);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.chero__count i {
+  font-style: normal;
+  margin: 0 0.35em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+@media (min-width: 576px) {
+  .chero__count {
+    display: inline-block;
+  }
+}
+
+/* ---- Scroll cue ---------------------------------------------------------- */
+
+.chero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(4.5rem, 3rem + 5vw, 6.5rem);
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.85em;
+  padding: 0;
+  font-size: var(--step--2);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+  animation: cheroIn 1s var(--ease-out) 1.2s both;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.chero__scroll:hover {
+  color: #fff;
+}
+
+@media (min-width: 1200px) {
+  .chero__scroll {
+    left: var(--gutter);
+    bottom: clamp(1.5rem, 0.5rem + 3vw, 2.75rem);
+    transform: none;
+  }
+}
+
+.chero__scroll-line {
+  position: relative;
+  width: 64px;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.chero__scroll-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gold-300);
+  animation: cheroCue 2.4s var(--ease-in-out) infinite;
+}
+
+@keyframes cheroCue {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  55%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Small screens: the copy is the hero, so the trust row trims to the two
+   claims that matter and the controls tuck under the copy. */
+@media (max-width: 575.98px) {
+  .chero {
+    padding-bottom: clamp(7rem, 5rem + 10vw, 9rem);
+  }
+
+  .chero__trust li:nth-child(n + 3) {
+    display: none;
+  }
+
+  .chero__actions .btn {
+    flex: 1 1 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chero__stage,
+  .chero__glow,
+  .chero__inner,
+  .chero__marks {
+    transform: none;
+    opacity: 1;
+  }
+
+  .chero__plate.is-active,
+  .chero__anim,
+  .chero__label,
+  .chero__years,
+  .chero__scroll {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .chero__scroll-line::after,
+  .chero__dot-fill[data-run] {
+    animation: none;
+  }
+
+  .chero__dot.is-active .chero__dot-fill {
+    transform: scaleX(1);
+  }
+}
+
+/* ==========================================================================
+   03 · SERVICES — heading, then the catalogue as a card slider
+
+   The track is a native scroll container. Everything the interaction needs —
+   swipe, trackpad, keyboard, scrollbar — comes from that; the arrows only
+   call scrollBy and scroll-snap decides where a card lands.
+   ========================================================================== */
+
+.svc {
+  padding-block: clamp(3.5rem, 2.4rem + 4.6vw, 6.5rem);
+  background: var(--sand-50);
+  border-top: 1px solid var(--line-soft);
+}
+
+/* ---- Heading ------------------------------------------------------------- */
+
+.svc__head {
+  display: grid;
+  gap: var(--space-m);
+  padding-bottom: var(--space-m);
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 768px) {
+  .svc__head {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    align-items: end;
+    gap: clamp(2rem, 0.5rem + 3.5vw, 4rem);
+  }
+}
+
+.svc__title {
+  margin-top: var(--space-s);
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.svc__intro {
+  margin-top: var(--space-s);
+  max-width: 52ch;
+  color: var(--text-muted);
+}
+
+.svc__head-aside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+
+@media (min-width: 768px) {
+  .svc__head-aside {
+    justify-content: flex-end;
+    gap: var(--space-m);
+  }
+}
+
+/* ---- Audience switch ----------------------------------------------------- */
+
+.svc__lanes {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.svc__lane {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.6em 1.25em;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.svc__lane-count {
+  font-size: 0.85em;
+  color: var(--accent);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.svc__lane:hover {
+  color: var(--plum-700);
+  border-color: rgba(126, 71, 152, 0.4);
+}
+
+.svc__lane.is-active {
+  color: #fff;
+  background: var(--plum-700);
+  border-color: var(--plum-700);
+}
+
+.svc__lane.is-active .svc__lane-count {
+  color: var(--gold-300);
+}
+
+/* ---- Arrows -------------------------------------------------------------- */
+
+.svc__arrows {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
+}
+
+/* Pause/play sits with the arrows, a size down: they navigate, it reports and
+   sets the state of the rotation. */
+.svc__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  margin-right: var(--space-2xs);
+  color: var(--plum-700);
+  border: 1px solid rgba(126, 71, 152, 0.28);
+  border-radius: var(--r-pill);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+/* The play glyph is a closed triangle and wants a solid fill at this size; the
+   pause glyph is two open strokes, which a fill cannot touch. */
+.svc__toggle svg {
+  fill: currentColor;
+}
+
+.svc__toggle:hover {
+  background: var(--plum-600);
+  border-color: var(--plum-600);
+  color: #fff;
+}
+
+.svc__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  color: var(--plum-700);
+  border: 1px solid rgba(126, 71, 152, 0.28);
+  border-radius: var(--r-pill);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+/* One chevron glyph serves both directions */
+.svc__arrow svg {
+  transform: rotate(90deg);
+}
+
+.svc__arrow--next svg {
+  transform: rotate(-90deg);
+}
+
+.svc__arrow:hover:not(:disabled) {
+  background: var(--plum-600);
+  border-color: var(--plum-600);
+  color: #fff;
+}
+
+.svc__arrow:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+
+/* ---- The track ----------------------------------------------------------- */
+
+.svc__track {
+  display: flex;
+  gap: var(--space-m);
+  margin: var(--space-l) 0 0;
+  padding: 0 0 var(--space-2xs);
+  list-style: none;
+  overflow-x: auto;
+  /* `proximity`, not `mandatory`: a mandatory snap re-snaps every programmatic
+     scroll, which fights the autoplay's smooth `scrollBy` and can leave the
+     row twitching in place instead of advancing. Proximity still lands a card
+     on the left edge when a swipe ends near one. */
+  scroll-snap-type: x proximity;
+  /* Cards are equal height whatever their treatment count, so a row of them
+     reads as a set rather than as a skyline. */
+  align-items: stretch;
+  scrollbar-width: none;
+  /* Bleeds to the right edge on small screens: a card cut off by the viewport
+     is the clearest possible signal that the row scrolls. */
+  margin-right: calc(-1 * var(--gutter));
+  padding-right: var(--gutter);
+}
+
+@media (min-width: 992px) {
+  .svc__track {
+    margin-right: 0;
+    padding-right: 0;
+  }
+}
+
+.svc__track::-webkit-scrollbar {
+  display: none;
+}
+
+.svc__track:focus-visible {
+  outline: 2px solid var(--plum-600);
+  outline-offset: 6px;
+  border-radius: var(--r-s);
+}
+
+/* ---- The card ------------------------------------------------------------ */
+
+/* Every rule below is scoped to `.svc`, the home page's rail. `svc-slide` is a
+   shared class — the Services and Offers pages lay the same card out in a
+   grid — and home.css is the last stylesheet loaded, so an unscoped
+   `.svc-slide { width: clamp(248px, 74vw, 320px) }` here was overriding the
+   grid card on those pages: it stopped filling its 1fr track and sat
+   left-aligned with the slack showing on the right.
+
+   Equal height, always. The track stretches its items and the card is a
+   column, so every card in the row takes the height of the tallest — a
+   category with two treatments ends level with one that has five, and the
+   buttons pinned to the foot line up straight across the row. */
+.svc .svc-slide {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: clamp(248px, 74vw, 320px);
+  scroll-snap-align: start;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-m);
+  transition:
+    box-shadow var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+}
+
+@media (min-width: 576px) {
+  .svc .svc-slide {
+    width: clamp(268px, 38vw, 330px);
+  }
+}
+
+.svc .svc-slide:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.svc .svc-slide__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--sand-100);
+}
+
+.svc .svc-slide__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s var(--ease-out);
+}
+
+.svc .svc-slide:hover .svc-slide__media img {
+  transform: scale(1.05);
+}
+
+.svc .svc-slide__count {
+  position: absolute;
+  left: var(--space-2xs);
+  bottom: var(--space-2xs);
+  padding: 0.45em 0.9em;
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(20, 12, 25, 0.46);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--r-pill);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.svc .svc-slide__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-2xs);
+  padding: var(--space-s) var(--space-s) var(--space-m);
+}
+
+/* The three blocks below each reserve the space their longest case needs, so
+   every card divides at the same four heights: name, summary, treatments,
+   actions. Stretching the cards alone was not enough — it made the boxes the
+   same height but left the content inside them starting at different points,
+   which is what shows as a staggered row of buttons. */
+.svc .svc-slide__name {
+  margin: 0;
+  min-height: 2.4em;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+.svc .svc-slide__name a {
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.svc .svc-slide__name a:hover {
+  color: var(--plum-700);
+}
+
+.svc .svc-slide__text {
+  margin: 0;
+  /* Three lines: the longest summary in the catalogue at the narrowest card
+     width. A two-line summary keeps the third line's space rather than
+     pulling the treatments up. */
+  min-height: 5.1em;
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  line-height: 1.7;
+}
+
+/* A fixed block of four rows: three treatments and the count of whatever is
+   left. Reserving the space rather than letting the list size itself is what
+   makes the cards match — a category with two treatments would otherwise sit
+   with a hole where its neighbour has a full list, and the row of cards read
+   as a skyline even though every box was the same height. */
+.svc .svc-slide__list {
+  display: grid;
+  gap: 0.4em;
+  align-content: start;
+  min-height: 8.4em;
+  margin: var(--space-2xs) 0 0;
+  padding: var(--space-s) 0 0;
+  border-top: 1px solid var(--line-soft);
+  list-style: none;
+  font-size: var(--step--2);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.svc .svc-slide__more {
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.svc .svc-slide__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55em;
+}
+
+.svc .svc-slide__list svg {
+  flex: none;
+  margin-top: 0.4em;
+  color: var(--accent);
+}
+
+.svc .svc-slide__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s);
+  /* Pinned to the foot of the card, so the buttons line up across the row
+     however much text sits above them. */
+  margin-top: auto;
+  padding-top: var(--space-m);
+}
+
+/* ---- Progress + links ---------------------------------------------------- */
+
+.svc__foot {
+  display: grid;
+  gap: var(--space-m);
+  margin-top: var(--space-m);
+}
+
+@media (min-width: 768px) {
+  .svc__foot {
+    grid-template-columns: minmax(0, 0.4fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-l);
+  }
+}
+
+/* Mirrors the track's scroll position: the thumb is as wide a fraction of the
+   rail as one card is of the row. */
+.svc__progress {
+  position: relative;
+  height: 2px;
+  background: var(--line);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.svc__progress-fill {
+  position: absolute;
+  inset: 0;
+  width: calc(100% / var(--of, 8));
+  background: var(--plum-600);
+  border-radius: inherit;
+  transform: translateX(calc(var(--at, 0) * (var(--of, 8) - 1) * 100%));
+  transition: transform 0.18s linear;
+}
+
+.svc__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s) var(--space-l);
+}
+
+@media (min-width: 768px) {
+  .svc__links {
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc .svc-slide,
+  .svc .svc-slide__media img {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   03b · PILLARS
+   The two service lanes with no band of their own, as ruled columns.
+   ========================================================================== */
+
+.pillars {
+  padding-block: clamp(2.5rem, 2rem + 2.4vw, 4rem);
+  background: var(--surface);
+}
+
+.pillars__list {
+  display: grid;
+  gap: var(--space-l);
+  margin: 0;
+  padding: var(--space-l) 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .pillars__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 0.5rem + 3.5vw, 4rem);
+  }
+
+  /* A hairline between the two rather than a border around each: they are two
+     columns of one band, not two cards. */
+  .pillars__list > li + li {
+    padding-left: clamp(2rem, 0.5rem + 3.5vw, 4rem);
+    border-left: 1px solid var(--line);
+  }
+}
+
+.pillar {
+  display: grid;
+  gap: var(--space-s);
+  align-content: start;
+}
+
+@media (min-width: 576px) {
+  .pillar {
+    grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr);
+    gap: var(--space-m);
+    align-items: start;
+  }
+}
+
+.pillar__media {
+  overflow: hidden;
+  border-radius: var(--r-s);
+  background: var(--sand-100);
+  aspect-ratio: 4 / 5;
+}
+
+.pillar__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s var(--ease-out);
+}
+
+.pillar:hover .pillar__media img {
+  transform: scale(1.04);
+}
+
+.pillar__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.pillar__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.55rem);
+  font-weight: 400;
+  line-height: 1.18;
+  letter-spacing: -0.018em;
+}
+
+.pillar__text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  line-height: 1.75;
+}
+
+.pillar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s);
+  margin-top: var(--space-2xs);
+}
+
+/* ==========================================================================
+   04 · SIGNATURE — the bridal plate
+   A campaign, not a section: full-bleed photography with the copy on it.
+   ========================================================================== */
+
+.signature {
+  --p: 0.5;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: clamp(520px, 24vw + 340px, 720px);
+  padding-block: clamp(3.5rem, 2.5rem + 5vw, 6rem);
+  overflow: hidden;
+  background: var(--plum-950);
+  color: #fff;
+}
+
+.signature__bg {
+  position: absolute;
+  inset: -8% 0;
+  z-index: -1;
+}
+
+.signature__bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  /* Drifts against the scroll, so the type sits on a moving plate. */
+  transform: translate3d(0, calc((var(--p) - 0.5) * 60px), 0);
+}
+
+.signature__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(20, 12, 25, 0.92) 0%,
+      rgba(20, 12, 25, 0.76) 40%,
+      rgba(20, 12, 25, 0.42) 72%,
+      rgba(20, 12, 25, 0.62) 100%
+    ),
+    linear-gradient(to top, rgba(20, 12, 25, 0.6) 0%, rgba(20, 12, 25, 0) 40%);
+}
+
+.signature__inner {
+  position: relative;
+  display: grid;
+  gap: var(--space-l);
+}
+
+@media (min-width: 992px) {
+  .signature__inner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2.5rem, 0.5rem + 4.5vw, 4.5rem);
+    align-items: center;
+  }
+}
+
+.signature__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  align-items: flex-start;
+}
+
+.signature__title {
+  margin: var(--space-2xs) 0 0;
+  font-size: clamp(1.75rem, 1.3rem + 2.1vw, 3rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+  color: #fff;
+}
+
+/* The second line of the title, set as its own note in gold. */
+.signature__title em {
+  display: block;
+  margin-top: 0.15em;
+  font-style: normal;
+  font-weight: 500;
+  color: var(--gold-300);
+}
+
+.signature__text {
+  margin: 0;
+  max-width: 48ch;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.75;
+}
+
+.signature__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-2xs);
+}
+
+/* Three buttons of very different label lengths otherwise wrap to their own
+   content width — a ragged stack rather than a deliberate one. Below sm,
+   stacking them in a column lets the default flex `align-items: stretch`
+   even them out to the same width. */
+@media (max-width: 575.98px) {
+  .signature__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.signature__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.signature__services {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.signature__services li {
+  display: grid;
+  gap: 0.2em;
+  padding: var(--space-2xs) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+@media (min-width: 576px) {
+  .signature__services li {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: var(--space-s);
+    align-items: baseline;
+  }
+}
+
+.signature__service-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+.signature__service-name svg {
+  flex: none;
+  color: var(--gold-300);
+}
+
+.signature__service-text {
+  font-size: var(--step--2);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.signature__shots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.signature__shots img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--r-s);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.signature__shots a:hover img,
+.signature__shots a:focus-visible img {
+  transform: scale(1.05);
+}
+
+.signature__note {
+  margin: var(--space-2xs) 0 0;
+  font-size: var(--step--2);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.signature__note strong {
+  color: var(--gold-300);
+}
+
+.signature .inline-link {
+  color: var(--gold-300);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signature__bg-img {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   05 · WHY — the reasons, as a narrative
+   ========================================================================== */
+
+.why-story {
+  background: var(--bg-alt);
+}
+
+/* ---- The head ------------------------------------------------------------ */
+
+.why-story__head {
+  display: grid;
+  gap: var(--space-m);
+  padding-bottom: var(--space-m);
+  margin-bottom: var(--space-l);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Claim left, the count and the deeper link right, both settling on the rule
+   the plates hang from. */
+@media (min-width: 992px) {
+  .why-story__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    align-items: end;
+    column-gap: clamp(2.5rem, 1rem + 4vw, 6rem);
+  }
+}
+
+.why-story__title {
+  margin-top: var(--space-s);
+  max-width: 18ch;
+  font-size: clamp(1.65rem, 1.3rem + 1.7vw, 2.65rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.018em;
+}
+
+.why-story__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-s);
+}
+
+.why-story__text {
+  max-width: 40ch;
+  color: var(--text-muted);
+}
+
+/* ---- The plates ---------------------------------------------------------- */
+
+.why-plates {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .why-plates {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 992px) {
+  .why-plates {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-m);
+  }
+}
+
+.why-plate {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.25rem, 1rem + 0.9vw, 1.75rem);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-l);
+  transition:
+    transform var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out);
+}
+
+.why-plate:hover {
+  transform: translateY(-3px);
+  border-color: var(--plum-200);
+  box-shadow: var(--shadow-md);
+}
+
+/* Mark and numeral share the top line: the icon says what kind of reason this
+   is, the numeral keeps the run of six readable as a sequence. */
+.why-plate__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  margin-bottom: var(--space-s);
+}
+
+.why-plate__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  color: var(--plum-600);
+  background: var(--plum-50);
+  border: 1px solid var(--plum-100);
+  border-radius: var(--r-m);
+  transition:
+    background var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+
+.why-plate:hover .why-plate__mark {
+  color: #fff;
+  background: var(--plum-600);
+  border-color: var(--plum-600);
+}
+
+.why-plate__num {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: 1;
+  color: var(--plum-100);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.why-plate__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 0.95rem + 0.45vw, 1.3rem);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+/* The gold stub that marks a title across this site, here between the claim
+   and the sentence backing it. */
+.why-plate__title::after {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin: 0.7em 0;
+  background: linear-gradient(90deg, var(--plum-500), var(--gold-300));
+  border-radius: 2px;
+}
+
+.why-plate__text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   07 · GALLERY — the transformation reel
+
+   The one section that leaves the page's measure. Every band above it is held
+   inside the container, so running this one edge to edge is what announces
+   that the work has started — and it lets the heading sit among the pictures,
+   in the first column, rather than above them.
+   ========================================================================== */
+
+.reel {
+  padding-block: clamp(3.5rem, 2.4rem + 4.6vw, 6.5rem) clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  /* `clip`, not `hidden`. Both contain the columns' parallax travel, but
+     `hidden` makes this element the scrollport for everything inside it, and a
+     box that cannot itself scroll gives a sticky child nothing to stick to —
+     the caption plate simply scrolls away. `clip` establishes no scroll
+     container, so the heading holds. Where `clip` is unsupported the rule is
+     dropped and the parallax may bleed a few pixels, which is a far cheaper
+     failure than a heading that does not stay put. */
+  overflow: clip;
+}
+
+.reel__inner {
+  display: grid;
+  gap: var(--space-2xs);
+  padding-inline: var(--space-2xs);
+}
+
+/* Below lg the three columns stack, each laying its own frames out two up. */
+@media (max-width: 991.98px) {
+  .reel__col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Three frames in a two-up grid strands the third in a row of its own with
+     a hole beside it — and once all three columns have stacked, that is three
+     holes down the page. The odd frame takes the full width instead, on a
+     wider crop so it reads as a band rather than as a stretched portrait. */
+  .reel__col li:last-child {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* From lg the intro becomes the first of four columns and the pictures run to
+   both edges of the window. */
+@media (min-width: 992px) {
+  .reel__inner {
+    grid-template-columns: minmax(0, 1.15fr) repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 0.2rem + 1.4vw, 1.35rem);
+    align-items: start;
+    padding-inline: clamp(0.75rem, 0.2rem + 1.4vw, 1.35rem);
+  }
+}
+
+/* ---- The caption plate --------------------------------------------------- */
+
+.reel__intro {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--space-s) var(--space-xs) var(--space-m);
+}
+
+@media (min-width: 992px) {
+  .reel__intro {
+    grid-column: auto;
+    /* Sits a little below the top edge so the first frames can start above it,
+       the way a caption sits inside a spread rather than over it. */
+    padding: clamp(2rem, 1rem + 3vw, 4rem) var(--space-m) var(--space-m) var(--space-s);
+    /* Held while the three columns of work travel past it. The columns run
+       roughly twice the height of this plate, so the heading stays with the
+       pictures it names for the whole of the section instead of scrolling out
+       at the first frame. `align-self` is what lets a grid item stick — a
+       stretched item is already the full height of its row and has nowhere
+       to move. */
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-l));
+    align-self: start;
+  }
+}
+
+.reel__title {
+  margin-top: var(--space-s);
+  /* The 14ch cap below is what gives the intro its narrow, poster-style wrap
+     while it still runs full width. From lg the intro itself becomes the
+     ~250–400px sticky sidebar column (1.15fr of the four tracks), which is
+     already narrower than 14ch could ever ask for — a second, independent
+     ch cap on top of that let "Transformations," run wider than its own
+     parent and sit visually clipped behind the first photo. overflow-wrap
+     is the backstop against the same thing happening to any future copy. */
+  max-width: 14ch;
+  overflow-wrap: break-word;
+  font-size: clamp(1.65rem, 1.3rem + 1.7vw, 2.65rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+@media (min-width: 992px) {
+  .reel__title {
+    max-width: 100%;
+  }
+}
+
+.reel__text {
+  margin-top: var(--space-s);
+  max-width: 34ch;
+  overflow-wrap: break-word;
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  line-height: 1.7;
+}
+
+@media (min-width: 992px) {
+  .reel__text {
+    max-width: 100%;
+  }
+}
+
+.reel__actions {
+  margin-top: var(--space-m);
+}
+
+/* The four gallery groups, listed as links — the section names what is in it
+   instead of leaving nine pictures to speak for four categories. */
+.reel__index {
+  margin: var(--space-m) 0 0;
+  padding: var(--space-s) 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+  display: grid;
+  gap: 0.5em;
+  width: 100%;
+}
+
+.reel__index a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.reel__index svg {
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.reel__index a:hover,
+.reel__index a:focus-visible {
+  color: var(--plum-700);
+}
+
+.reel__index a:hover svg,
+.reel__index a:focus-visible svg {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- The columns --------------------------------------------------------- */
+
+.reel__col {
+  display: grid;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 992px) {
+  .reel__col {
+    gap: clamp(0.75rem, 0.2rem + 1.4vw, 1.35rem);
+  }
+
+  /* The three columns are level and static. They used to start at different
+     heights and drift at different rates on scroll, so no two frames ever
+     lined up across the row — a deliberate effect, but it left the wall
+     unresolved and every frame in motion against its neighbours. One crop, one
+     baseline, rows that line up. */
+}
+
+/* One crop for every frame, so the rows read as a set. Mixed crops made the
+   wall look unresolved. The only exception is the odd frame on a stacked
+   two-up row below lg, which widens to fill the hole beside it. */
+.reel__col li {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: var(--sand-100);
+  border-radius: var(--r-s);
+}
+
+.reel__col a {
+  display: block;
+  height: 100%;
+}
+
+.reel__col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease-out);
+}
+
+.reel__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+  padding: 1.4em 1em 0.9em;
+  font-size: var(--step--2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(to top, rgba(20, 12, 25, 0.78), rgba(20, 12, 25, 0));
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+}
+
+.reel__caption-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reel__caption svg {
+  flex: none;
+}
+
+.reel__col a:hover img,
+.reel__col a:focus-visible img {
+  transform: scale(1.06);
+}
+
+.reel__col a:hover .reel__caption,
+.reel__col a:focus-visible .reel__caption {
+  opacity: 1;
+  transform: none;
+}
+
+.reel__foot {
+  margin: var(--space-l) 0 0;
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+

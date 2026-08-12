@@ -3,7 +3,7 @@ import BookingForm from "../components/BookingForm";
 import Icon from "../components/Icon";
 import { CtaBanner, FaqSection, LocationSection } from "../components/Blocks";
 import { Eyebrow } from "../components/Ui";
-import { CONTACT, FAQS, SOCIALS, WHATSAPP } from "../data/site";
+import { CONTACT, FAQS, WHATSAPP } from "../data/site";
 import { faqSchema, localBusinessSchema, useSeo } from "../hooks/useSeo";
 import { PAGE_KEYWORDS } from "../data/keywords";
 import { IMG } from "../assets";
@@ -174,25 +174,6 @@ export default function Contact() {
                   </div>
                 </li>
               </ul>
-
-              <div>
-                <span className="visit__label">Follow Us</span>
-                <ul className="footer__socials" style={{ marginTop: "var(--space-2xs)" }}>
-                  {SOCIALS.map((s) => (
-                    <li key={s.label}>
-                      <a
-                        className="footer__social"
-                        href={s.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`Naturals Thanjavur on ${s.label}`}
-                      >
-                        <Icon name={s.icon} size={18} />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
             </aside>
           </div>
         </div>

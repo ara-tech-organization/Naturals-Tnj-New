@@ -142,8 +142,12 @@ export default function Bridal() {
       </section>
 
       {/* ---- Occasion services ------------------------------------------- */}
-      <section className="section section--alt" aria-labelledby="occasion-services">
-        <div className="container">
+      <section className="section section--dark occ-photo" aria-labelledby="occasion-services">
+        <div className="occ-photo__bg" aria-hidden="true">
+          <img src={IMG.bridalMakeover} alt="" loading="lazy" decoding="async" />
+        </div>
+
+        <div className="container occ-photo__inner">
           <SectionHeading
             eyebrow="What We Offer"
             title="Bridal & Special Occasion Services"
@@ -151,21 +155,23 @@ export default function Bridal() {
             text="Make every celebration unforgettable with our special occasion services, crafted by experienced bridal makeup artists in Thanjavur."
             split
             aside={
-              <Btn to="/book" size="sm" icon="calendar">
+              <Btn to="/book" size="sm" variant="light" icon="calendar">
                 Book Your Package
               </Btn>
             }
           />
 
-          <div className="bridal-grid stagger">
-            {OCCASION_SERVICES.map((s, i) => (
-              <article key={s.name} className="bridal-card" data-reveal>
-                <span className="bridal-card__num">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="bridal-card__title">{s.name}</h3>
-                <p className="bridal-card__text">{s.text}</p>
-              </article>
+          <ul className="occ-checklist stagger">
+            {OCCASION_SERVICES.map((s) => (
+              <li key={s.name} data-reveal>
+                <div className="occ-checklist__head">
+                  <Icon name="check" size={16} />
+                  <h3>{s.name}</h3>
+                </div>
+                <p>{s.text}</p>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 

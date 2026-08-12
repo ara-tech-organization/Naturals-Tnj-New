@@ -209,6 +209,35 @@
   flex: none;
 }
 
+/* The topbar carries the phone number above the header, but it scrolls away
+   with the rest of the page — the sticky header needs its own copy so the
+   number stays reachable once the visitor has scrolled past it. Held back to
+   xl, where the nav has room to spare beside it. */
+.header__call {
+  display: none;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.header__call:hover {
+  color: var(--plum-600);
+}
+
+.header--dark:not(.is-scrolled) .header__call {
+  color: #fff;
+}
+
+@media (min-width: 1200px) {
+  .header__call {
+    display: inline-flex;
+  }
+}
+
 /* Header CTA button hides on the narrowest screens (sticky bar covers it) */
 .header__cta {
   display: none;
@@ -779,48 +808,29 @@
   opacity: 1;
 }
 
-/* Secondary pages — smaller than the numbered primary list above, so the
-   hierarchy of the drawer matches the hierarchy of the site. */
-.drawer__secondary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs) var(--space-m);
-  padding-bottom: var(--space-s);
-  border-bottom: 1px solid var(--line-dark);
-}
-
-.drawer__secondary a {
-  font-size: var(--step--1);
-  color: rgba(255, 255, 255, 0.72);
-  transition: color var(--dur-fast) var(--ease-out);
-}
-
-.drawer__secondary a:hover {
-  color: #fff;
-}
-
 .drawer__actions {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-2xs);
 }
 
+/* On a phone these stack one per row, so each is a full-width primary control
+   rather than one of three chips. At the small button's 11px label that left a
+   caption floating in the middle of a 45px bar. The label steps up to match
+   the button it sits in, and the height is set deliberately instead of falling
+   out of the small size's minimum. */
+@media (max-width: 479.98px) {
+  .drawer__actions .btn {
+    min-height: 50px;
+    padding-block: 0.9em;
+    font-size: var(--step--1);
+  }
+}
+
 @media (min-width: 480px) {
   .drawer__actions {
     grid-template-columns: repeat(3, 1fr);
   }
-}
-
-.drawer__meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4em;
-  font-size: var(--step--1);
-  color: rgba(255, 255, 255, 0.62);
-}
-
-.drawer__meta a:hover {
-  color: #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -921,11 +931,30 @@
   color: #fff;
 }
 
+/* More room above than below: the footer opens against whatever section ends
+   the page, and the column headings were starting almost on the seam. */
 .footer__top {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-xl) var(--space-l);
-  padding-block: var(--space-l) var(--space-m);
+  padding-block: var(--space-xl) var(--space-m);
+}
+
+/* Phone. Stacked, the four blocks were separated by var(--space-xl) of nothing
+   — a gap sized for a gutter between columns, doing duty as the space between
+   rows, which made the footer scroll for screens. A hairline does the
+   separating instead, and the gap comes down to match. */
+@media (max-width: 575.98px) {
+  .footer__top {
+    gap: 0;
+    padding-block: var(--space-l) var(--space-s);
+  }
+
+  .footer__top > * + * {
+    margin-top: var(--space-m);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line-dark);
+  }
 }
 
 @media (min-width: 576px) {
@@ -967,6 +996,26 @@
   display: flex;
   flex-direction: column;
   gap: 0.7em;
+}
+
+/* Two up on a phone. Ten short labels down a single column is a lot of
+   scrolling for very little content. This has to sit after the rule above,
+   not with the rest of the phone overrides further up the file — same
+   specificity, so `display: flex` would otherwise win on source order and the
+   list would quietly stay in one column. */
+@media (max-width: 575.98px) {
+  .footer__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.2em var(--space-s);
+  }
+
+  /* Keeps each row a 44px touch target now that the flex gap is gone:
+     0.7em top and bottom on a 14px label with 1.6 leading lands at ~42px, and
+     the row gap carries it the rest of the way. */
+  .footer__list a {
+    padding-block: 0.7em;
+  }
 }
 
 .footer__list a,

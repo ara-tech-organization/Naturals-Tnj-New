@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BRAND, CONTACT, HERO_MEDIA, HERO_SLIDES, TRUST_POINTS } from "../data/site";
+import { BRAND, HERO_MEDIA, HERO_SLIDES, TRUST_POINTS } from "../data/site";
 import Icon from "./Icon";
 import { Btn } from "./Ui";
 import { usePointerDepth, useScrollProgress } from "../hooks/useMotion";
@@ -182,9 +182,10 @@ export default function Hero() {
 
         {/* ---- Layers 05–06 · floating marks ----------------------------- */}
         <div className="chero__marks" aria-hidden="true">
+          {/* A written mark, not the photograph's alt text — see HERO_SLIDES. */}
           <span className="chero__label">
             <span className="chero__label-dot" />
-            {slide.main.alt}
+            {slide.mark}
           </span>
 
           <span className="chero__years">
@@ -193,10 +194,6 @@ export default function Hero() {
           </span>
         </div>
 
-        <a className="chero__call" href={CONTACT.phoneHref}>
-          <Icon name="phone" size={15} />
-          {CONTACT.phoneDisplay}
-        </a>
       </div>
 
       {/* ---- Controls ----------------------------------------------------- */}

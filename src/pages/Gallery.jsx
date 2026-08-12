@@ -209,11 +209,9 @@ export default function Gallery() {
                 <ul className="gal-grid stagger">
                   {group.images.map((img, i) => {
                     const at = base + i;
-                    const shape =
-                      i === 0 ? " gal-item--feature" : i % 4 === 3 ? " gal-item--tall" : "";
 
                     return (
-                      <li key={img.src} className={`gal-item${shape}`} data-reveal="scale">
+                      <li key={img.src} className="gal-item" data-reveal="scale">
                         <button
                           type="button"
                           className="gal-item__btn"

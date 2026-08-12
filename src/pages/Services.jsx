@@ -196,25 +196,40 @@ export default function Services() {
         </div>
       </section>
 
-      {/* ---- Why choose Naturals ----------------------------------------- */}
-      <section className="section section--alt" aria-labelledby="why-services">
+      {/* ---- Why choose Naturals -----------------------------------------
+           A specification sheet, not a grid of cards. This section closes a
+           page that is otherwise entirely lists of treatments, and the six
+           reasons are the terms those treatments are delivered under — so they
+           are set as ruled entries with the numeral, the standard and what it
+           means in three columns, the way a spec is read rather than the way a
+           feature is sold. The homepage argues the same six points as a
+           narrative beside a sticky claim; here they are the small print, and
+           they are set like it. */}
+      <section className="section section--alt standards" aria-labelledby="why-services">
         <div className="container">
-          <SectionHeading
-            eyebrow="Why Us"
-            title="Why Choose Naturals?"
-            titleId="why-services"
-            text="The standards behind every service on this page."
-            center
-          />
-          <ul className="why-grid stagger">
+          <header className="standards__head">
+            <div data-reveal>
+              <Eyebrow>Why Us</Eyebrow>
+              <h2 id="why-services" className="standards__title">
+                Why Choose Naturals?
+              </h2>
+            </div>
+            <p className="standards__lead" data-reveal>
+              The standards behind every service on this page.
+            </p>
+          </header>
+
+          <ol className="standards__list">
             {WHY_US.map((item, i) => (
-              <li key={item.title} className="why-card" data-reveal>
-                <span className="why-card__num">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="why-card__title">{item.title}</h3>
-                <p className="why-card__text">{item.text}</p>
+              <li key={item.title} className="standard" data-reveal="fade">
+                <span className="standard__num" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="standard__title">{item.title}</h3>
+                <p className="standard__text">{item.text}</p>
               </li>
             ))}
-          </ul>
+          </ol>
 
           <p className="pricing-note pricing-note--center" data-reveal="fade">
             <Icon name="sparkle" size={15} />

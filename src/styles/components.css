@@ -342,8 +342,11 @@
 
 /* Opt-in ceiling for a figure sitting beside a copy column. Without it the
    aspect ratio keeps scaling the photo with the viewport until it towers over
-   the text it is meant to accompany. */
+   the text it is meant to accompany. Width is pinned explicitly — otherwise
+   the browser "solves" the aspect ratio by shrinking width to match the
+   capped height instead of just cropping, leaving dead space beside it. */
 .figure--capped {
+  width: 100%;
   max-height: 520px;
 }
 
@@ -804,7 +807,7 @@
 .stepper {
   display: flex;
   align-items: center;
-  margin-bottom: var(--space-l);
+  margin-bottom: var(--space-m);
 }
 
 .stepper__item {

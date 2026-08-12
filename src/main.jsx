@@ -12,6 +12,8 @@ import "./styles/sections.css";
 import "./styles/pages.css";
 // Last, so its `.editorial` scope can refine anything above it without !important
 import "./styles/editorial.css";
+// Later still: the homepage's own sections, which exist nowhere else
+import "./styles/home.css";
 
 // Marks that JS is running. Reveal animations only hide their elements under
 // `.js`, so if the bundle ever fails to load the content stays visible.
