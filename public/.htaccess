@@ -1,0 +1,24 @@
+# SPA fallback for Hostinger (Apache): every route that isn't a real file or
+# directory on disk gets served index.html, so React Router can take over
+# client-side navigation for deep links and page refreshes alike.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteRule ^index\.html$ - [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Fingerprinted assets (dist/assets/*) are safe to cache for a long time —
+# their filenames change whenever their content does.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+</IfModule>

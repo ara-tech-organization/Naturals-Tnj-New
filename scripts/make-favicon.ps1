@@ -1,15 +1,18 @@
 # Builds the favicons from the brand logo.
 #
-# src/assets/logo.png is white on transparency, so it disappears against a
-# light browser tab. This crops the "naturals" wordmark out of it by alpha
-# bounds — dropping the "World's fastest growing salon chain" tagline, which is
-# hopeless at icon sizes — and sets it white on a plum rounded square, writing
-# public/favicon-32.png and public/apple-touch-icon.png.
+# src/assets/logo.png is already white on transparency. This crops the
+# "naturals" wordmark out of it by alpha bounds — dropping the "World's
+# fastest growing salon chain" tagline, which is hopeless at icon sizes —
+# scaled up large in the tile and left white (reads best on the dark tabs/
+# home screens most browsers/phones default to) on a transparent square,
+# writing the single public/favicon.png at 180px, used for both the browser
+# tab and the phone home-screen icon — browsers downscale it fine for the
+# tab, so one file covers every size instead of shipping several.
 #
 # The wordmark is ~4.7:1, so in a square tile it can only ever be a thin band.
-# It reads at 180px (the apple-touch size); at the 16px a browser tab actually
-# renders it is a plum tile with a white smudge. Set $USE_GLYPH = $true below to
-# fall back to the wordmark's own leading "n", which stays legible at 16px.
+# It reads at 180px; at the 16px a browser tab actually renders it is a faint
+# smudge. Set $USE_GLYPH = $true below to fall back to the wordmark's own
+# leading "n", which stays legible at 16px.
 #
 #   powershell -File scripts/make-favicon.ps1
 
@@ -68,8 +71,8 @@ $gh = $y1 - $y0 + 1
 # how much of the tile the crop fills. A near-square glyph can take the same
 # fraction both ways; the wordmark is scaled to the tile's width and lands
 # wherever its aspect ratio puts it vertically.
-$fillW = if ($USE_GLYPH) { 0.58 } else { 0.86 }
-$fillH = if ($USE_GLYPH) { 0.58 } else { 0.70 }
+$fillW = if ($USE_GLYPH) { 0.72 } else { 0.98 }
+$fillH = if ($USE_GLYPH) { 0.72 } else { 0.86 }
 
 function New-Icon([int]$size, [string]$out) {
   $bmp = New-Object System.Drawing.Bitmap($size, $size)
@@ -79,35 +82,19 @@ function New-Icon([int]$size, [string]$out) {
   $g.PixelOffsetMode = "HighQuality"
   $g.Clear([System.Drawing.Color]::Transparent)
 
-  # plum rounded square, same 22% corner radius as the mark it replaces
-  $r = [int]($size * 0.22); $d = $r * 2
-  $path = New-Object System.Drawing.Drawing2D.GraphicsPath
-  $path.AddArc(0, 0, $d, $d, 180, 90)
-  $path.AddArc($size - $d, 0, $d, $d, 270, 90)
-  $path.AddArc($size - $d, $size - $d, $d, $d, 0, 90)
-  $path.AddArc(0, $size - $d, $d, $d, 90, 90)
-  $path.CloseFigure()
-  $brush = New-Object System.Drawing.SolidBrush([System.Drawing.ColorTranslator]::FromHtml("#7E4798"))
-  $g.FillPath($brush, $path)
-
-  # the crop, centred
+  # the crop, white and centred, on a transparent square
   $scale = [Math]::Min(($size * $script:fillW) / $script:gw, ($size * $script:fillH) / $script:gh)
   $dw = [single]($script:gw * $scale)
   $dh = [single]($script:gh * $scale)
   $dx = [single](($size - $dw) / 2.0)
   $dy = [single](($size - $dh) / 2.0)
-  $dest = [System.Drawing.RectangleF]::new($dx, $dy, $dw, $dh)
-  $srcRect = [System.Drawing.RectangleF]::new([single]$script:x0, [single]$script:y0, [single]$script:gw, [single]$script:gh)
-  $g.DrawImage($script:src, $dest, $srcRect, [System.Drawing.GraphicsUnit]::Pixel)
+  $dest = [System.Drawing.Rectangle]::new([int][Math]::Round($dx), [int][Math]::Round($dy), [int][Math]::Round($dw), [int][Math]::Round($dh))
+  $g.DrawImage($script:src, $dest, $script:x0, $script:y0, $script:gw, $script:gh, [System.Drawing.GraphicsUnit]::Pixel)
 
   $bmp.Save($out, [System.Drawing.Imaging.ImageFormat]::Png)
-  $g.Dispose(); $bmp.Dispose(); $brush.Dispose(); $path.Dispose()
+  $g.Dispose(); $bmp.Dispose()
   "wrote $out"
 }
 
-New-Icon 32  (Join-Path $root "public\favicon-32.png")
-# 64 is the device-pixel size of a 32px tab slot on a 2x display — worth
-# shipping when the mark is this fine
-New-Icon 64  (Join-Path $root "public\favicon-64.png")
-New-Icon 180 (Join-Path $root "public\apple-touch-icon.png")
+New-Icon 180 (Join-Path $root "public\favicon.png")
 $src.Dispose()

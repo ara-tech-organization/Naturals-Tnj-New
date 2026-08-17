@@ -89,6 +89,15 @@
   height: var(--header-h);
 }
 
+/* The header's row uses the same .container as every content section, whose
+   max-width keeps body copy readable — but that leaves the nav bar's own
+   logo and buttons stranded well short of the edge on wide screens. The bar
+   itself has no readability concern, so it gets the full viewport width
+   (still padded by the gutter) instead of the shared max-width. */
+.header .container {
+  max-width: none;
+}
+
 /* ---- Logo ---------------------------------------------------------------- */
 
 .logo {
@@ -98,44 +107,63 @@
   flex: none;
 }
 
-/* The supplied logo.png is a pure-white mark on transparency, so it would
-   disappear on the light header. Painting it as a mask lets the same single
-   asset take the brand plum on light surfaces and stay white on dark ones.
+/* Two assets sit stacked and cross-fade, each shown exactly as authored —
+   logo2.png (full colour) reads cleanly on the light bar, while logo.png
+   (its light print) is what stays legible on a dark ground (the overlay
+   header over a photo, the drawer, the footer). Neither is recoloured.
    The artwork already carries the wordmark, so no text is set beside it —
    which is why the mark itself is sized generously. */
-.logo__mark {
+.logo__mark-wrap {
+  position: relative;
   flex: none;
   /* Sized against --header-h so the mark and the bar grow together and the
      clearance above and below stays even at every width. */
   height: clamp(54px, 44px + 3vw, 80px);
-  /* 400 × 213 source */
-  aspect-ratio: 400 / 213;
-  background-color: var(--plum-700);
-  -webkit-mask: url("../assets/logo.png") no-repeat center / contain;
-  mask: url("../assets/logo.png") no-repeat center / contain;
+  /* 9000 × 4800 source */
+  aspect-ratio: 15 / 8;
   transform-origin: left center;
-  transition:
-    transform var(--dur) var(--ease-out),
-    background-color var(--dur) var(--ease-out);
+  transition: transform var(--dur) var(--ease-out);
 }
 
-/* White wherever the mark sits on a dark ground */
+.logo__mark-color,
+.logo__mark {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.logo__mark-color {
+  opacity: 1;
+}
+
+.logo__mark {
+  opacity: 0;
+}
+
+/* On a dark ground, swap to the light print and hide the colour one */
+.header--dark:not(.is-scrolled) .logo__mark-color,
+.drawer .logo__mark-color {
+  opacity: 0;
+}
 .header--dark:not(.is-scrolled) .logo__mark,
 .drawer .logo__mark,
 .footer .logo__mark {
-  background-color: #fff;
+  opacity: 1;
 }
 
 /* Scale, not height — a transform is painted, never laid out, so the condensed
    logo cannot nudge the header's height or the page beneath it. */
-.header.is-scrolled .logo__mark {
+.header.is-scrolled .logo__mark-wrap {
   transform: scale(0.84);
 }
 
 /* The footer has no bar to fit inside, so the mark runs larger still — kept
    ahead of the header size so the hierarchy between the two still reads. */
-.logo--lg .logo__mark {
-  height: clamp(68px, 56px + 3.2vw, 96px);
+.logo--lg .logo__mark-wrap {
+  height: clamp(88px, 72px + 4.2vw, 132px);
 }
 
 /* ---- Desktop nav --------------------------------------------------------- */
@@ -149,7 +177,7 @@
   .nav {
     display: flex;
     align-items: center;
-    gap: clamp(0.75rem, -0.4rem + 1.8vw, 1.9rem);
+    gap: clamp(1rem, -0.4rem + 2.6vw, 2.75rem);
   }
 }
 
@@ -212,30 +240,21 @@
 /* The topbar carries the phone number above the header, but it scrolls away
    with the rest of the page — the sticky header needs its own copy so the
    number stays reachable once the visitor has scrolled past it. Held back to
-   xl, where the nav has room to spare beside it. */
+   xl, where the nav has room to spare beside it. Styling itself comes from
+   the shared .btn/.btn--outline classes; this only controls visibility. */
 .header__call {
   display: none;
-  align-items: center;
-  gap: 0.5em;
-  font-size: var(--step--1);
-  font-weight: 500;
-  color: var(--text);
-  white-space: nowrap;
-  transition: color var(--dur-fast) var(--ease-out);
-}
-
-.header__call:hover {
-  color: var(--plum-600);
-}
-
-.header--dark:not(.is-scrolled) .header__call {
-  color: #fff;
 }
 
 @media (min-width: 1200px) {
   .header__call {
     display: inline-flex;
   }
+}
+
+.header--dark:not(.is-scrolled) .header__call {
+  --btn-fg: #fff;
+  border-color: rgba(255, 255, 255, 0.55);
 }
 
 /* Header CTA button hides on the narrowest screens (sticky bar covers it) */

@@ -1616,94 +1616,6 @@
   color: var(--text-muted);
 }
 
-/* ---- Team ----------------------------------------------------------------- */
-
-.team-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-m);
-}
-
-@media (min-width: 576px) {
-  .team-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 992px) {
-  .team-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-.team-card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2xs);
-  padding: var(--space-m);
-  background: var(--surface);
-  border: 1px solid var(--line-soft);
-  border-radius: var(--r-l);
-}
-
-/* Explicitly a placeholder — reads as "awaiting photo", not as a broken image */
-.team-card__photo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-  aspect-ratio: 4 / 3;
-  margin-bottom: var(--space-s);
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--sand-50),
-    var(--sand-50) 10px,
-    var(--sand-100) 10px,
-    var(--sand-100) 20px
-  );
-  border-radius: var(--r-m);
-  color: var(--ink-400);
-  font-size: var(--step--2);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.team-card__name {
-  font-family: var(--font-sans);
-  font-size: var(--step-0);
-  font-weight: 500;
-  color: var(--ink-400);
-}
-
-.team-card__role {
-  font-family: var(--font-display);
-  font-size: var(--step-2);
-  color: var(--text-strong);
-}
-
-.team-card__meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  margin-top: var(--space-s);
-  padding-top: var(--space-s);
-  border-top: 1px solid var(--line-soft);
-}
-
-.team-card__meta dt {
-  font-size: var(--step--2);
-  letter-spacing: var(--track-caps);
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.team-card__meta dd {
-  margin: 0;
-  font-size: var(--step--1);
-  color: var(--text-strong);
-}
-
 /* ---- Achievements --------------------------------------------------------- */
 
 .ach-grid {
@@ -2234,6 +2146,37 @@
   padding-top: var(--space-m);
   border-top: 1px solid var(--line-soft);
   font-size: var(--step--1);
+}
+
+/* ---- Thank you (post-submit) ---------------------------------------------- */
+
+/* No hero here either, so it shares 404's own top-level flow spacing. */
+.thankyou {
+  display: flex;
+  align-items: center;
+  min-height: 68vh;
+}
+
+.thankyou__icon {
+  display: block;
+  margin: 0 auto var(--space-s);
+  padding: var(--space-2xs);
+  color: var(--plum-600);
+  background: var(--plum-50);
+  border-radius: 50%;
+}
+
+.thankyou__title {
+  margin: var(--space-s) 0;
+  font-size: var(--step-5);
+}
+
+.thankyou__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-l);
 }
 
 /* ---- Notice panel (pending rate card, membership terms) ------------------- */

@@ -56,7 +56,7 @@ export default function Home() {
   useSeo({
     title: "Best Unisex Salon for Hair, Bridal & Spa | Naturals Salon Thanjavur",
     description:
-      "Experience premium hair styling, bridal makeovers, spa therapies & men's grooming at Naturals Thanjavur. 15+ years of trusted expertise. Book your appointment today!",
+      "Experience premium hair styling, bridal makeovers, spa therapies & men's grooming at Naturals Thanjavur. 3+ years of trusted expertise. Book your appointment today!",
     path: "/",
     keywords: PAGE_KEYWORDS.home,
     image: IMG.hairstyle,
@@ -133,7 +133,7 @@ export default function Home() {
               </p>
 
               <blockquote className="pull-quote" data-reveal>
-                Fifteen years in one city, and the same question at every chair: what do you
+                Three years in one city, and the same question at every chair: what do you
                 actually want it to look like?
                 <cite>Naturals Thanjavur, since {BRAND.since}</cite>
               </blockquote>
@@ -296,8 +296,8 @@ export default function Home() {
       <section className="section section--tight section--dark" aria-labelledby="numbers-title">
         <div className="container">
           {/* Head sits above the figures rather than beside them: four numbers
-              this large need the full measure, and "10,000+" is three times the
-              width of "15+", so a narrow column made the row read as ragged. */}
+              this large need the full measure, and "10,000+" is several times
+              the width of "3+", so a narrow column made the row read as ragged. */}
           <div className="numbers">
             <div className="numbers__head" data-reveal>
               <div>
@@ -307,7 +307,7 @@ export default function Home() {
                 </h2>
               </div>
               <p className="numbers__text">
-                Fifteen years of work in Thanjavur, counted the only way that means anything — in
+                Three years of work in Thanjavur, counted the only way that means anything — in
                 the people who came back, and brought someone with them.
               </p>
             </div>

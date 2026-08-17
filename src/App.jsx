@@ -18,6 +18,7 @@ import Pricing from "./pages/Pricing";
 import Offers from "./pages/Offers";
 import Locations from "./pages/Locations";
 import TestimonialsPage from "./pages/TestimonialsPage";
+import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 import { isKnownSection } from "./data/sections";
 
@@ -77,7 +78,7 @@ export default function App() {
       </a>
 
       <ScrollToTop />
-      <Header overlay={isHome || isDarkHero} dark={isDarkHero} />
+      <Header overlay={isHome || isDarkHero} dark={isDarkHero} topbar={!isHome} />
 
       <main id="main" className="page-shell">
         <Routes>
@@ -94,6 +95,7 @@ export default function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/book" element={<Book />} />
+          <Route path="/thank-you" element={<ThankYou />} />
 
           {SECTION_PAGES.map(([path, Page]) => (
             <Route

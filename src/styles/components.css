@@ -781,6 +781,97 @@
   color: #C0392B;
 }
 
+/* ---- Custom select (listbox pattern, replaces native <select>) ----------- */
+
+.select {
+  position: relative;
+}
+
+.select__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+  width: 100%;
+  min-height: 50px;
+  padding: 0.8em 1em;
+  background: var(--surface);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: var(--step-0);
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: var(--r-s);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.select__btn:focus-visible,
+.select__btn[aria-expanded="true"] {
+  outline: none;
+  border-color: var(--plum-500);
+  box-shadow: 0 0 0 3px rgba(126, 71, 152, 0.14);
+}
+
+.select__btn--invalid {
+  border-color: #C0392B;
+}
+
+.select__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.select__placeholder {
+  color: var(--text-muted);
+}
+
+.select__chev {
+  flex: none;
+  color: var(--plum-500);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.select__btn[aria-expanded="true"] .select__chev {
+  transform: rotate(180deg);
+}
+
+.select__list {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 6px;
+  margin: 0;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-s);
+  box-shadow: var(--shadow-md);
+}
+
+.select__option {
+  padding: 0.65em 0.8em;
+  font-size: var(--step-0);
+  color: var(--text-strong);
+  border-radius: var(--r-s);
+  cursor: pointer;
+}
+
+.select__option.is-active {
+  background: var(--plum-50);
+}
+
+.select__option.is-selected {
+  color: var(--plum-600);
+  font-weight: 600;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -800,96 +891,6 @@
 .form-note {
   font-size: var(--step--2);
   color: var(--text-muted);
-}
-
-/* ---- Stepper (booking form's two-screen progress) ------------------------ */
-
-.stepper {
-  display: flex;
-  align-items: center;
-  margin-bottom: var(--space-m);
-}
-
-.stepper__item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  font-size: var(--step--2);
-  font-weight: 500;
-  letter-spacing: var(--track-caps);
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.stepper__item:not(:last-child) {
-  flex: 1;
-}
-
-.stepper__item:not(:last-child)::after {
-  content: "";
-  flex: 1;
-  min-width: 20px;
-  height: 1px;
-  margin: 0 var(--space-2xs);
-  background: var(--line);
-  transition: background var(--dur-fast) var(--ease-out);
-}
-
-.stepper__item.is-done::after {
-  background: var(--plum-300);
-}
-
-.stepper__dot {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  color: var(--text-muted);
-  font-size: var(--step--2);
-  font-weight: 600;
-  transition:
-    background var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out);
-}
-
-.stepper__item.is-active .stepper__dot {
-  background: var(--plum-600);
-  border-color: var(--plum-600);
-  color: #fff;
-}
-
-.stepper__item.is-active .stepper__label {
-  color: var(--text-strong);
-}
-
-.stepper__item.is-done .stepper__dot {
-  background: var(--plum-100);
-  border-color: var(--plum-300);
-  color: var(--plum-600);
-}
-
-/* Labels crowd a 320px screen with two of them plus a connecting rule, so the
-   dot and its number/check carry the step on the smallest phones. */
-.stepper__label {
-  display: none;
-}
-
-@media (min-width: 460px) {
-  .stepper__label {
-    display: inline;
-  }
-}
-
-.form-success {
-  padding: var(--space-m);
-  background: var(--plum-50);
-  border: 1px solid var(--plum-100);
-  border-radius: var(--r-m);
-  text-align: center;
 }
 
 /* ---- Breadcrumb ---------------------------------------------------------- */
@@ -924,40 +925,3 @@
   color: #fff;
 }
 
-/* ---- Segmented control (booking form audience filter) --------------------- */
-
-.seg {
-  display: flex;
-  gap: var(--space-3xs);
-  padding: 4px;
-  background: var(--sand-50);
-  border: 1px solid var(--line-soft);
-  border-radius: var(--r-pill);
-  width: 100%;
-}
-
-.seg__btn {
-  flex: 1;
-  min-height: 42px;
-  /* Padding collapses on the narrowest screens so three labels stay on one
-     line inside a 320px viewport. */
-  padding: 0.5em clamp(0.3rem, -0.5rem + 4vw, 0.9rem);
-  font-size: var(--step--2);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-  border-radius: var(--r-pill);
-  white-space: nowrap;
-  transition:
-    background var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out);
-}
-
-.seg__btn:hover {
-  color: var(--plum-700);
-}
-
-.seg__btn.is-active {
-  background: var(--plum-800);
-  color: #fff;
-}

@@ -1,7 +1,7 @@
 """Self-host the webfonts the site uses.
 
 Parses the Google Fonts CSS, keeps only the latin + latin-ext subsets, pulls
-every .woff2 into public/fonts/, and emits src/styles/fonts.css.
+every .woff2 into src/assets/fonts/, and emits src/styles/fonts.css.
 
 Two things this handles that a naive download does not:
 
@@ -20,7 +20,10 @@ import urllib.request
 
 SCRATCH = pathlib.Path(__file__).parent
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-FONT_DIR = ROOT / "public" / "fonts"
+# Under src/, not public/, so Vite processes the url()s in fonts.css as
+# assets — fingerprinted and copied into dist/assets/ with paths rewritten
+# to match wherever the build is actually deployed, base path included.
+FONT_DIR = ROOT / "src" / "assets" / "fonts"
 
 KEEP_SUBSETS = {"latin", "latin-ext"}
 SOURCES = [
@@ -114,9 +117,10 @@ head = """/* ===================================================================
    declares (`font-family: Poppins, sans-serif`, weights 300-700), so the
    redesign matches the corporate site exactly.
 
-   Served from /public/fonts rather than fonts.gstatic.com: that removes two
-   DNS lookups and a render-blocking third-party stylesheet from the critical
-   path, and the type keeps working where that CDN is slow or blocked.
+   Self-hosted from src/assets/fonts rather than fonts.gstatic.com: that
+   removes two DNS lookups and a render-blocking third-party stylesheet from
+   the critical path, and the type keeps working where that CDN is slow or
+   blocked.
 
    Only latin and latin-ext ship; the devanagari subset is never rendered by
    this site's copy. Italic 400/500 are included for <em> and inline notes.
@@ -133,7 +137,7 @@ for f in faces:
     lines.append(f'  font-style: {f["style"]};')
     lines.append(f'  font-weight: {f["weight"]};')
     lines.append("  font-display: swap;")
-    lines.append(f'  src: url("/fonts/{f["file"]}") format("woff2");')
+    lines.append(f'  src: url("../assets/fonts/{f["file"]}") format("woff2");')
     if f["range"]:
         lines.append(f'  unicode-range: {f["range"]};')
     lines.append("}")
@@ -142,5 +146,5 @@ for f in faces:
 (ROOT / "src" / "styles" / "fonts.css").write_text("\n".join(lines), encoding="utf-8")
 
 print(f"\n{len(raw)} faces fetched -> {len(faces)} unique files")
-print(f"total {total / 1024:.0f} KB in public/fonts/")
+print(f"total {total / 1024:.0f} KB in src/assets/fonts/")
 print("wrote src/styles/fonts.css")

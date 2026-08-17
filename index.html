@@ -13,33 +13,35 @@
     <meta name="author" content="Naturals Beauty Salon" />
     <link rel="canonical" href="https://naturalsthanjavur.com/" />
 
-    <!-- The logo is white on transparency, so it vanishes against a light tab.
-         The favicon is the "naturals" wordmark cropped out of /assets/logo.png
-         (tagline dropped) on brand plum — see scripts/make-favicon.ps1. The 64
-         is what a 2x display pulls for a 32px tab slot. -->
-    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
-    <link rel="icon" href="/favicon-64.png" type="image/png" sizes="64x64" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- The favicon is the "naturals" wordmark cropped out of /assets/logo.png
+         (tagline dropped), white on a transparent square — see
+         scripts/make-favicon.ps1. One 180px file, reused for both the
+         browser tab and the phone home-screen icon; browsers downscale it
+         fine for the tab. -->
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
 
     <!-- Poppins is the single typeface naturalsthanjavur.com uses, and the only
-         one here. Self-hosted from /public/fonts (see src/styles/fonts.css), so
-         no fonts.googleapis.com stylesheet blocks first render and there is no
-         gstatic.com round trip.
+         one here. Self-hosted from src/assets/fonts (see src/styles/fonts.css),
+         so no fonts.googleapis.com stylesheet blocks first render and there is
+         no gstatic.com round trip.
 
          Only the two faces needed above the fold are preloaded: 400 for body
-         copy and 500 for headings, navigation and buttons. -->
+         copy and 500 for headings, navigation and buttons. Referenced the same
+         way as the image preloads below — the path resolves into the source
+         tree, so Vite rewrites it to the hashed build URL. -->
     <link
       rel="preload"
       as="font"
       type="font/woff2"
-      href="/fonts/poppins-400-normal-latin.woff2"
+      href="/src/assets/fonts/poppins-400-normal-latin.woff2"
       crossorigin
     />
     <link
       rel="preload"
       as="font"
       type="font/woff2"
-      href="/fonts/poppins-500-normal-latin.woff2"
+      href="/src/assets/fonts/poppins-500-normal-latin.woff2"
       crossorigin
     />
 

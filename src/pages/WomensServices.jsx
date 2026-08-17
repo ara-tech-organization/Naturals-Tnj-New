@@ -3,7 +3,7 @@ import ServiceMenu from "../components/ServiceMenu";
 import { CtaBanner, FaqSection, StatsRow } from "../components/Blocks";
 import { ArrowLink, Btn, Eyebrow, Figure, SectionHeading } from "../components/Ui";
 import { WOMENS_SERVICES } from "../data/services";
-import { CONTACT, PAGE_FAQS } from "../data/site";
+import { BRAND, CONTACT, PAGE_FAQS } from "../data/site";
 import { faqSchema, localBusinessSchema, useSeo } from "../hooks/useSeo";
 import { PAGE_KEYWORDS } from "../data/keywords";
 import { IMG } from "../assets";
@@ -98,7 +98,7 @@ export default function WomensServices() {
             </div>
             <div className="split__copy">
               <div data-reveal>
-                <Eyebrow>Trusted Since 2009</Eyebrow>
+                <Eyebrow>Trusted Since {BRAND.since}</Eyebrow>
                 <h2>Why women across Thanjavur choose Naturals</h2>
               </div>
               <p className="lead" data-reveal>

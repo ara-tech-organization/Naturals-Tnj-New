@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { BRAND, CONTACT, SOCIALS } from "../data/site";
+import { IMG } from "../assets";
 import Icon from "./Icon";
 import { Btn } from "./Ui";
 
@@ -11,7 +12,6 @@ import { Btn } from "./Ui";
 const QUICK_LINKS = [
   { label: "Home", to: "/" },
   { label: "About Us", to: "/about" },
-  { label: "Gallery", to: "/gallery" },
   { label: "Offers", to: "/offers" },
   { label: "Contact", to: "/contact" },
   { label: "Book Appointment", to: "/book" },
@@ -36,7 +36,9 @@ export default function Footer() {
         <div className="footer__top">
           <div className="footer__brand">
             <Link to="/" className="logo logo--lg" aria-label={`${BRAND.full} — home`}>
-              <span className="logo__mark" aria-hidden="true" />
+              <span className="logo__mark-wrap" aria-hidden="true">
+                <img className="logo__mark" src={IMG.logo} alt="" />
+              </span>
             </Link>
             <p className="footer__blurb">
               Thanjavur&rsquo;s trusted unisex salon since {BRAND.since} — expert hair styling,

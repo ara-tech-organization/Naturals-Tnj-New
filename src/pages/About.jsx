@@ -2,7 +2,7 @@ import PageHero from "../components/PageHero";
 import Icon from "../components/Icon";
 import { CtaBanner, StatsRow, Testimonials } from "../components/Blocks";
 import { ArrowLink, Btn, Eyebrow, Figure, SectionHeading } from "../components/Ui";
-import { BRAND, CONTACT, CORE_VALUES, TEAM } from "../data/site";
+import { BRAND, CONTACT, CORE_VALUES } from "../data/site";
 import { localBusinessSchema, useSeo } from "../hooks/useSeo";
 import { PAGE_KEYWORDS } from "../data/keywords";
 import { IMG } from "../assets";
@@ -10,7 +10,7 @@ import { IMG } from "../assets";
 const SCHEMA = localBusinessSchema(CONTACT);
 
 const ACHIEVEMENTS = [
-  { icon: "award", title: "15+ Years of Service", text: "Serving Thanjavur continuously since 2009." },
+  { icon: "award", title: "3+ Years of Service", text: "Serving Thanjavur continuously since 2023." },
   { icon: "users", title: "10,000+ Clients", text: "Trusted across Thanjavur and nearby districts." },
   { icon: "heart", title: "100+ Bridal Works", text: "Bridal makeovers delivered for the city's weddings." },
   { icon: "shield", title: "Multiple Branches", text: "Grown from one parlour into a multi-branch unisex salon." },
@@ -20,7 +20,7 @@ export default function About() {
   useSeo({
     title: "About Us | Naturals Salon Thanjavur",
     description:
-      "Discover the story behind Naturals, Thanjavur's trusted unisex salon since 2009 - expert hair, bridal & spa care with 15+ years of excellence.",
+      "Discover the story behind Naturals, Thanjavur's trusted unisex salon since 2023 - expert hair, bridal & spa care with 3+ years of excellence.",
     path: "/about",
     keywords: PAGE_KEYWORDS.about,
     image: IMG.story,
@@ -50,7 +50,7 @@ export default function About() {
                 </h2>
               </div>
               <p className="lead" data-reveal>
-                Founded in 2009, Naturals quickly became one of the best salons in Thanjavur for
+                Founded in 2023, Naturals quickly became one of the best salons in Thanjavur for
                 beauty and wellness care. What began as a modest beauty parlour has grown into a
                 trusted unisex salon with multiple branches across the city.
               </p>
@@ -147,49 +147,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* ---- Team --------------------------------------------------------- */}
-      <section className="section section--alt" aria-labelledby="team-title">
-        <div className="container">
-          <SectionHeading
-            eyebrow="The People"
-            title="Meet Our Expert Team"
-            titleId="team-title"
-            text="Certified stylists and skin care specialists, each with years behind the chair."
-            center
-          />
-
-          <ul className="team-grid stagger">
-            {TEAM.map((m) => (
-              <li key={m.role} className="team-card" data-reveal>
-                {/* PLACEHOLDER portrait — replace with the stylist's real photo */}
-                <div className="team-card__photo" aria-hidden="true">
-                  <Icon name="users" size={30} />
-                  <span>Photo to be supplied</span>
-                </div>
-                <h3 className="team-card__name">{m.name}</h3>
-                <p className="team-card__role">{m.role}</p>
-                <dl className="team-card__meta">
-                  <div>
-                    <dt>Experience</dt>
-                    <dd>{m.experience}</dd>
-                  </div>
-                  <div>
-                    <dt>Specialty</dt>
-                    <dd>{m.specialty}</dd>
-                  </div>
-                </dl>
-              </li>
-            ))}
-          </ul>
-
-          <p className="pricing-note pricing-note--center" data-reveal="fade">
-            <Icon name="sparkle" size={15} />
-            Team names and photographs are placeholders — the source material did not include them.
-            Send us the real details and they will drop straight in.
-          </p>
-        </div>
-      </section>
-
       {/* ---- Achievements ------------------------------------------------- */}
       <section className="section section--dark" aria-labelledby="ach-title">
         <div className="container">
@@ -197,7 +154,7 @@ export default function About() {
             eyebrow="Milestones"
             title="Our Achievements"
             titleId="ach-title"
-            text="Fifteen years of growth, measured the only way that counts — in clients served."
+            text="Three years of growth, measured the only way that counts — in clients served."
             center
           />
 

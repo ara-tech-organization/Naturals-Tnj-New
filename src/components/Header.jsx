@@ -2,17 +2,24 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { BRAND, CONTACT, NAV, SERVICE_TABS, WHATSAPP } from "../data/site";
 import { MENS_SERVICES, WOMENS_SERVICES } from "../data/services";
+import { IMG } from "../assets";
 import Icon from "./Icon";
 import MegaMenu from "./MegaMenu";
 import { Btn } from "./Ui";
 
 function Logo({ onClick }) {
   return (
-    // The supplied logo artwork already contains the "Naturals Thanjavur"
-    // wordmark, so no text is set beside it. The link carries the accessible
-    // name instead, since the mark itself is painted as a CSS mask.
+    // The wordmark is already baked into the artwork, so no text is set
+    // beside it — the link carries the accessible name instead. Two assets
+    // are layered and cross-faded by CSS, each shown as-authored (no
+    // recolouring): the full-colour logo2.png on light grounds, and logo.png
+    // (its light print) on dark ones where the colour version wouldn't read
+    // against a photo.
     <Link to="/" className="logo" onClick={onClick} aria-label={`${BRAND.full} — home`}>
-      <span className="logo__mark" aria-hidden="true" />
+      <span className="logo__mark-wrap" aria-hidden="true">
+        <img className="logo__mark-color" src={IMG.logo2} alt="" />
+        <img className="logo__mark" src={IMG.logo} alt="" />
+      </span>
     </Link>
   );
 }
@@ -24,8 +31,12 @@ function Logo({ onClick }) {
  * to a solid blurred bar once the user scrolls. `dark` additionally flips the
  * logo, nav and burger to white — used on the pages whose hero is a dark
  * photograph. The homepage hero is light, so it takes `overlay` alone.
+ *
+ * `topbar` toggles the desktop-only contact strip above the nav. It's
+ * unrelated to sticky positioning either way — `.header` sticks at `top: 0`
+ * regardless of what, if anything, sits above it in normal flow.
  */
-export default function Header({ overlay = false, dark = false }) {
+export default function Header({ overlay = false, dark = false, topbar = true }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [mega, setMega] = useState(false);
@@ -125,21 +136,23 @@ export default function Header({ overlay = false, dark = false }) {
   return (
     <>
       {/* Desktop contact strip */}
-      <div className="topbar">
-        <div className="container topbar__inner">
-          <div className="topbar__group">
-            <a href={CONTACT.phoneHref}>
-              <Icon name="phone" size={14} />
-              {CONTACT.phoneDisplay}
-            </a>
-            <a href={CONTACT.emailHref}>
-              <Icon name="mail" size={14} />
-              {CONTACT.email}
-            </a>
+      {topbar ? (
+        <div className="topbar">
+          <div className="container topbar__inner">
+            <div className="topbar__group">
+              <a href={CONTACT.phoneHref}>
+                <Icon name="phone" size={14} />
+                {CONTACT.phoneDisplay}
+              </a>
+              <a href={CONTACT.emailHref}>
+                <Icon name="mail" size={14} />
+                {CONTACT.email}
+              </a>
+            </div>
+            <span className="topbar__tag">{BRAND.tagline} · Since {BRAND.since}</span>
           </div>
-          <span className="topbar__tag">{BRAND.tagline} · Since {BRAND.since}</span>
         </div>
-      </div>
+      ) : null}
 
       <header className={headerClass}>
         <div className="container header__inner">
@@ -182,10 +195,15 @@ export default function Header({ overlay = false, dark = false }) {
           </nav>
 
           <div className="header__actions">
-            <a href={CONTACT.phoneHref} className="header__call">
-              <Icon name="phone" size={14} />
+            <Btn
+              href={CONTACT.phoneHref}
+              variant="outline"
+              size="sm"
+              className="header__call"
+              icon="phone"
+            >
               {CONTACT.phoneDisplay}
-            </a>
+            </Btn>
             <Btn to="/book" size="sm" className="header__cta" icon="calendar">
               Book Appointment
             </Btn>

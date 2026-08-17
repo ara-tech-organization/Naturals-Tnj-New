@@ -15,7 +15,7 @@ export const BRAND = {
   legal: "Naturals Beauty Salon — Thanjavur",
   tagline: "Premium Beauty & Wellness",
   logo: IMG.logo,
-  since: 2009,
+  since: 2023,
   url: "https://naturalsthanjavur.com",
 };
 
@@ -88,6 +88,7 @@ export const BRANCHES = [
     id: "arulananda-nagar",
     name: CONTACT.branch,
     area: "Arulananda Nagar",
+    city: BRAND.place,
     addressLines: CONTACT.addressLines,
     addressShort: CONTACT.addressShort,
     landmark: CONTACT.landmark,
@@ -134,14 +135,17 @@ export const MEMBERSHIP = {
  * them as three separate top-level items. The tab contents are read from
  * `services.js` so the menu can never drift from the catalogue.
  */
+/**
+ * Pricing and Gallery are hidden here rather than deleted — the pages,
+ * routes and data all stay live, just unlinked from the primary nav, so
+ * re-adding either is a one-line change whenever they're wanted back.
+ */
 export const NAV = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
   { label: "Services", to: "/services", mega: true },
   { label: "Bridal", to: "/bridal-makeover" },
-  { label: "Pricing", to: "/pricing" },
   { label: "Offers", to: "/offers" },
-  { label: "Gallery", to: "/gallery" },
   { label: "Contact", to: "/contact" },
 ];
 
@@ -217,7 +221,7 @@ export const HERO_SLIDES = [
     mark: "Hair · Beauty · Grooming",
     eyebrow: `${BRAND.name} ${BRAND.place} · Since ${BRAND.since}`,
     title: [{ t: "Thanjavur's Trusted Salon for " }, { t: "Hair, Bridal & Grooming", em: true }],
-    text: "Looking for the best salon in Thanjavur? Naturals Beauty Parlour brings together expert hair styling, bridal makeup artistry, rejuvenating spa therapies, and complete grooming solutions under one roof. With 15+ years of trusted service, we've become one of the most recommended unisex salons in Thanjavur for both everyday beauty needs and once-in-a-lifetime moments.",
+    text: "Looking for the best salon in Thanjavur? Naturals Beauty Parlour brings together expert hair styling, bridal makeup artistry, rejuvenating spa therapies, and complete grooming solutions under one roof. With 3+ years of trusted service, we've become one of the most recommended unisex salons in Thanjavur for both everyday beauty needs and once-in-a-lifetime moments.",
     cta: { label: "Book Your Appointment", to: "/book" },
     alt: { label: "Explore Services", to: "/services" },
     main: {
@@ -283,14 +287,14 @@ export const GOOGLE_BUSINESS = {
  */
 export const STATS = [
   { value: 10000, suffix: "+", display: "10,000+", label: "Happy Customers" },
-  { value: 15, suffix: "+", display: "15+", label: "Years Experience" },
+  { value: 3, suffix: "+", display: "3+", label: "Years Experience" },
   { value: 100, suffix: "+", display: "100+", label: "Bridal Works" },
   { value: 25, suffix: "+", display: "25+", label: "Expert Stylists" },
 ];
 
 /** Trust signals — from the content document's "Trust Bar / USP Strip". */
 export const TRUST_POINTS = [
-  "15+ Years Experience",
+  "3+ Years Experience",
   "10,000+ Happy Customers",
   "Certified Stylists",
   "Hygienic & Safe Environment",
@@ -302,8 +306,8 @@ export const TRUST_POINTS = [
 export const WHY_US = [
   {
     icon: "award",
-    title: "15+ Years of Proven Expertise",
-    text: "Serving Thanjavur since 2009, with a track record built on consistent, dependable results.",
+    title: "3+ Years of Proven Expertise",
+    text: "Serving Thanjavur since 2023, with a track record built on consistent, dependable results.",
   },
   {
     icon: "users",
@@ -358,7 +362,7 @@ export const TESTIMONIALS = [
 export const FAQS = [
   {
     q: "What is the best salon in Thanjavur for hair and bridal makeovers?",
-    a: "Naturals Thanjavur is one of the city's most trusted unisex salons, known for expert hair styling, bridal makeovers, and premium spa treatments backed by 15+ years of experience.",
+    a: "Naturals Thanjavur is one of the city's most trusted unisex salons, known for expert hair styling, bridal makeovers, and premium spa treatments backed by 3+ years of experience.",
   },
   {
     q: "Where can I find a good bridal makeup artist in Thanjavur?",
@@ -390,7 +394,7 @@ export const FAQS = [
   },
   {
     q: "What makes Naturals Thanjavur different from other salons nearby?",
-    a: "With 15+ years of expertise, certified stylists, premium products, and a strong focus on hygiene, Naturals Thanjavur has earned the trust of thousands of customers across the city.",
+    a: "With 3+ years of expertise, certified stylists, premium products, and a strong focus on hygiene, Naturals Thanjavur has earned the trust of thousands of customers across the city.",
   },
   {
     q: "How do I book an appointment at Naturals Thanjavur?",
@@ -413,7 +417,7 @@ export const PAGE_FAQS = {
   womens: [
     {
       q: "Which is the best ladies beauty parlour in Thanjavur for hair and skin?",
-      a: "Naturals is a trusted women's salon in Thanjavur, offering cuts and colour, texture services, scalp and hair rituals, facials, body polish, reflexology and mani-pedi under one roof — backed by 15+ years of service and certified stylists.",
+      a: "Naturals is a trusted women's salon in Thanjavur, offering cuts and colour, texture services, scalp and hair rituals, facials, body polish, reflexology and mani-pedi under one roof — backed by 3+ years of service and certified stylists.",
     },
     {
       q: "Do you offer hair smoothening and keratin treatment for women in Thanjavur?",
@@ -500,28 +504,3 @@ export const CORE_VALUES = [
   },
 ];
 
-/**
- * PLACEHOLDER — the live site lists the team as "XXX / YYY / ZZZ" and the
- * content document asks for real names and photos, which were not supplied.
- * Replace `name` and add `photo` once the client provides them.
- */
-export const TEAM = [
-  {
-    name: "PLACEHOLDER — Stylist name",
-    role: "Senior Hair Stylist",
-    experience: "12+ Years",
-    specialty: "Bridal Hair & Advanced Styling",
-  },
-  {
-    name: "PLACEHOLDER — Stylist name",
-    role: "Men's Grooming Specialist",
-    experience: "8+ Years",
-    specialty: "Modern Cuts & Beard Styling",
-  },
-  {
-    name: "PLACEHOLDER — Stylist name",
-    role: "Skin Care Expert",
-    experience: "10+ Years",
-    specialty: "Anti-ageing & Facial Treatments",
-  },
-];

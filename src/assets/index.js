@@ -17,6 +17,7 @@ import hairStyling from "./hair-styling.jpg";
 import hairstyle from "./hairstyle.jpg";
 import heroBg from "./hero_bgimage.jpg";
 import logo from "./logo.png";
+import logo2 from "./logo2.png";
 import makeup from "./makeup.jpeg";
 import mensGroomingHero from "./mens-grooming-hero.jpg";
 import mensGrooming from "./mens_grooming.jpeg";
@@ -56,6 +57,7 @@ export const IMG = {
   hairstyle,
   heroBg,
   logo,
+  logo2,
   makeup,
   mensGroomingHero,
   mensGrooming,

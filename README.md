@@ -176,9 +176,9 @@ styling stations, and `saloon.jpeg` is a men's facial.
 
 The favicon can't use the logo as-is for the same reason. `scripts/make-favicon.ps1`
 crops the **naturals** wordmark out of `logo.png` by alpha bounds — dropping the tagline,
-which is hopeless at icon sizes — and sets it white on a plum rounded square, writing
-`public/favicon-32.png`, `favicon-64.png` (the 2x tab slot) and `apple-touch-icon.png`.
-Re-run it if the logo ever changes.
+which is hopeless at icon sizes — and writes it white on a transparent square to the
+single `public/favicon.png` (180px), reused for both the browser tab and the phone
+home-screen icon. Re-run it if the logo ever changes.
 
 The wordmark is ~4.7:1, so in a square tile it is always a thin band: it reads at 180px
 and is a white smudge at the 16px a browser tab actually renders. Setting `$USE_GLYPH`

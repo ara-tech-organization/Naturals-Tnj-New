@@ -41,7 +41,7 @@ export default function Book() {
                   Reserve Your Chair
                 </h2>
               </div>
-              <BookingForm />
+              <BookingForm source="Book Appointment Page" />
             </div>
 
             <aside className="booking__aside" data-reveal="right">

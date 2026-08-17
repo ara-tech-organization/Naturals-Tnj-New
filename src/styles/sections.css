@@ -1765,51 +1765,10 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-s);
-  margin-top: var(--space-m);
-  padding-top: var(--space-m);
+  gap: var(--space-xs);
+  margin-top: var(--space-s);
+  padding-top: var(--space-s);
   border-top: 1px solid var(--line-soft);
-}
-
-@media (min-width: 576px) {
-  .booking-form__foot {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-m);
-  }
-
-}
-
-.booking-form__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-s);
-}
-
-/* The step swapped in on Continue/Back has already been validated onto
-   screen — a quick settle rather than the scroll-triggered `data-reveal`
-   system, which only fires once per element as it enters the viewport. */
-.step-panel {
-  animation: stepIn var(--dur-slow) var(--ease-out);
-}
-
-@keyframes stepIn {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 10px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .step-panel {
-    animation: none;
-  }
 }
 
 .booking__aside {

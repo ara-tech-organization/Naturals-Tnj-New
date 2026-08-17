@@ -29,7 +29,7 @@ export default function TestimonialsPage() {
       <PageHero
         eyebrow="Client Stories"
         title="What Our Customers Say"
-        text="Fifteen years of work, judged by the only people whose opinion counts — the clients who sat in the chair."
+        text="Three years of work, judged by the only people whose opinion counts — the clients who sat in the chair."
         image={IMG.makeup}
         alt="Bridal makeover by Naturals Thanjavur makeup artists"
         trail={[{ label: "Testimonials" }]}
