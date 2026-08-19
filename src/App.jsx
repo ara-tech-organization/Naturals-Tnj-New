@@ -8,8 +8,6 @@ import { useReveal } from "./hooks/useReveal";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Services from "./pages/Services";
-import WomensServices from "./pages/WomensServices";
-import MensGrooming from "./pages/MensGrooming";
 import Bridal from "./pages/Bridal";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
@@ -23,14 +21,12 @@ import NotFound from "./pages/NotFound";
 import { isKnownSection } from "./data/sections";
 
 /**
- * Pages whose sections are addressable, e.g. /womens-services/cuts-styling.
+ * Pages whose sections are addressable, e.g. /services/cuts-styling.
  * They render the same component as the bare route — ScrollToTop takes the
  * trailing segment and scrolls that section into view.
  */
 const SECTION_PAGES = [
   ["/services", Services],
-  ["/womens-services", WomensServices],
-  ["/mens-grooming", MensGrooming],
   ["/pricing", Pricing],
   ["/offers", Offers],
   ["/gallery", Gallery],
@@ -47,8 +43,6 @@ function SectionRoute({ base, children }) {
 const DARK_HERO_ROUTES = new Set([
   "/about",
   "/services",
-  "/womens-services",
-  "/mens-grooming",
   "/bridal-makeover",
   "/pricing",
   "/offers",
@@ -66,7 +60,7 @@ export default function App() {
   // Every hero on the site is now a dark photograph the header floats over in
   // white — the homepage included, since its cinematic stage is full-bleed
   // imagery. Anything else (the 404) has no hero and gets the solid bar from
-  // the start. Matched on the first segment only, so /womens-services/cuts-styling
+  // the start. Matched on the first segment only, so /services/cuts-styling
   // counts as its page.
   const isHome = pathname === "/";
   const isDarkHero = isHome || DARK_HERO_ROUTES.has(`/${pathname.split("/")[1]}`);
@@ -85,8 +79,6 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
-          <Route path="/womens-services" element={<WomensServices />} />
-          <Route path="/mens-grooming" element={<MensGrooming />} />
           <Route path="/bridal-makeover" element={<Bridal />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/offers" element={<Offers />} />

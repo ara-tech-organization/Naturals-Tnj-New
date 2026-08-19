@@ -19,7 +19,6 @@ import heroBg from "./hero_bgimage.jpg";
 import logo from "./logo.png";
 import logo2 from "./logo2.png";
 import makeup from "./makeup.jpeg";
-import mensGroomingHero from "./mens-grooming-hero.jpg";
 import mensGrooming from "./mens_grooming.jpeg";
 import saloon from "./saloon.jpeg";
 import skincare from "./skincare.jpeg";
@@ -49,6 +48,23 @@ import mensCut from "./mens-cut.jpg";
 import beardTrim from "./beard-trim.jpg";
 import executiveShave from "./executive-shave.jpg";
 
+/* The salon's own photography for men's categories that previously had to
+   share a stock image with the women's side of the catalogue. Each of these
+   is a dedicated men's-context shot instead. Two near-duplicate pairs were
+   supplied for World of Colors and Mani-Pedi — only the stronger frame from
+   each pair is wired in below; the other stays on disk unused. A supplied
+   "Texture.png" is not used here: despite the name it shows a hair-colour
+   application (matching World of Colors, not a smoothening/keratin
+   treatment), so mens-texture keeps the shared stock photo instead. */
+import beardMoustacheMen from "./Beard & Moustache.jpg";
+import worldOfColorsMen from "./World of Colors.jpg";
+import hairRitualMen from "./Hair Ritual.jpg";
+import facialsMen from "./Facials.jpg";
+import facialAddOnsMen from "./Facial Add ons.jpg";
+import deTanMen from "./De-tan.jpg";
+import maniPediMen from "./Mani-Pedi.jpg";
+import mensSpecialsCard from "./Mens Special.jpg";
+
 export const IMG = {
   story,
   beautyServices,
@@ -59,7 +75,6 @@ export const IMG = {
   logo,
   logo2,
   makeup,
-  mensGroomingHero,
   mensGrooming,
   saloon,
   skincare,
@@ -84,6 +99,15 @@ export const IMG = {
   mensCut,
   beardTrim,
   executiveShave,
+
+  beardMoustacheMen,
+  worldOfColorsMen,
+  hairRitualMen,
+  facialsMen,
+  facialAddOnsMen,
+  deTanMen,
+  maniPediMen,
+  mensSpecialsCard,
 };
 
 export default IMG;

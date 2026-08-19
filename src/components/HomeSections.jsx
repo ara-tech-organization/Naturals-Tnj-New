@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { CONTACT, HERO_SLIDES, WHY_US } from "../data/site";
-import { GALLERY_GROUPS, OCCASION_SERVICES } from "../data/services";
+import { GALLERY_GROUPS } from "../data/services";
 import { IMG } from "../assets";
 import Icon from "./Icon";
 import { ArrowLink, Btn, Chapter } from "./Ui";
@@ -49,8 +49,8 @@ export function SignatureBridal() {
               Premium Salon Services in Thanjavur" in the content outline, and
               only sits in its own plate because it earns the space. */}
           <h3 id="bridal-title" className="signature__title">
-            Bridal Makeup Artist in Thanjavur
-            <em>Your Perfect Wedding Look</em>
+            Bridal Makeup
+            <em>Your Perfect Look</em>
           </h3>
 
           <p className="signature__text">
@@ -74,22 +74,7 @@ export function SignatureBridal() {
         </div>
 
         <div className="signature__side">
-          {/* Every occasion service the document names, each with what it
-              actually is — a list of six names alone would have been the one
-              place on the page where a service is named but not explained. */}
-          <ul className="signature__services" data-reveal="right">
-            {OCCASION_SERVICES.map((s) => (
-              <li key={s.name}>
-                <span className="signature__service-name">
-                  <Icon name="check" size={13} />
-                  {s.name}
-                </span>
-                <span className="signature__service-text">{s.text}</span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="signature__proof" data-reveal="fade">
+          <div className="signature__proof" data-reveal="right">
             <ul className="signature__shots">
               {BRIDAL_SHOTS.slice(0, 4).map((img) => (
                 <li key={img.src}>
@@ -133,7 +118,7 @@ const PILLARS = [
     text: "From precision haircuts to advanced hair spa therapy, keratin treatments, and smoothening — using the latest techniques and salon-grade products.",
     image: IMG.hairStyling,
     alt: "Professional hair styling service at Naturals Thanjavur",
-    to: "/womens-services",
+    to: "/services/womens",
     link: "See hair services",
   },
   {
@@ -141,7 +126,7 @@ const PILLARS = [
     text: "A trusted beauty parlour for women in Thanjavur, offering hair spa, skin whitening facials, and full body spa treatments.",
     image: IMG.beautyServices,
     alt: "Beauty parlour services for women at Naturals Thanjavur",
-    to: "/womens-services",
+    to: "/services/womens",
     link: "See beauty services",
   },
 ];

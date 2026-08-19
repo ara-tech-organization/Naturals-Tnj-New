@@ -45,10 +45,10 @@ export const CONTACT = {
   email: "naturals.tj2@gmail.com",
   emailHref: "mailto:naturals.tj2@gmail.com",
   hours: [
-    { days: "Monday — Saturday", time: "9:00 AM – 8:00 PM" },
-    { days: "Sunday", time: "10:00 AM – 6:00 PM" },
+    { days: "Monday — Friday", time: "9:00 AM – 9:00 PM" },
+    { days: "Saturday & Sunday", time: "8:00 AM – 9:00 PM" },
   ],
-  hoursShort: "Mon – Sat: 9 AM – 8 PM",
+  hoursShort: "Open Daily: 8 AM – 9 PM",
   mapsDirections:
     "https://www.google.com/maps/dir/?api=1&destination=Naturals+unisex+salon+Arulanthar+nagar+Thanjavur",
   mapsEmbed:
@@ -166,7 +166,7 @@ export const SERVICE_TABS = [
   {
     id: "women",
     label: "Women's Services",
-    to: "/womens-services",
+    to: "/services/womens",
     blurb: "Tailored beauty and hair care, crafted with premium products and modern techniques.",
     image: IMG.skincare,
     alt: "Women's beauty parlour and facial services at Naturals Thanjavur",
@@ -174,7 +174,7 @@ export const SERVICE_TABS = [
   {
     id: "men",
     label: "Men's Services",
-    to: "/mens-grooming",
+    to: "/services/mens",
     blurb: "Complete grooming for the modern man, from classic cuts to relaxing spa therapies.",
     image: IMG.mensGrooming,
     alt: "Men's haircut and grooming service in Thanjavur",
@@ -220,8 +220,8 @@ export const HERO_SLIDES = [
     id: "unisex",
     mark: "Hair · Beauty · Grooming",
     eyebrow: `${BRAND.name} ${BRAND.place} · Since ${BRAND.since}`,
-    title: [{ t: "Thanjavur's Trusted Salon for " }, { t: "Hair, Bridal & Grooming", em: true }],
-    text: "Looking for the best salon in Thanjavur? Naturals Beauty Parlour brings together expert hair styling, bridal makeup artistry, rejuvenating spa therapies, and complete grooming solutions under one roof. With 3+ years of trusted service, we've become one of the most recommended unisex salons in Thanjavur for both everyday beauty needs and once-in-a-lifetime moments.",
+    title: [{ t: "Thanjavur's " }, { t: "Hair & Bridal Salon", em: true }],
+    text: "Expert hair styling, bridal makeup and spa therapies under one roof — trusted by Thanjavur for 3+ years.",
     cta: { label: "Book Your Appointment", to: "/book" },
     alt: { label: "Explore Services", to: "/services" },
     main: {
@@ -237,8 +237,8 @@ export const HERO_SLIDES = [
     id: "bridal",
     mark: "Bridal Studio",
     eyebrow: "Glam Up Your Special Day",
-    title: [{ t: "Bridal Makeover in Thanjavur" , em: true }, { t: ", Crafted for Your Big Day" }],
-    text: "As one of Thanjavur's most trusted bridal makeup artists, we craft flawless, camera-ready looks tailored to your outfit, skin tone, and style — with a personalised trial session before the day itself.",
+    title: [{ t: "Bridal Makeover " }, { t: "in Thanjavur", em: true }],
+    text: "Flawless, camera-ready bridal looks tailored to your outfit, skin tone and style.",
     cta: { label: "Explore Bridal Services", to: "/bridal-makeover" },
     alt: { label: "Book a Bridal Trial", to: "/book" },
     main: {
@@ -254,9 +254,9 @@ export const HERO_SLIDES = [
     id: "mens",
     mark: "Grooming Lounge",
     eyebrow: "For Him",
-    title: [{ t: "Men's Grooming Salon in Thanjavur", em: true }, { t: " for the Modern Man" }],
-    text: "Sharp haircuts, expert beard styling and trimming, facials built for men's skin, and complete grooming packages — all in a unisex salon the men of Thanjavur have trusted for over 15 years.",
-    cta: { label: "Explore Men's Grooming", to: "/mens-grooming" },
+    title: [{ t: "Men's Grooming " }, { t: "Salon in Thanjavur", em: true }],
+    text: "Sharp cuts, beard styling and facials for men — trusted by Thanjavur for 3+ years.",
+    cta: { label: "Explore Men's Grooming", to: "/services/mens" },
     alt: { label: "Book Your Session", to: "/book" },
     main: {
       src: IMG.mensCut,
@@ -429,7 +429,7 @@ export const PAGE_FAQS = {
     },
     {
       q: "Is there a women's hair spa in Thanjavur at Naturals?",
-      a: "Our Hair Ritual range covers head massage, Classic Hair Spa and Color Save repair for coloured hair, and our Scalp Ritual range adds dandruff control and hair fall control as 5+1 courses.",
+      a: "Our Hair Ritual range covers head massage, Classic Hair Spa and Color Save repair for coloured hair.",
     },
     {
       q: "Do you have a women's spa or body spa near me in Thanjavur?",

@@ -190,6 +190,13 @@ export function Accordion({ items, defaultOpen = -1, renderBody }) {
  * nothing here is JS-generated-only content.
  */
 function FaqEditorial({ title, items }) {
+  // The sticky stage on the right can only be as tall as the list on the
+  // left lets it be, or the two go out of sync: past the last question, the
+  // taller stage stays pinned while the shorter list has already run out,
+  // leaving a stretch of empty column beside it. The media image is what
+  // pushes the stage past the list's height on a short FAQ set, so it drops
+  // out below this count rather than fighting the sticky layout for it.
+  const showMedia = items.length >= 8;
   const [active, setActive] = useState(0);
   // Reduced-motion visitors land on a stopped rotation with the toggle in
   // reach, never on an answer that changes under them unasked.
@@ -288,9 +295,11 @@ function FaqEditorial({ title, items }) {
           <span className="faq-ed__rule" aria-hidden="true" />
           <p className="faq-ed__panel-a">{current.a}</p>
         </div>
-        <div className="faq-ed__media figure-frame">
-          <img src={IMG.salonInterior} alt="" loading="lazy" decoding="async" />
-        </div>
+        {showMedia ? (
+          <div className="faq-ed__media figure-frame">
+            <img src={IMG.salonInterior} alt="" loading="lazy" decoding="async" />
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -301,19 +310,6 @@ export function FaqSection({ items = FAQS, title = "Frequently Asked Questions" 
     <section className="section" aria-labelledby="faq-title">
       <div className="container">
         <FaqEditorial title={title} items={items} />
-
-        <div className="faq-ed__cta" data-reveal="fade">
-          <p>
-            Still have a question? Call us on{" "}
-            <a href={CONTACT.phoneHref} className="inline-link">
-              {CONTACT.phoneDisplay}
-            </a>{" "}
-            — we&rsquo;re happy to help.
-          </p>
-          <Btn href={WHATSAPP} variant="outline" size="sm" icon="whatsapp">
-            Ask on WhatsApp
-          </Btn>
-        </div>
       </div>
     </section>
   );
@@ -469,7 +465,7 @@ export function CtaBanner({
             Book an Appointment
           </Btn>
           <Btn href={CONTACT.phoneHref} variant="ghost" icon="phone">
-            Call {CONTACT.phoneDisplay}
+            Call Us
           </Btn>
           <Btn href={WHATSAPP} variant="ghost" icon="whatsapp">
             WhatsApp Us

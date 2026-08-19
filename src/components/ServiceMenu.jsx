@@ -83,7 +83,7 @@ function ServiceTile({ s, index, ctaLabel, isTarget }) {
  * holds the same content in a fifth of the height and puts the categories side
  * by side, which is how somebody choosing a service actually reads them.
  *
- * Every card keeps its slug as an `id`, so /womens-services/cuts-styling still
+ * Every card keeps its slug as an `id`, so /services/cuts-styling still
  * scrolls to the right one — and because a card is small enough to miss in a
  * grid, the addressed card is ringed until you navigate away from it.
  */

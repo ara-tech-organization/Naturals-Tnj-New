@@ -1,6 +1,6 @@
 import PageHero from "../components/PageHero";
 import Icon from "../components/Icon";
-import { CtaBanner, StatsRow, Testimonials } from "../components/Blocks";
+import { CtaBanner, StatsRow } from "../components/Blocks";
 import { ArrowLink, Btn, Eyebrow, Figure, SectionHeading } from "../components/Ui";
 import { BRAND, CONTACT, CORE_VALUES } from "../data/site";
 import { localBusinessSchema, useSeo } from "../hooks/useSeo";
@@ -174,7 +174,6 @@ export default function About() {
         </div>
       </section>
 
-      <Testimonials />
       <CtaBanner
         eyebrow="Come Say Hello"
         title="Visit Naturals Thanjavur"

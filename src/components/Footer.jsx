@@ -22,8 +22,8 @@ const QUICK_LINKS = [
     mega-menu. */
 const SERVICE_LINKS = [
   { label: "All Services", to: "/services" },
-  { label: "Women’s Services", to: "/womens-services" },
-  { label: "Men’s Grooming", to: "/mens-grooming" },
+  { label: "Women’s Services", to: "/services/womens" },
+  { label: "Men’s Grooming", to: "/services/mens" },
   { label: "Bridal Makeover", to: "/bridal-makeover" },
 ];
 

@@ -93,7 +93,7 @@ export default function Home() {
             <div className="welcome__head-main" data-reveal>
               <Chapter>The Naturals Experience</Chapter>
               <h2 id="welcome-title" className="welcome__title">
-                Welcome to Naturals — Thanjavur&rsquo;s Preferred <em>Unisex Salon</em>
+                Thanjavur&rsquo;s Preferred <em>Unisex Salon</em>
               </h2>
             </div>
 
@@ -237,7 +237,7 @@ export default function Home() {
                 ))}
               </ul>
               <div className="split__actions" data-reveal>
-                <Btn to="/mens-grooming">Explore Men&rsquo;s Grooming</Btn>
+                <Btn to="/services/mens">Explore Men&rsquo;s Grooming</Btn>
                 <ArrowLink to="/book">Book Your Session</ArrowLink>
               </div>
             </div>
@@ -262,7 +262,7 @@ export default function Home() {
             <div data-reveal>
               <Chapter>Spa &amp; Wellness</Chapter>
               <h2 id="spa-title" className="spa__title">
-                Spa &amp; Wellness Therapies in Thanjavur
+                Spa &amp; Wellness in Thanjavur
               </h2>
             </div>
             <div className="spa__aside">
@@ -274,7 +274,7 @@ export default function Home() {
                 <Btn href={CONTACT.phoneHref} variant="light" icon="phone">
                   Call Now!
                 </Btn>
-                <ArrowLink to="/womens-services">See Spa Services</ArrowLink>
+                <ArrowLink to="/services/womens">See Spa Services</ArrowLink>
               </div>
             </div>
           </div>

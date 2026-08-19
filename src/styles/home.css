@@ -1238,68 +1238,38 @@
 .signature__side {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: var(--space-m);
 }
 
-.signature__services {
-  display: grid;
-  gap: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-}
-
-.signature__services li {
-  display: grid;
-  gap: 0.2em;
-  padding: var(--space-2xs) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-}
-
-@media (min-width: 576px) {
-  .signature__services li {
-    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
-    gap: var(--space-s);
-    align-items: baseline;
-  }
-}
-
-.signature__service-name {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55em;
-  font-size: var(--step--1);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: #fff;
-}
-
-.signature__service-name svg {
-  flex: none;
-  color: var(--gold-300);
-}
-
-.signature__service-text {
-  font-size: var(--step--2);
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.66);
-}
-
+/* Two-across rather than four-in-a-row: with the service list gone, this
+   grid is the entire right-hand column, so the shots need to read as a
+   proper plate of proof rather than a thin strip of thumbnails. It fills
+   the column's own width (no cap of its own) so the gap between the two
+   halves of the section stays the deliberate one set on `.signature__inner`,
+   rather than doubling up with unused space inside this column too. */
 .signature__shots {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-2xs);
-  margin: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-s);
+  max-width: 26rem;
+  margin-inline: auto;
   padding: 0;
   list-style: none;
+}
+
+@media (min-width: 992px) {
+  .signature__shots {
+    max-width: none;
+    margin-inline: 0;
+  }
 }
 
 .signature__shots img {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: var(--r-s);
+  border-radius: var(--r-m);
   transition: transform var(--dur) var(--ease-out);
 }
 

@@ -46,7 +46,7 @@ export default function FloatingActions() {
         <a className="floater" href={CONTACT.phoneHref} aria-label={`Call ${CONTACT.phoneDisplay}`}>
           <Icon name="phone" size={19} />
           <span className="floater__tip" aria-hidden="true">
-            {CONTACT.phoneDisplay}
+            Call Us
           </span>
         </a>
       </div>

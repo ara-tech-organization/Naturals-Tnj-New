@@ -1,7 +1,7 @@
 import PageHero from "../components/PageHero";
 import BookingForm from "../components/BookingForm";
 import Icon from "../components/Icon";
-import { CtaBanner, FaqSection, LocationSection } from "../components/Blocks";
+import { CtaBanner, LocationSection } from "../components/Blocks";
 import { Eyebrow } from "../components/Ui";
 import { CONTACT, FAQS, WHATSAPP } from "../data/site";
 import { faqSchema, localBusinessSchema, useSeo } from "../hooks/useSeo";
@@ -180,7 +180,6 @@ export default function Contact() {
       </section>
 
       <LocationSection />
-      <FaqSection />
       <CtaBanner
         eyebrow="We're Open"
         title="Walk In or Book Ahead"

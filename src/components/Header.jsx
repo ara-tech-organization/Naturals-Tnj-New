@@ -202,7 +202,7 @@ export default function Header({ overlay = false, dark = false, topbar = true })
               className="header__call"
               icon="phone"
             >
-              {CONTACT.phoneDisplay}
+              Call Us
             </Btn>
             <Btn to="/book" size="sm" className="header__cta" icon="calendar">
               Book Appointment

@@ -1,6 +1,6 @@
 import PageHero from "../components/PageHero";
 import Icon from "../components/Icon";
-import { CtaBanner, FaqSection, Testimonials } from "../components/Blocks";
+import { CtaBanner, FaqSection } from "../components/Blocks";
 import { ArrowLink, Btn, Eyebrow, SectionHeading } from "../components/Ui";
 import { OCCASION_SERVICES } from "../data/services";
 import { CONTACT, PAGE_FAQS } from "../data/site";
@@ -36,36 +36,6 @@ const JOURNEY = [
     can be scanned instead of read. */
 const COVERS = ["Bride", "Groom", "Saree Draping", "Hairdo", "Mehandi"];
 
-/** Each line of the old tick list, given a heading and its own tile — every
-    one is a separate booking someone might arrive for. */
-const SUITABLE_FOR = [
-  {
-    icon: "sparkle",
-    title: "Bridal",
-    text: "Engagement, muhurtham and reception looks, each built for its own venue and lighting.",
-  },
-  {
-    icon: "users",
-    title: "Groom Makeup",
-    text: "Grooming and makeup for the groom, so both of you photograph consistently.",
-  },
-  {
-    icon: "star",
-    title: "Party & Sangeet",
-    text: "Makeup for family and guests across the celebrations either side of the wedding.",
-  },
-  {
-    icon: "scissors",
-    title: "Draping & Hairdo",
-    text: "Saree draping and hairdo bookable on their own, without a full package.",
-  },
-  {
-    icon: "heart",
-    title: "Mehandi",
-    text: "Mehandi for the bride and for the wedding party, booked alongside or separately.",
-  },
-];
-
 export default function Bridal() {
   useSeo({
     title: "Bridal Makeup Artist in Thanjavur | Naturals Bridal Makeover",
@@ -81,8 +51,8 @@ export default function Bridal() {
     <>
       <PageHero
         eyebrow="Glam Up Your Special Day"
-        title="Bridal Makeup Artist in Thanjavur — Your Perfect Wedding Look"
-        text="As one of Thanjavur's most trusted bridal makeup artists, we craft flawless, camera-ready looks tailored to your outfit, skin tone, and style."
+        title="Bridal Makeup Artist in Thanjavur"
+        text="Your perfect wedding look — flawless, camera-ready makeup tailored to your outfit, skin tone and style."
         image={IMG.bridalMakeover}
         alt="Bridal makeover by Naturals Thanjavur makeup artists"
         trail={[{ label: "Bridal" }]}
@@ -134,7 +104,7 @@ export default function Bridal() {
                 Book Your Bridal Trial
               </Btn>
               <Btn href={CONTACT.phoneHref} variant="outline" size="lg" icon="phone">
-                Call {CONTACT.phoneDisplay}
+                Call Us
               </Btn>
             </div>
           </div>
@@ -154,11 +124,6 @@ export default function Bridal() {
             titleId="occasion-services"
             text="Make every celebration unforgettable with our special occasion services, crafted by experienced bridal makeup artists in Thanjavur."
             split
-            aside={
-              <Btn to="/book" size="sm" variant="light" icon="calendar">
-                Book Your Package
-              </Btn>
-            }
           />
 
           <ul className="occ-checklist stagger">
@@ -176,7 +141,7 @@ export default function Bridal() {
       </section>
 
       {/* ---- Journey ----------------------------------------------------- */}
-      <section className="section section--dark journey" aria-labelledby="journey-title">
+      <section className="section journey" aria-labelledby="journey-title">
         <span className="journey__glow" aria-hidden="true" />
 
         <div className="container">
@@ -202,59 +167,19 @@ export default function Bridal() {
           </ol>
 
           <div className="journey__actions" data-reveal>
-            <Btn to="/book" variant="light" icon="calendar">
+            <Btn to="/book" icon="calendar">
               Book Your Trial
             </Btn>
             <ArrowLink to="/gallery">See Bridal Gallery</ArrowLink>
             {/* Brides routinely browse the general hair and skin menu on the
                 way to the date — the reciprocal link back from Women's
                 Services already exists. */}
-            <ArrowLink to="/womens-services">Women&rsquo;s Services</ArrowLink>
-          </div>
-        </div>
-      </section>
-
-      {/* ---- Suitable for ------------------------------------------------ */}
-      <section className="section section--alt occ" aria-labelledby="occ-title">
-        <div className="container">
-          <div className="occ__head" data-reveal>
-            <Eyebrow>Suitable For</Eyebrow>
-            <h2 id="occ-title" className="occ__title">
-              Every celebration, not only the wedding morning.
-            </h2>
-          </div>
-
-          {/* Tiles rather than ticks: each line is a distinct booking someone
-              might come in for, so each gets its own card. */}
-          <ul className="occ__grid stagger">
-            {SUITABLE_FOR.map((o) => (
-              <li className="occ__tile" key={o.title} data-reveal>
-                <span className="occ__icon" aria-hidden="true">
-                  <Icon name={o.icon} size={19} />
-                </span>
-                <h3 className="occ__tile-title">{o.title}</h3>
-                <p className="occ__tile-text">{o.text}</p>
-              </li>
-            ))}
-          </ul>
-
-          {/* The seasonal warning is the reason to call today, so it sits on
-              its own bar with the number as a button rather than as a note. */}
-          <div className="occ__note" data-reveal="fade">
-            <p>
-              <strong>Bridal dates book out well ahead of the season.</strong> Call to check
-              availability for your date.
-            </p>
-            <Btn href={CONTACT.phoneHref} variant="outline" size="sm" icon="phone">
-              {CONTACT.phoneDisplay}
-            </Btn>
+            <ArrowLink to="/services/womens">Women&rsquo;s Services</ArrowLink>
           </div>
         </div>
       </section>
 
       <FaqSection items={PAGE_FAQS.bridal} title="Bridal Questions, Answered" />
-
-      <Testimonials />
 
       <CtaBanner
         eyebrow="Your Wedding Day"

@@ -7,9 +7,9 @@ import { isKnownSection } from "../data/sections";
  * on navigation — unless the URL names a section, in which case scroll that
  * section into view once it has mounted.
  *
- * Sections travel as a path segment (/mens-grooming/mens-cuts-styling), not a
+ * Sections travel as a path segment (/services/mens-cuts-styling), not a
  * fragment. Old fragment URLs are rewritten to the path form in place, so a
- * bookmark or an indexed /mens-grooming#mens-cuts-styling still lands correctly
+ * bookmark or an indexed /services#mens-cuts-styling still lands correctly
  * and leaves the canonical URL in the address bar. A hash that is not a known
  * section — the #main skip link — is left alone and simply scrolled to.
  */

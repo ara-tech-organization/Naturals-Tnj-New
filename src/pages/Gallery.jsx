@@ -19,9 +19,9 @@ const TOTAL = GALLERY_GROUPS.reduce((n, g) => n + g.images.length, 0);
     it just earned. */
 const GROUP_LINK = {
   bridal: { to: "/bridal-makeover", label: "Bridal services" },
-  hair: { to: "/womens-services", label: "Hair services" },
-  mens: { to: "/mens-grooming", label: "Men's grooming" },
-  spa: { to: "/womens-services", label: "Spa & skin services" },
+  hair: { to: "/services/womens", label: "Hair services" },
+  mens: { to: "/services/mens", label: "Men's grooming" },
+  spa: { to: "/services/womens", label: "Spa & skin services" },
 };
 
 /**

@@ -151,13 +151,12 @@ export const PAGE_KEYWORDS = {
     G.brand,
   ),
 
-  /** The catalogue page carries the service-category terms. */
-  services: meta(G.hair, G.skinSpa, G.packages, [
+  /** The catalogue page carries the service-category terms for both women's
+      and men's categories — they no longer have pages of their own, so their
+      keyword sets live here too. */
+  services: meta(G.hair, G.skinSpa, G.packages, G.womens, G.mensFull, [
     "salon services thanjavur",
     "unisex salon thanjavur",
-  ]),
-
-  womensServices: meta(G.womens, [
     "ladies beauty parlour in thanjavur",
     "best beauty parlour in thanjavur",
     "hair spa in thanjavur",
@@ -165,9 +164,8 @@ export const PAGE_KEYWORDS = {
     "hair smoothening thanjavur",
     "facial treatment thanjavur",
     "skin care salon thanjavur",
+    "men's haircut thanjavur",
   ]),
-
-  mensGrooming: meta(G.mensFull, G.mens, ["men's haircut thanjavur"]),
 
   /** Every bridal and makeup-artist phrase lands on the bridal page. */
   bridal: meta(
@@ -254,12 +252,12 @@ export const PAGE_KEYWORDS = {
  * spam pattern Google discounts.
  */
 export const POPULAR_SEARCHES = [
-  { label: "Hair Salon in Thanjavur", to: "/womens-services/cuts-styling" },
-  { label: "Hair Spa in Thanjavur", to: "/womens-services/hair-ritual" },
-  { label: "Keratin Treatment Thanjavur", to: "/womens-services/texture" },
-  { label: "Facial Treatment Thanjavur", to: "/womens-services/facials" },
+  { label: "Hair Salon in Thanjavur", to: "/services/cuts-styling" },
+  { label: "Hair Spa in Thanjavur", to: "/services/hair-ritual" },
+  { label: "Keratin Treatment Thanjavur", to: "/services/texture" },
+  { label: "Facial Treatment Thanjavur", to: "/services/facials" },
   { label: "Bridal Makeup Thanjavur", to: "/bridal-makeover" },
-  { label: "Men's Grooming Thanjavur", to: "/mens-grooming" },
-  { label: "Beard Styling & Trimming", to: "/mens-grooming/mens-beard-moustache" },
-  { label: "Spa & Reflexology in Thanjavur", to: "/womens-services/reflexology" },
+  { label: "Men's Grooming Thanjavur", to: "/services/mens" },
+  { label: "Beard Styling & Trimming", to: "/services/mens-beard-moustache" },
+  { label: "Spa & Reflexology in Thanjavur", to: "/services/reflexology" },
 ];

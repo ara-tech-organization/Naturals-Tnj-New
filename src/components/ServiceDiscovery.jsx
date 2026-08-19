@@ -13,11 +13,16 @@ import { ArrowLink, Btn, Chapter } from "./Ui";
 /** Dwell per card before the row advances. */
 const INTERVAL = 3000;
 
+/* Women's and men's services both now live on /services rather than on
+   pages of their own — `to` stays the deep-link base a category slug is
+   appended to (/services/cuts-styling), while `anchor` is where the
+   audience's own half of that page starts (/services/womens). */
 const LANES = [
   {
     id: "women",
     label: "Women",
-    to: "/womens-services",
+    to: "/services",
+    anchor: "/services/womens",
     intro:
       "Tailored beauty and hair care designed for every woman, crafted with premium products and modern techniques.",
     list: WOMENS_SERVICES,
@@ -25,7 +30,8 @@ const LANES = [
   {
     id: "men",
     label: "Men",
-    to: "/mens-grooming",
+    to: "/services",
+    anchor: "/services/mens",
     intro:
       "Complete grooming solutions for the modern man, from sharp cuts and beard work to facials built for men's skin.",
     list: MENS_SERVICES,
@@ -285,7 +291,7 @@ export default function ServiceDiscovery() {
           </div>
 
           <div className="svc__links">
-            <ArrowLink to={current.to}>View the full {current.label}&rsquo;s menu</ArrowLink>
+            <ArrowLink to={current.anchor}>View the full {current.label}&rsquo;s menu</ArrowLink>
             <ArrowLink to="/services">Browse every service</ArrowLink>
             <ArrowLink to="/pricing">See the rate card</ArrowLink>
           </div>

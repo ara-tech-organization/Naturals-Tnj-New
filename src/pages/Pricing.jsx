@@ -116,9 +116,9 @@ function RateTable({ category, index, basePath }) {
           {!priced ? <span className="rate-card__pill">Priced on request</span> : null}
         </div>
 
-        {/* /womens-services/:section is already an addressable route that
-            scrolls to the matching card, so every category can point at its
-            own write-up instead of at the top of the menu. */}
+        {/* /services/:section is already an addressable route that scrolls
+            to the matching card, so every category can point at its own
+            write-up instead of at the top of the menu. */}
         <ArrowLink to={`${basePath}/${category.slug}`}>
           <span className="sr-only">{category.name} — </span>What&rsquo;s included
         </ArrowLink>
@@ -217,7 +217,7 @@ export default function Pricing() {
               split
               className="rate-head"
               aside={
-                <ArrowLink to={tab === 0 ? "/womens-services" : "/mens-grooming"}>
+                <ArrowLink to={tab === 0 ? "/services/womens" : "/services/mens"}>
                   See {current.short} service details
                 </ArrowLink>
               }
@@ -270,7 +270,7 @@ export default function Pricing() {
                 key={category.slug}
                 category={category}
                 index={i}
-                basePath={tab === 0 ? "/womens-services" : "/mens-grooming"}
+                basePath="/services"
               />
             ))}
           </div>

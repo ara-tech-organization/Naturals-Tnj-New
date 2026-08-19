@@ -338,7 +338,7 @@
 
 .svc-notes__list {
   display: grid;
-  gap: var(--space-xs) var(--space-l);
+  gap: var(--space-xs);
   margin-top: var(--space-s);
 }
 
@@ -348,26 +348,17 @@
   }
 }
 
+/* Each note as its own boxed card rather than a bulleted line — the two
+   notes are distinct caveats, not a run of continuing points, and a card
+   holds that separation more clearly than a shared dot marker did. */
 .svc-notes__list li {
-  position: relative;
-  padding-left: 1.45em;
+  padding: var(--space-s);
   font-size: var(--step--1);
   line-height: 1.65;
   color: var(--text-muted);
-}
-
-/* A ringed dot rather than a dash — two notes side by side need a marker with
-   enough weight to hold each column's left edge. */
-.svc-notes__list li::before {
-  content: "";
-  position: absolute;
-  top: 0.6em;
-  left: 0.15em;
-  width: 6px;
-  height: 6px;
-  border-radius: var(--r-pill);
-  background: var(--plum-500);
-  box-shadow: 0 0 0 4px var(--plum-100);
+  background: var(--surface);
+  border: 1px solid var(--plum-100);
+  border-radius: var(--r-m);
 }
 
 .svc-notes__actions {
@@ -968,52 +959,47 @@
   color: var(--text-on-dark);
 }
 
-/* ---- Occasion (Services page) -------------------------------------------- */
-
-.occasion {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-xl);
-}
-
-@media (min-width: 992px) {
-  .occasion {
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: clamp(2.5rem, 0rem + 6vw, 5rem);
-    align-items: start;
-  }
-
-  .occasion__copy {
-    position: sticky;
-    top: calc(var(--header-h-scrolled) + var(--space-l));
-  }
-}
-
-.occasion__copy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-s);
-}
+/* ---- Occasion (Services page) --------------------------------------------
+   Heading full-width across the top (via SectionHeading split), the six
+   boxed cards in their own row below — same top/bottom rhythm as the
+   Bridal page's matching section, rather than a side-by-side split. */
 
 .occasion__list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0;
+  gap: var(--space-s);
+  margin-top: var(--space-l);
 }
 
 @media (min-width: 640px) {
   .occasion__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 var(--space-l);
   }
 }
 
+@media (min-width: 992px) {
+  .occasion__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Boxed cards rather than a ruled list — same glass-card treatment as
+   `.occ-checklist li` on the Bridal page, so the two "six special-day
+   services" lists read as the same component wherever they appear. */
 .occasion__list li {
   display: flex;
   align-items: flex-start;
   gap: var(--space-s);
-  padding-block: var(--space-m);
-  border-bottom: 1px solid var(--line-dark);
+  padding: var(--space-m);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line-dark);
+  border-radius: var(--r-l);
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.occasion__list li:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(217, 195, 156, 0.35);
 }
 
 .occasion__num {
@@ -1189,6 +1175,12 @@
   inset: 0;
   pointer-events: none;
   background:
+    radial-gradient(50% 60% at 12% 0%, rgba(126, 71, 152, 0.08), transparent 70%),
+    radial-gradient(45% 55% at 88% 100%, rgba(183, 151, 101, 0.08), transparent 70%);
+}
+
+.section--dark .journey__glow {
+  background:
     radial-gradient(50% 60% at 12% 0%, rgba(126, 71, 152, 0.42), transparent 70%),
     radial-gradient(45% 55% at 88% 100%, rgba(183, 151, 101, 0.16), transparent 70%);
 }
@@ -1243,7 +1235,11 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--rule-dark, rgba(255, 255, 255, 0.18));
+  background: var(--line);
+}
+
+.section--dark .journey__step::before {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .journey__step:last-child::before {
@@ -1279,6 +1275,10 @@
 
 .journey__step-title {
   font-size: var(--step-1);
+  color: var(--text-strong);
+}
+
+.section--dark .journey__step-title {
   color: #fff;
 }
 
@@ -1286,6 +1286,10 @@
   margin-top: var(--space-2xs);
   font-size: var(--step--1);
   line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.section--dark .journey__step-text {
   color: var(--text-on-dark);
 }
 
@@ -1301,7 +1305,11 @@
   gap: var(--space-s) clamp(1.75rem, 1rem + 2.4vw, 3rem);
   margin-top: clamp(2.75rem, 1.6rem + 3.4vw, 4.5rem);
   padding-top: var(--space-l);
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid var(--line);
+}
+
+.section--dark .journey__actions {
+  border-top-color: rgba(255, 255, 255, 0.14);
 }
 
 /* ---- Suitable for ---------------------------------------------------------
@@ -1462,21 +1470,42 @@
 }
 
 .occ-checklist {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-s);
   margin-top: var(--space-l);
 }
 
+@media (min-width: 640px) {
+  .occ-checklist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 992px) {
+  .occ-checklist {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Boxed cards rather than a ruled list — six items read as a set to scan,
+   not a run of rows to read top to bottom. Same glass-card treatment as
+   `.section--dark .svc-notes`, so it matches the rest of the site's dark-bg
+   card language instead of inventing a new one. */
 .occ-checklist li {
   display: flex;
   flex-direction: column;
   gap: var(--space-2xs);
-  padding-block: var(--space-m);
-  border-bottom: 1px solid var(--line-dark);
+  padding: var(--space-m);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line-dark);
+  border-radius: var(--r-l);
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
 }
 
-.occ-checklist li:first-child {
-  border-top: 1px solid var(--line-dark);
+.occ-checklist li:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(217, 195, 156, 0.35);
 }
 
 .occ-checklist__head {
@@ -1499,24 +1528,6 @@
   font-size: var(--step--1);
   line-height: 1.6;
   color: var(--text-on-dark);
-  max-width: 60ch;
-}
-
-@media (min-width: 768px) {
-  .occ-checklist li {
-    flex-direction: row;
-    align-items: center;
-    gap: var(--space-l);
-  }
-
-  .occ-checklist__head {
-    flex: 0 0 260px;
-  }
-
-  .occ-checklist p {
-    flex: 1;
-    max-width: 52ch;
-  }
 }
 
 /* ---- Mission / vision ----------------------------------------------------- */

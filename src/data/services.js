@@ -61,15 +61,6 @@ export const WOMENS_SERVICES = [
     ],
   },
   {
-    slug: "scalp-ritual",
-    name: "Scalp Ritual",
-    summary: "Course-based dandruff and hair fall control therapy for a healthier scalp.",
-    text: "Targeted scalp therapy for dandruff and hair fall, taken as a course rather than a one-off sitting — five sessions with the sixth complimentary, so the scalp has time to respond.",
-    image: IMG.scalpRitual,
-    alt: "Scalp treatment and dandruff control therapy at Naturals Thanjavur",
-    items: ["Dandruff Control (5+1)", "Hair Fall Control (5+1)"],
-  },
-  {
     slug: "hair-ritual",
     name: "Hair Ritual",
     summary: "Head massage, classic hair spa and colour-save repair for deep nourishment.",
@@ -181,7 +172,7 @@ export const MENS_SERVICES = [
     name: "Beard & Moustache",
     summary: "Shaping, trimming and colouring for beard and moustache.",
     text: "Beard and moustache work handled properly — shaping and trimming to your face, and colouring that covers greys without looking painted on.",
-    image: IMG.beardTrim,
+    image: IMG.beardMoustacheMen,
     alt: "Beard styling and colouring for men at Naturals Thanjavur",
     items: ["Beard Styling & Trim", "Beard Coloring", "Moustache Color"],
   },
@@ -190,7 +181,7 @@ export const MENS_SERVICES = [
     name: "World of Colors",
     summary: "Fashion colours, grey coverage and global colour for men's hair.",
     text: "Fashion colours, grey coverage, and global colour for a fresh new style. A great way to update your look while covering greys naturally and confidently.",
-    image: IMG.hairColour,
+    image: IMG.worldOfColorsMen,
     alt: "Men's hair colouring and grey coverage at Naturals Thanjavur",
     items: ["Fashion Colours", "Grey Coverage", "Global & Root Colour"],
   },
@@ -208,7 +199,7 @@ export const MENS_SERVICES = [
     name: "Hair Ritual",
     summary: "Head massage, hair spa and dandruff control treatment.",
     text: "Relaxing head massage, hair spa, and dandruff control treatment. A rejuvenating experience that improves scalp health and leaves hair feeling refreshed.",
-    image: IMG.wellness,
+    image: IMG.hairRitualMen,
     alt: "Men's head massage and hair spa at Naturals Thanjavur",
     items: ["Head Massage", "Hair Spa", "Dandruff Control Treatment"],
   },
@@ -217,7 +208,7 @@ export const MENS_SERVICES = [
     name: "Facials",
     summary: "Manly radiance, detox charcoal, brightening bliss and hydra facial.",
     text: "Manly radiance, detox charcoal, brightening bliss, and hydra facial for refreshed skin. Designed specifically for men's skin, these facials help combat dullness and daily grime.",
-    image: IMG.facial,
+    image: IMG.facialsMen,
     alt: "Men's facial treatment in Thanjavur at Naturals",
     items: ["Manly Radiance", "Detox Charcoal", "Brightening Bliss", "Hydra Facial"],
   },
@@ -226,7 +217,7 @@ export const MENS_SERVICES = [
     name: "Facial Add-ons",
     summary: "Bright care for the neck and elbows alongside your facial.",
     text: "Bright care for the areas a facial doesn't reach. A simple add-on that evens out tone on the neck and elbows while you're already in the chair.",
-    image: IMG.facialMask,
+    image: IMG.facialAddOnsMen,
     alt: "Bright care facial add-on for men at Naturals Thanjavur",
     items: ["Bright Care (Neck)", "Bright Care (Elbow)"],
   },
@@ -253,7 +244,7 @@ export const MENS_SERVICES = [
     name: "De-tan",
     summary: "Tan removal for face, neck and arms.",
     text: "A de-tan session that lifts sun tan and restores your natural tone — the quickest fix for a summer of riding to work.",
-    image: IMG.skincare,
+    image: IMG.deTanMen,
     alt: "De-tan treatment for men at Naturals Thanjavur",
     items: ["De-tan"],
   },
@@ -262,7 +253,7 @@ export const MENS_SERVICES = [
     name: "Mani-Pedi",
     summary: "Basic, advanced and organic spa grooming for hands and feet.",
     text: "Basic, advanced, and organic spa grooming for hands and feet. A grooming essential that keeps your hands and feet clean, healthy, and well-maintained.",
-    image: IMG.manicure,
+    image: IMG.maniPediMen,
     alt: "Men's manicure and pedicure grooming at Naturals Thanjavur",
     items: ["Basic", "Advanced", "Organic Spa"],
   },
@@ -271,7 +262,7 @@ export const MENS_SERVICES = [
     name: "Men's Specials",
     summary: "The Gentlemen's Club grooming combo.",
     text: "Our signature men's combo — several of the services above bundled into one sitting at a combo rate. Ask for the current inclusions when you book.",
-    image: IMG.mensGroomingHero,
+    image: IMG.mensSpecialsCard,
     alt: "Gentlemen's Club grooming combo at Naturals Thanjavur",
     items: ["Gentlemen's Club Combo"],
   },
@@ -319,7 +310,7 @@ export const SERVICE_PILLARS = [
     text: "From precision haircuts to advanced hair spa therapy, keratin treatments, and smoothening, our hair salon in Thanjavur is built around the latest techniques and premium, salon-grade products. Whether you're after a bold transformation or subtle upkeep, our stylists tailor every service to you.",
     image: IMG.hairstyle,
     alt: "Professional hair styling service at Naturals Thanjavur",
-    to: "/womens-services",
+    to: "/services/womens",
     cta: "Book Your Session",
   },
   {
@@ -328,7 +319,7 @@ export const SERVICE_PILLARS = [
     text: "As a trusted beauty parlour for women in Thanjavur, we offer everything from hair spa and skin whitening facials to full body spa treatments, all designed around what makes you feel most confident.",
     image: IMG.skincare,
     alt: "Women's beauty parlour and facial services at Naturals Thanjavur",
-    to: "/womens-services",
+    to: "/services/womens",
     cta: "Book Your Session",
   },
   {
@@ -337,7 +328,7 @@ export const SERVICE_PILLARS = [
     text: "Our unisex salon for men in Thanjavur offers sharp haircuts, expert beard styling and trimming, facial treatments, and complete grooming packages for the modern man who wants to look effortlessly put-together.",
     image: IMG.mensGrooming,
     alt: "Men's haircut and grooming service in Thanjavur",
-    to: "/mens-grooming",
+    to: "/services/mens",
     cta: "Book Your Session",
   },
   {
@@ -388,7 +379,7 @@ export const GALLERY_GROUPS = [
       { src: IMG.beardTrim, alt: "Beard shaping and trimming" },
       { src: IMG.executiveShave, alt: "Executive shave for men" },
       { src: IMG.mensGrooming, alt: "Men's haircut and grooming service in Thanjavur" },
-      { src: IMG.mensGroomingHero, alt: "Beard styling and grooming for men at Naturals Thanjavur" },
+      { src: IMG.beardMoustacheMen, alt: "Beard styling and grooming for men at Naturals Thanjavur" },
     ],
   },
   {
@@ -436,15 +427,15 @@ export const BOOKING_SERVICES = [
  * competing set of links.
  */
 const POPULAR = [
-  { name: "Haircut & Styling", tag: "Women's", to: "/womens-services/cuts-styling" },
-  { name: "Hair Colour", tag: "Women's", to: "/womens-services/world-of-colors" },
-  { name: "Keratin & Smoothening", tag: "Women's", to: "/womens-services/texture" },
-  { name: "Hair Spa", tag: "Women's", to: "/womens-services/hair-ritual" },
-  { name: "Facials", tag: "Women's", to: "/womens-services/facials" },
-  { name: "Men's Haircut", tag: "Men's", to: "/mens-grooming/mens-cuts-styling" },
-  { name: "Beard Colour & Styling", tag: "Men's", to: "/mens-grooming/mens-beard-moustache" },
-  { name: "Men's Facial", tag: "Men's", to: "/mens-grooming/mens-facials" },
-  { name: "Mani-Pedi", tag: "Both", to: "/womens-services/mani-pedi" },
+  { name: "Haircut & Styling", tag: "Women's", to: "/services/cuts-styling" },
+  { name: "Hair Colour", tag: "Women's", to: "/services/world-of-colors" },
+  { name: "Keratin & Smoothening", tag: "Women's", to: "/services/texture" },
+  { name: "Hair Spa", tag: "Women's", to: "/services/hair-ritual" },
+  { name: "Facials", tag: "Women's", to: "/services/facials" },
+  { name: "Men's Haircut", tag: "Men's", to: "/services/mens-cuts-styling" },
+  { name: "Beard Colour & Styling", tag: "Men's", to: "/services/mens-beard-moustache" },
+  { name: "Men's Facial", tag: "Men's", to: "/services/mens-facials" },
+  { name: "Mani-Pedi", tag: "Both", to: "/services/mani-pedi" },
   { name: "Bridal Makeup", tag: "Bridal", to: "/bridal-makeover" },
 ];
 
@@ -471,48 +462,6 @@ export const POPULAR_SERVICES = POPULAR.map((s) => {
 });
 
 /* ------------------------------------------ SPECIAL PACKAGES / COMBOS */
-
-/**
- * Cross-gender combos that aren't a single category on either side of the
- * catalogue. Rendered on /offers#packages — the structure calls for a
- * "Special Packages / Combos" destination, and a package is a bundle of the
- * services already listed above rather than a new kind of service, so it sits
- * with the membership terms that govern it instead of on a page of its own.
- *
- * PLACEHOLDER: the rate card names "Glow Up" but does not print its
- * inclusions, so the copy below routes that question to the salon rather than
- * listing services that may not be in the bundle. Add an `items` array of
- * sub-service names and the card lists them.
- */
-export const COMBO_PACKAGES = [
-  {
-    slug: "glow-up",
-    name: "Glow Up",
-    tag: "Combo",
-    text: "Our cross-gender glow combo — a facial-led bundle taken in a single sitting at a combo rate. Ask for the current inclusions when you book.",
-    image: IMG.skincare,
-    alt: "Glow Up combo package at Naturals Thanjavur",
-    items: [],
-  },
-  {
-    slug: "gentlemens-club",
-    name: "Gentlemen's Club",
-    tag: "Men's Combo",
-    text: "The men's grooming combo from the rate card — several men's services bundled into one appointment.",
-    image: IMG.mensGroomingHero,
-    alt: "Gentlemen's Club grooming combo at Naturals Thanjavur",
-    items: ["Gentlemen's Club Combo"],
-  },
-  {
-    slug: "ice-cream-mani-pedi",
-    name: "Ice Cream Manicure & Pedicure",
-    tag: "Women's Combo",
-    text: "Manicure and pedicure taken together as our signature ice cream combo, priced as one booking.",
-    image: IMG.spaExperience,
-    alt: "Ice cream manicure and pedicure combo at Naturals Thanjavur",
-    items: ["Ice Cream Manicure & Pedicure Combo"],
-  },
-];
 
 /* ---------------------------------------------------------------- PRICING */
 

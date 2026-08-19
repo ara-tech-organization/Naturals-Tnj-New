@@ -191,7 +191,7 @@ which stays legible at tab size.
 | --- | --- | --- |
 | `/` | Home | ✓ |
 | `/about` | About | ✓ |
-| `/services` · `/womens-services` · `/mens-grooming` | Services (mega-menu) | ✓ |
+| `/services` · `/services/womens` · `/services/mens` | Services (mega-menu) | ✓ |
 | `/bridal-makeover` | Bridal | ✓ |
 | `/pricing` | Rate card | ✓ |
 | `/offers` | Offers & Membership | ✓ |

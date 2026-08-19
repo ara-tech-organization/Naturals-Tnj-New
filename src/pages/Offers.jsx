@@ -3,7 +3,6 @@ import PageHero from "../components/PageHero";
 import Icon from "../components/Icon";
 import { CtaBanner } from "../components/Blocks";
 import { ArrowLink, Btn, Eyebrow, Figure, SectionHeading } from "../components/Ui";
-import { COMBO_PACKAGES } from "../data/services";
 import { CONTACT, MEMBERSHIP, WHATSAPP } from "../data/site";
 import { localBusinessSchema, useSeo } from "../hooks/useSeo";
 import { PAGE_KEYWORDS } from "../data/keywords";
@@ -189,61 +188,8 @@ export default function Offers() {
         </div>
       </section>
 
-      {/* ---- Special packages & combos ------------------------------------- */}
-      <section className="section" id="packages" aria-labelledby="combos-title">
-        <div className="container">
-          <SectionHeading
-            eyebrow="Special Packages"
-            title="Packages & Combos"
-            titleId="combos-title"
-            text="Cross-gender combos that bundle services from both sides of the menu into a single sitting. Inclusions and combo rates are confirmed in salon."
-            split
-            aside={
-              <Btn to="/pricing" variant="outline" size="sm">
-                View the Rate Card
-              </Btn>
-            }
-          />
-
-          <ul className="svc-grid svc-grid--three stagger">
-            {COMBO_PACKAGES.map((p) => (
-              <li key={p.slug}>
-                <article className="svc-card" data-reveal>
-                  <div className="svc-card__media">
-                    <img src={p.image} alt={p.alt} loading="lazy" decoding="async" />
-                    <span className="svc-card__tag">{p.tag}</span>
-                  </div>
-                  <div className="svc-card__body">
-                    <h3 className="svc-card__title">{p.name}</h3>
-                    <p className="svc-card__text">{p.text}</p>
-                    {/* Inclusions print only where the rate card supplies them —
-                        an empty list stays empty rather than being guessed at. */}
-                    {p.items.length ? (
-                      <ul className="detail-list">
-                        {p.items.map((sub) => (
-                          <li key={sub}>
-                            <Icon name="check" size={13} />
-                            <span className="detail-list__name">{sub}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
-                    <div className="svc-card__foot">
-                      <Link className="link-arrow svc-card__link" to="/book">
-                        <span>Book this combo</span>
-                        <Icon name="arrowUpRight" size={15} />
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       {/* ---- Packages ------------------------------------------------------ */}
-      <section className="section section--alt" aria-labelledby="packages-title">
+      <section className="section section--alt" id="packages" aria-labelledby="packages-title">
         <div className="container">
           <SectionHeading
             eyebrow="Book Together"
@@ -251,11 +197,6 @@ export default function Offers() {
             titleId="packages-title"
             text="Three ways to bundle a booking. Each is quoted for your group when you call, so the price reflects exactly what you're having done."
             split
-            aside={
-              <Btn to="/book" variant="outline" size="sm" icon="calendar">
-                Book a Package
-              </Btn>
-            }
           />
 
           {/* Same card as the Services page — a package is a service bundle,
@@ -282,15 +223,6 @@ export default function Offers() {
               </li>
             ))}
           </ul>
-
-          <p className="pricing-note pricing-note--center" data-reveal="fade">
-            <Icon name="sparkle" size={15} />
-            Looking for individual service rates instead?{" "}
-            <Link className="inline-link" to="/pricing">
-              View the full rate card
-            </Link>
-            .
-          </p>
         </div>
       </section>
 
